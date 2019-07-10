@@ -29,8 +29,12 @@ class Image(db.Entity):
 
 
 @db_session
-def add_textnote(day_date, note):
-    """ Adding new text note to date. """
+def add_textnote(day_date: date, note: str) -> None:
+    """
+    Adding new textnote to date.
+    :param day_date: selected day
+    :param note: text to add
+    """
     n = Note.get(date=day_date)
     if n is None:
         n = Note(date=day_date)
@@ -38,8 +42,12 @@ def add_textnote(day_date, note):
 
 
 @db_session
-def get_notes(day_date):
-    """ Returns textnotes associated with date. (readonly values) (generator) """
+def get_notes(day_date: date) -> TextNote:
+    """
+    Returns textnotes associated with date. (generator)
+    :param day_date: selected day
+    :return: TextNote (readonly values)
+    """
     n = Note.get(date=day_date)
     for i in TextNote.select(lambda i: i.note == n):
         _, _, _ = i.id, i.value, i.geo_coord  # for writing to cache
@@ -47,7 +55,12 @@ def get_notes(day_date):
 
 
 @db_session
-def has_textnotes(day_date):
+def has_textnotes(day_date: date) -> bool:
+    """
+    Checks if selected date has any textnote.
+    :param day_date: selected day
+    :return: bool
+    """
     n = Note.get(date=day_date)
     if n is None or len(n.textnotes) == 0:
         return False
@@ -55,21 +68,36 @@ def has_textnotes(day_date):
 
 
 @db_session
-def update_textnote(id, value=None, geo_coord=None):
-    """ Update value and/or geo coordinates of Textnote. """
+def update_textnote(id: int, value: str = None, geo_coord: str = None) -> None:
+    """
+    Update value and/or geo coordinates of Textnote.
+    :param id: id of textnote
+    :param value: text to update (None means no value changes)
+    :param geo_coord: json (None means no value changes)
+    """
     n = TextNote[id]
     if value is not None:
         n.value = value
     if geo_coord is not None:
         n.geo_coord = geo_coord
 
-@db_session
-def delete_textnote(id):
-    TextNote[id].delete()
 
 @db_session
-def add_image(day_date, path):
-    """ Adding new image path to given date. """
+def delete_textnote(id: int) -> None:
+    """
+    Delete selected textnote.
+    :param id: id of textnote
+    """
+    TextNote[id].delete()
+
+
+@db_session
+def add_image(day_date: date, path: str) -> None:
+    """
+    Adding new image path to given date.
+    :param day_date:
+    :param path: Path to image file (relative to app images folder).
+    """
     n = Note.get(date=day_date)
     if n is None:
         n = Note(date=day_date)
@@ -77,8 +105,12 @@ def add_image(day_date, path):
 
 
 @db_session
-def get_images(day_date):
-    """ Returns Images associated with date. (readonly values)  (generator) """
+def get_images(day_date: date) -> Image:
+    """
+    Returns Images associated with date. (readonly values)  (generator)
+    :param day_date: selected date
+    :return: Image (readonly values)
+     """
     n = Note.get(date=day_date)
     for i in Image.select(lambda i: i.note == n):
         _, _, _ = i.id, i.path, i.geo_coord  # for writing to cache
@@ -86,7 +118,12 @@ def get_images(day_date):
 
 
 @db_session
-def has_images(day_date):
+def has_images(day_date: date) -> bool:
+    """
+    Checks wheter selected date has any image.
+    :param day_date: selected day
+    :return: bool
+    """
     n = Note.get(date=day_date)
     if n is None or len(n.images) == 0:
         return False
@@ -94,8 +131,13 @@ def has_images(day_date):
 
 
 @db_session
-def update_image(id, path=None, geo_coord=None):
-    """ Update path and/or geo coordinates of Image. """
+def update_image(id: int, path: str = None, geo_coord: str = None) -> None:
+    """
+    Update path and/or geo coordinates of Image.
+    :param id: id of image.
+    :param path: Path to image file (relative to app images folder) (None means no value changes)
+    :param geo_coord: json (None means no change value)
+    """
     n = Image[id]
     if path is not None:
         n.path = path
@@ -104,7 +146,11 @@ def update_image(id, path=None, geo_coord=None):
 
 
 @db_session
-def delete_image(id):
+def delete_image(id: int) -> None:
+    """
+    Delete image.
+    :param id: id of image to delete
+    """
     Image[id].delete()
 
 
