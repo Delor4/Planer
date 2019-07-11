@@ -68,7 +68,7 @@ def has_textnotes(day_date: date) -> bool:
 
 
 @db_session
-def update_textnote(id: int, value: str = None, geo_coord: str = None) -> None:
+def update_textnote(id: int, value: str = None, geo_coord: Json = None) -> None:
     """
     Update value and/or geo coordinates of Textnote.
     :param id: id of textnote
@@ -131,7 +131,7 @@ def has_images(day_date: date) -> bool:
 
 
 @db_session
-def update_image(id: int, path: str = None, geo_coord: str = None) -> None:
+def update_image(id: int, path: str = None, geo_coord: Json = None) -> None:
     """
     Update path and/or geo coordinates of Image.
     :param id: id of image.
