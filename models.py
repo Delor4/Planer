@@ -49,7 +49,7 @@ def get_notes(day_date: date) -> TextNote:
     :return: TextNote (readonly values)
     """
     n = Note.get(date=day_date)
-    for i in TextNote.select(lambda i: i.note == n):
+    for i in TextNote.select(lambda j: j.note == n):
         _, _, _ = i.id, i.value, i.geo_coord  # for writing to cache
         yield i
 
@@ -68,14 +68,14 @@ def has_textnotes(day_date: date) -> bool:
 
 
 @db_session
-def update_textnote(id: int, value: str = None, geo_coord: Json = None) -> None:
+def update_textnote(tx_id: int, value: str = None, geo_coord: Json = None) -> None:
     """
     Update value and/or geo coordinates of Textnote.
-    :param id: id of textnote
+    :param tx_id: id of textnote
     :param value: text to update (None means no value changes)
     :param geo_coord: json (None means no value changes)
     """
-    n = TextNote[id]
+    n = TextNote[tx_id]
     if value is not None:
         n.value = value
     if geo_coord is not None:
@@ -83,12 +83,12 @@ def update_textnote(id: int, value: str = None, geo_coord: Json = None) -> None:
 
 
 @db_session
-def delete_textnote(id: int) -> None:
+def delete_textnote(tx_id: int) -> None:
     """
     Delete selected textnote.
-    :param id: id of textnote
+    :param tx_id: id of textnote
     """
-    TextNote[id].delete()
+    TextNote[tx_id].delete()
 
 
 @db_session
@@ -112,7 +112,7 @@ def get_images(day_date: date) -> Image:
     :return: Image (readonly values)
      """
     n = Note.get(date=day_date)
-    for i in Image.select(lambda i: i.note == n):
+    for i in Image.select(lambda j: j.note == n):
         _, _, _ = i.id, i.path, i.geo_coord  # for writing to cache
         yield i
 
@@ -131,14 +131,14 @@ def has_images(day_date: date) -> bool:
 
 
 @db_session
-def update_image(id: int, path: str = None, geo_coord: Json = None) -> None:
+def update_image(im_id: int, path: str = None, geo_coord: Json = None) -> None:
     """
     Update path and/or geo coordinates of Image.
-    :param id: id of image.
+    :param im_id: id of image.
     :param path: Path to image file (relative to app images folder) (None means no value changes)
     :param geo_coord: json (None means no change value)
     """
-    n = Image[id]
+    n = Image[im_id]
     if path is not None:
         n.path = path
     if geo_coord is not None:
@@ -146,12 +146,12 @@ def update_image(id: int, path: str = None, geo_coord: Json = None) -> None:
 
 
 @db_session
-def delete_image(id: int) -> None:
+def delete_image(im_id: int) -> None:
     """
     Delete image.
-    :param id: id of image to delete
+    :param im_id: id of image to delete
     """
-    Image[id].delete()
+    Image[im_id].delete()
 
 
 # set_sql_debug(True)
