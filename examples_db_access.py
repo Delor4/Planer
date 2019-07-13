@@ -35,7 +35,7 @@ print("Date " + str(dat) + " has images:", models.has_images(dat))
 dat2 = datetime.datetime(2003, 5, 6)
 print("Date " + str(dat2) + " has images:", models.has_images(dat2))
 
-pr = models.new_profile("Nowy profil")
+pr = models.make_profile("Nowy profil")
 old = models.set_profile(pr)
 
 print("Textnotes in new profile ({0}):".format(models.get_curr_profile_name()))
