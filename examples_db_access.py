@@ -13,12 +13,12 @@ models.add_textnote(dat, "test note2")
 models.add_textnote(dat, "test note3")
 models.add_textnote(dat, "test note4")
 
-print("Added textnotes:")
+print("Dodane notki:")
 for i in models.get_notes(dat):
     print(i.id, '"' + i.value + '"', i.geo_coord)
     print("    ", i.note.id, i.note.date)
 
-print("Added images:")
+print("Dodane obrazy:")
 for i in models.get_images(dat):
     print(i.id, i.path, i.geo_coord)
     print("    ", i.note.id, i.note.date)
@@ -27,25 +27,31 @@ for i in models.get_images(dat):
 for i in models.get_notes(dat):
     models.update_textnote(i.id, value=i.value+" dopisek")
 
-print("Changed textnotes:")
+print("Zmienione notki:")
 for i in models.get_notes(dat):
     print(i.id, '"' + i.value + '"')
 
-print("Date " + str(dat) + " has images:", models.has_images(dat))
+print("Pod datą " + str(dat) + " są obrazy?:", models.has_images(dat))
 dat2 = datetime.datetime(2003, 5, 6)
-print("Date " + str(dat2) + " has images:", models.has_images(dat2))
+print("Pod datą " + str(dat2) + " są obrazy?:", models.has_images(dat2))
 
 pr = models.make_profile("Nowy profil")
 old = models.set_curr_profile(pr)
 
-print("Textnotes in new profile ({0}):".format(models.get_curr_profile_name()))
+models.add_textnote(dat, "test note in another profile")
+
+print("Notki profilu '{0}':".format(models.get_curr_profile_name()))
 for i in models.get_notes(dat):
     print(i.id, '"' + i.value + '"', i.geo_coord)
     print("    ", i.note.id, i.note.date)
 
 models.set_curr_profile(old)
+
+print("Profil przed zmianą nazwy '{0}'".format(models.get_curr_profile_name()))
 models.update_profile(old, "Stary profil")
-print("Textnotes in old profile ({0}):".format(models.get_curr_profile_name()))
+print("Profil po zmianie nazwy '{0}'".format(models.get_curr_profile_name()))
+
+print("Notki w profilu '{0}':".format(models.get_curr_profile_name()))
 for i in models.get_notes(dat):
     print(i.id, '"' + i.value + '"', i.geo_coord)
     print("    ", i.note.id, i.note.date)
