@@ -63,13 +63,17 @@ class PlanerDB:
             return i
 
     @db_session
+    def _get_day(self, day_date: date):
+        return self.db.Day.get(date=day_date, profile=self.db.Profile[self.curr_profile_id])
+
+    @db_session
     def add_textnote(self, day_date: date, note: str) -> None:
         """
         Adding new textnote to date.
         :param day_date: selected day
         :param note: text to add
         """
-        n = self.db.Day.get(date=day_date, profile=self.db.Profile[self.curr_profile_id])
+        n = self._get_day(day_date)
         if n is None:
             n = self.db.Day(date=day_date, profile=self.db.Profile[self.curr_profile_id])
         self.db.TextNote(value=note, day=n)
@@ -81,8 +85,7 @@ class PlanerDB:
         :param day_date: selected day
         :return: TextNote (readonly values)
         """
-        n = self.db.Day.get(date=day_date, profile=self.db.Profile[self.curr_profile_id])
-        for i in self.db.TextNote.select(lambda j: j.day == n):
+        for i in self.db.TextNote.select(lambda j: j.day == self._get_day(day_date)):
             _, _, _ = i.id, i.value, i.geo_coord  # for writing to cache
             yield i
 
@@ -93,10 +96,19 @@ class PlanerDB:
         :param day_date: selected day
         :return: bool
         """
-        n = self.db.Day.get(date=day_date, profile=self.db.Profile[self.curr_profile_id])
+        n = self._get_day(day_date)
         if n is None or len(n.textnotes) == 0:
             return False
         return True
+
+    @db_session
+    def count_textnotes(self, day_date: date) -> int:
+        """
+        Count textnotes attached to selected date.
+        :param day_date: selected day
+        :return: int
+        """
+        return len(self._get_day(day_date).textnotes)
 
     @db_session
     def update_textnote(self, tx_id: int, value: str = None, geo_coord: Json = None) -> None:
@@ -127,7 +139,7 @@ class PlanerDB:
         :param day_date:
         :param path: Path to image file (relative to app images folder).
         """
-        n = self.db.Day.get(date=day_date, profile=self.db.Profile[self.curr_profile_id])
+        n = self._get_day(day_date)
         if n is None:
             n = self.db.Day(date=day_date, profile=self.db.Profile[self.curr_profile_id])
         self.db.Image(path=path, day=n)
@@ -139,8 +151,7 @@ class PlanerDB:
         :param day_date: selected date
         :return: Image (readonly values)
          """
-        n = self.db.Day.get(date=day_date, profile=self.db.Profile[self.curr_profile_id])
-        for i in self.db.Image.select(lambda j: j.day == n):
+        for i in self.db.Image.select(lambda j: j.day == self._get_day(day_date)):
             _, _, _ = i.id, i.path, i.geo_coord  # for writing to cache
             yield i
 
@@ -151,10 +162,19 @@ class PlanerDB:
         :param day_date: selected day
         :return: bool
         """
-        n = self.db.Day.get(date=day_date, profile=self.db.Profile[self.curr_profile_id])
+        n = self._get_day(day_date)
         if n is None or len(n.images) == 0:
             return False
         return True
+
+    @db_session
+    def count_images(self, day_date: date) -> int:
+        """
+        Count images attached to selected date.
+        :param day_date: selected day
+        :return: int
+        """
+        return len(self._get_day(day_date).images)
 
     @db_session
     def update_image(self, im_id: int, path: str = None, geo_coord: Json = None) -> None:
