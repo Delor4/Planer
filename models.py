@@ -168,11 +168,12 @@ def init_db() -> int:
     Init database.
     :return: Id of default profile.
     """
-    user_count = select(u.id for u in Profile).count()
-    if user_count == 0:
+    profiles = select(u.id for u in Profile)
+    if count(profiles) == 0:
         u = Profile(name='Default profile')
         commit()
         return u.id
+    return profiles[0].id
 
 
 @db_session
