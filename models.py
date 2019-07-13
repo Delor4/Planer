@@ -287,3 +287,14 @@ class PlanerDB:
         """
         u = self.db.Profile[self.get_curr_profile()]
         return u.name
+
+    @db_session
+    def get_all_profiles(self):
+        """
+        Returns all profiles. (generator)
+        :return: Profile (readonly values)
+         """
+
+        for i in select(u for u in self.db.Profile):
+            _, _ = i.id, i.name  # for writing to cache
+            yield i
