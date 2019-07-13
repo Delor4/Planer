@@ -51,7 +51,7 @@ class PlanerDB:
     @db_session
     def init_db(db) -> int:
         """
-        Init database.
+        Init database (make default profile if needed).
         :return: Id of default profile.
         """
         profiles = select(u.id for u in db.Profile)
@@ -237,7 +237,7 @@ class PlanerDB:
 
     def get_curr_profile(self) -> int:
         """
-        Returns currently selected profile.
+        Returns id of currently selected profile.
         :return: id of profile.
         """
         return self.curr_profile_id
@@ -245,7 +245,7 @@ class PlanerDB:
     @db_session
     def get_curr_profile_name(self) -> str:
         """
-        Returns currently selected profile's name.
+        Returns the name of the currently selected profile.
         :return: Name of profile.
         """
         u = self.db.Profile[self.get_curr_profile()]
