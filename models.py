@@ -82,7 +82,7 @@ class PlanerDB:
         return self.db.Image.select(lambda j: (j.day == self._get_day(day_date)) and (j.deleted is False))
 
     @db_session
-    def add_textnote(self, day_date: date, note: str) -> None:
+    def add_textnote(self, day_date: date, note: str) -> int:
         """
         Adding new textnote to date.
         :param day_date: selected day
@@ -91,7 +91,9 @@ class PlanerDB:
         n = self._get_day(day_date)
         if n is None:
             n = self.db.Day(date=day_date, profile=self.db.Profile[self.curr_profile_id])
-        self.db.TextNote(value=note, day=n)
+        i = self.db.TextNote(value=note, day=n)
+        commit()
+        return i.id
 
     @db_session
     def get_notes(self, day_date: date):
@@ -156,7 +158,7 @@ class PlanerDB:
             self.db.TextNote[tx_id].updated_at = datetime.now()
 
     @db_session
-    def add_image(self, day_date: date, path: str) -> None:
+    def add_image(self, day_date: date, path: str) -> int:
         """
         Adding new image path to given date.
         :param day_date:
@@ -165,7 +167,9 @@ class PlanerDB:
         n = self._get_day(day_date)
         if n is None:
             n = self.db.Day(date=day_date, profile=self.db.Profile[self.curr_profile_id])
-        self.db.Image(path=path, day=n)
+        i = self.db.Image(path=path, day=n)
+        commit()
+        return i.id
 
     @db_session
     def get_images(self, day_date: date):
