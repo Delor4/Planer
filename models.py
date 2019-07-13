@@ -84,7 +84,8 @@ class PlanerDB:
     @db_session
     def add_textnote(self, day_date: date, note: str) -> int:
         """
-        Adding new textnote to date.
+        Adding new textnote to day.
+        :return: id of added textnote
         :param day_date: selected day
         :param note: text to add
         """
@@ -163,6 +164,7 @@ class PlanerDB:
         Adding new image path to given date.
         :param day_date:
         :param path: Path to image file (relative to app images folder).
+        :return: id of added image
         """
         n = self._get_day(day_date)
         if n is None:
@@ -226,7 +228,7 @@ class PlanerDB:
     @db_session
     def delete_image(self, im_id: int) -> None:
         """
-        Delete image.
+        Delete image's data from db.
         :param im_id: id of image to delete
         """
         if not self.db.Image[im_id].deleted:
