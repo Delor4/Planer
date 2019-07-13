@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+import calendar
 
 #mainFrameWidth = 1000
 #mainFrameHeight = 700
@@ -38,11 +39,26 @@ helpMenu.add_command(label="O nas", command = about) # added showinfo window
 # rightMainFrame.pack(side = RIGHT)
 # bottomMainFrame.pack(side = BOTTOM)
 
-# loop for creating grid
+# loop for creating grid v1
+# for row in range(5):
+#     for column in range(7):
+#        Label(mainWindow, text = 'R%s/C%s'%(row, column), borderwidth = 50).grid(row = row, column = column)
+
+def calendarWeeks():
+    cal = calendar.Calendar()
+    print("Tygodnie w lutym 2010:")
+    for week in cal.monthdayscalendar(2010, 2):
+        print(week)
+    print("Tygodnie w marcu 2009:")
+    for week in cal.monthdayscalendar(2009, 3):
+        print(week)
+#
+# # loop for creating grid v2
+# def calendarView():
 for row in range(5):
-    Frame(mainWindow, width=1000, height=1, bg="red")
     for column in range(7):
-       Label(mainWindow, text = 'R%s/C%s'%(row, column), borderwidth = 50).grid(row = row, column = column)
+        Label(mainWindow, text = calendarWeeks(), borderwidth = 50).grid(row = row, column = column)
+
 
 
 mainWindow.mainloop()
