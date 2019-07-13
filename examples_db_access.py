@@ -2,10 +2,11 @@ import models
 import datetime
 
 print("********************")
-# db = models.PlanerDB('notes.sqlite')
-db = models.PlanerDB()
+# db = models.PlanerDB('notes.sqlite') # db in file
+db = models.PlanerDB()  # db in memory
 
 dat = datetime.datetime(2014, 5, 9)
+
 # adding some data to DB
 db.add_image(dat, "/fff/tt/image.jpeg")
 db.add_image(dat, "/fff/tt/image2.jpeg")
@@ -28,9 +29,20 @@ for i in db.get_images(dat):
 for i in db.get_notes(dat):
     db.update_textnote(i.id, value=i.value + " dopisek")
 
+# update values in images
+for i in db.get_images(dat):
+    gc = i.geo_coord.copy()  # shallow copy because it's read only values
+    gc['latitude'] = 'unknown'
+    gc['longitude'] = 'unknown'
+    db.update_image(i.id, geo_coord=gc)
+
 print("Zmienione notki:")
 for i in db.get_notes(dat):
     print(i.id, '"' + i.value + '"')
+
+print("Zmienione obrazy:")
+for i in db.get_images(dat):
+    print(i.id, i.path, i.geo_coord)
 
 print("Pod datą " + str(dat) + " są obrazy?:", db.has_images(dat))
 dat2 = datetime.datetime(2003, 5, 6)
@@ -55,4 +67,3 @@ print("Profil po zmianie nazwy '{0}'".format(db.get_curr_profile_name()))
 print("Notki w profilu '{0}':".format(db.get_curr_profile_name()))
 for i in db.get_notes(dat):
     print(i.id, '"' + i.value + '"', i.geo_coord)
-    print("    ", i.day.id, i.day.date)
