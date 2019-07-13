@@ -171,7 +171,7 @@ def init_db() -> int:
 
 
 @db_session
-def new_profile(name) -> int:
+def make_profile(name) -> int:
     u = User(name=name)
     commit()
     return u.id
