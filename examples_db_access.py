@@ -9,10 +9,10 @@ dat = datetime.datetime(2014, 5, 9)
 
 # adding some data to DB
 db.add_image(dat, "/fff/tt/image.jpeg")
-db.add_image(dat, "/fff/tt/image2.jpeg")
+img = db.add_image(dat, "/fff/tt/image2.jpeg")
 db.add_textnote(dat, "test note")
 db.add_textnote(dat, "test note2")
-db.add_textnote(dat, "test note3")
+note = db.add_textnote(dat, "test note3")
 db.add_textnote(dat, "test note4")
 
 print("Dodane notki:")
@@ -67,3 +67,13 @@ print("Profil po zmianie nazwy '{0}'".format(db.get_curr_profile_name()))
 print("Notki w profilu '{0}':".format(db.get_curr_profile_name()))
 for i in db.get_notes(dat):
     print(i.id, '"' + i.value + '"', i.geo_coord)
+
+db.delete_textnote(note)
+print("Notki po usunięciu id '{0}':".format(note))
+for i in db.get_notes(dat):
+    print(i.id, '"' + i.value + '"', i.geo_coord)
+
+db.delete_image(img)
+print("Obrazy po usunięciu id '{0}':".format(img))
+for i in db.get_images(dat):
+    print(i.id, i.path, i.geo_coord)
