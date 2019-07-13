@@ -164,6 +164,10 @@ def delete_image(im_id: int) -> None:
 
 @db_session
 def init_db() -> int:
+    """
+    Init database.
+    :return: Id of default profile.
+    """
     user_count = select(u.id for u in Profile).count()
     if user_count == 0:
         u = Profile(name='Default profile')
@@ -173,13 +177,24 @@ def init_db() -> int:
 
 @db_session
 def make_profile(name: str) -> int:
+    """
+    Make new profile.
+    :param name: Name of profile.
+    :return: id of new profile.
+    """
     u = Profile(name=name)
     commit()
     return u.id
 
 
 @db_session
-def update_profile(profile_id: int, name: str) -> int:
+def update_profile(profile_id: int, name: str = None) -> int:
+    """
+    Change name of profile.
+    :param profile_id: Id of profile.
+    :param name: New name. (None means no changes)
+    :return: Id of changed profile.
+    """
     u = Profile[profile_id]
     if name is not None:
         u.name = name
@@ -189,6 +204,11 @@ def update_profile(profile_id: int, name: str) -> int:
 
 @db_session
 def set_curr_profile(profile_id: int) -> int:
+    """
+    Sets the current profile.
+    :param profile_id: Id of profile.
+    :return: Id of previous profile.
+    """
     u = Profile[profile_id]
     global curr_profile_id
     tmp = curr_profile_id
@@ -197,11 +217,19 @@ def set_curr_profile(profile_id: int) -> int:
 
 
 def get_curr_profile() -> int:
+    """
+    Returns currently selected profile.
+    :return: id of profile.
+    """
     return curr_profile_id
 
 
 @db_session
 def get_curr_profile_name() -> str:
+    """
+    Returns currently selected profile's name.
+    :return: Name of profile.
+    """
     u = Profile[get_curr_profile()]
     return u.name
 
