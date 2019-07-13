@@ -16,12 +16,12 @@ models.add_textnote(dat, "test note4")
 print("Dodane notki:")
 for i in models.get_notes(dat):
     print(i.id, '"' + i.value + '"', i.geo_coord)
-    print("    ", i.note.id, i.note.date)
+    print("    ", i.day.id, i.day.date)
 
 print("Dodane obrazy:")
 for i in models.get_images(dat):
     print(i.id, i.path, i.geo_coord)
-    print("    ", i.note.id, i.note.date)
+    print("    ", i.day.id, i.day.date)
 
 # update values in textnotes
 for i in models.get_notes(dat):
@@ -43,7 +43,7 @@ models.add_textnote(dat, "test note in another profile")
 print("Notki profilu '{0}':".format(models.get_curr_profile_name()))
 for i in models.get_notes(dat):
     print(i.id, '"' + i.value + '"', i.geo_coord)
-    print("    ", i.note.id, i.note.date)
+    print("    ", i.day.id, i.day.date)
 
 models.set_curr_profile(old)
 
@@ -54,4 +54,4 @@ print("Profil po zmianie nazwy '{0}'".format(models.get_curr_profile_name()))
 print("Notki w profilu '{0}':".format(models.get_curr_profile_name()))
 for i in models.get_notes(dat):
     print(i.id, '"' + i.value + '"', i.geo_coord)
-    print("    ", i.note.id, i.note.date)
+    print("    ", i.day.id, i.day.date)
