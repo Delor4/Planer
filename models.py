@@ -165,9 +165,35 @@ def delete_image(im_id: int) -> None:
 def init_db() -> int:
     user_count = select(u.id for u in User).count()
     if user_count == 0:
-        u = User(name='Default profile.')
+        u = User(name='Default profile')
         commit()
         return u.id
+
+
+@db_session
+def new_profile(name) -> int:
+    u = User(name=name)
+    commit()
+    return u.id
+
+
+@db_session
+def set_profile(profile_id: int) -> int:
+    u = User[profile_id]
+    global curr_user_id
+    tmp = curr_user_id
+    curr_user_id = u.id
+    return tmp
+
+
+def get_curr_profile() -> int:
+    return curr_user_id
+
+
+@db_session
+def get_curr_profile_name() -> str:
+    u = User[get_curr_profile()]
+    return u.name
 
 
 # set_sql_debug(True)
