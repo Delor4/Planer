@@ -178,7 +178,7 @@ def make_profile(name) -> int:
 
 
 @db_session
-def set_profile(profile_id: int) -> int:
+def set_curr_profile(profile_id: int) -> int:
     u = User[profile_id]
     global curr_user_id
     tmp = curr_user_id
