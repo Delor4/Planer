@@ -32,7 +32,7 @@ class Image(db.Entity):
 class Profile(db.Entity):
     _table_ = 'profiles'
     id = PrimaryKey(int, column='profile_id', auto=True)
-    name = Required(str, unique=True, column='profile_name')
+    name = Required(str, column='profile_name')
     notes = Set(Note)
 
 
