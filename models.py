@@ -10,6 +10,7 @@ class Note(db.Entity):
     date = Required(date, column='note_date', index='date_index')
     textnotes = Set('TextNote')
     images = Set('Image')
+    user = Required('User')
 
 
 class TextNote(db.Entity):
@@ -28,6 +29,12 @@ class Image(db.Entity):
     geo_coord = Optional(Json)
 
 
+class User(db.Entity):
+    id = PrimaryKey(int, column='user_id', auto=True)
+    name = Required(str, unique=True, column='user_name')
+    notes = Set(Note)
+
+
 @db_session
 def add_textnote(day_date: date, note: str) -> None:
     """
@@ -35,9 +42,9 @@ def add_textnote(day_date: date, note: str) -> None:
     :param day_date: selected day
     :param note: text to add
     """
-    n = Note.get(date=day_date)
+    n = Note.get(date=day_date, user=User[curr_user_id])
     if n is None:
-        n = Note(date=day_date)
+        n = Note(date=day_date, user=User[curr_user_id])
     TextNote(value=note, note=n)
 
 
@@ -48,7 +55,7 @@ def get_notes(day_date: date) -> TextNote:
     :param day_date: selected day
     :return: TextNote (readonly values)
     """
-    n = Note.get(date=day_date)
+    n = Note.get(date=day_date, user=User[curr_user_id])
     for i in TextNote.select(lambda j: j.note == n):
         _, _, _ = i.id, i.value, i.geo_coord  # for writing to cache
         yield i
@@ -61,7 +68,7 @@ def has_textnotes(day_date: date) -> bool:
     :param day_date: selected day
     :return: bool
     """
-    n = Note.get(date=day_date)
+    n = Note.get(date=day_date, user=User[curr_user_id])
     if n is None or len(n.textnotes) == 0:
         return False
     return True
@@ -98,9 +105,9 @@ def add_image(day_date: date, path: str) -> None:
     :param day_date:
     :param path: Path to image file (relative to app images folder).
     """
-    n = Note.get(date=day_date)
+    n = Note.get(date=day_date, user=User[curr_user_id])
     if n is None:
-        n = Note(date=day_date)
+        n = Note(date=day_date, user=User[curr_user_id])
     Image(path=path, note=n)
 
 
@@ -111,7 +118,7 @@ def get_images(day_date: date) -> Image:
     :param day_date: selected date
     :return: Image (readonly values)
      """
-    n = Note.get(date=day_date)
+    n = Note.get(date=day_date, user=User[curr_user_id])
     for i in Image.select(lambda j: j.note == n):
         _, _, _ = i.id, i.path, i.geo_coord  # for writing to cache
         yield i
@@ -124,7 +131,7 @@ def has_images(day_date: date) -> bool:
     :param day_date: selected day
     :return: bool
     """
-    n = Note.get(date=day_date)
+    n = Note.get(date=day_date, user=User[curr_user_id])
     if n is None or len(n.images) == 0:
         return False
     return True
@@ -154,9 +161,21 @@ def delete_image(im_id: int) -> None:
     Image[im_id].delete()
 
 
+@db_session
+def init_db() -> int:
+    user_count = select(u.id for u in User).count()
+    if user_count == 0:
+        u = User(name='Default profile.')
+        commit()
+        return u.id
+
+
 # set_sql_debug(True)
+
 
 db.bind(provider='sqlite', filename=':memory:')
 # db.bind(provider='sqlite', filename='notes.sqlite', create_db=True)
 
 db.generate_mapping(create_tables=True)
+
+curr_user_id = init_db()
