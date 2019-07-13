@@ -44,21 +44,16 @@ helpMenu.add_command(label="O nas", command = about) # added showinfo window
 #     for column in range(7):
 #        Label(mainWindow, text = 'R%s/C%s'%(row, column), borderwidth = 50).grid(row = row, column = column)
 
-def calendarWeeks():
-    cal = calendar.Calendar()
-    print("Tygodnie w lutym 2010:")
-    for week in cal.monthdayscalendar(2010, 2):
-        print(week)
-    print("Tygodnie w marcu 2009:")
-    for week in cal.monthdayscalendar(2009, 3):
-        print(week)
-#
-# # loop for creating grid v2
-# def calendarView():
-for row in range(5):
-    for column in range(7):
-        Label(mainWindow, text = calendarWeeks(), borderwidth = 50).grid(row = row, column = column)
+buttonDay = Button()
 
+#calendar
+cal = calendar.Calendar()
+row = 0
+for day in cal.itermonthdays2(2016, 1):
+    if day[0] > 0:
+        print("col:{0}, row:{1}".format(day[1], row))
+    if day[1] == 6:
+        row += 1
 
 
 mainWindow.mainloop()
