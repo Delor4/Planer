@@ -171,8 +171,17 @@ def init_db() -> int:
 
 
 @db_session
-def make_profile(name) -> int:
+def make_profile(name: str) -> int:
     u = User(name=name)
+    commit()
+    return u.id
+
+
+@db_session
+def update_profile(profile_id: int, name: str) -> int:
+    u = User[profile_id]
+    if name is not None:
+        u.name = name
     commit()
     return u.id
 
