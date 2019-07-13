@@ -77,3 +77,7 @@ db.delete_image(img)
 print("Obrazy po usunięciu id '{0}':".format(img))
 for i in db.get_images(dat):
     print(i.id, i.path, i.geo_coord)
+
+print("Lista profili:")
+for i in db.get_all_profiles():
+    print(i.id, i.name)
