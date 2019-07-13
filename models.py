@@ -27,7 +27,7 @@ class PlanerDB:
             geo_coord = Optional(Json)
             created_at = Required(datetime, default=lambda: datetime.now())
             updated_at = Required(datetime, default=lambda: datetime.now())
-            deleted = Required(bool, default='false')
+            deleted = Required(bool, default=False)
 
         class Image(db.Entity):
             _table_ = 'images'
@@ -37,7 +37,7 @@ class PlanerDB:
             geo_coord = Optional(Json)
             created_at = Required(datetime, default=lambda: datetime.now())
             updated_at = Required(datetime, default=lambda: datetime.now())
-            deleted = Required(bool, default='false')
+            deleted = Required(bool, default=False)
 
         class Profile(db.Entity):
             _table_ = 'profiles'
@@ -74,6 +74,14 @@ class PlanerDB:
         return self.db.Day.get(date=day_date, profile=self.db.Profile[self.curr_profile_id])
 
     @db_session
+    def _get_textnotes(self, day_date: date):
+        return self.db.TextNote.select(lambda j: (j.day == self._get_day(day_date)) and (j.deleted is False))
+
+    @db_session
+    def _get_images(self, day_date: date):
+        return self.db.Image.select(lambda j: (j.day == self._get_day(day_date)) and (j.deleted is False))
+
+    @db_session
     def add_textnote(self, day_date: date, note: str) -> None:
         """
         Adding new textnote to date.
@@ -92,7 +100,7 @@ class PlanerDB:
         :param day_date: selected day
         :return: TextNote (readonly values)
         """
-        for i in self.db.TextNote.select(lambda j: j.day == self._get_day(day_date)):
+        for i in self._get_textnotes(day_date):
             _, _, _ = i.id, i.value, i.geo_coord  # for writing to cache
             yield i
 
@@ -103,8 +111,7 @@ class PlanerDB:
         :param day_date: selected day
         :return: bool
         """
-        n = self._get_day(day_date)
-        if n is None or len(n.textnotes) == 0:
+        if self._get_day(day_date) is None or len(self._get_textnotes(day_date)) == 0:
             return False
         return True
 
@@ -115,7 +122,7 @@ class PlanerDB:
         :param day_date: selected day
         :return: int
         """
-        return len(self._get_day(day_date).textnotes)
+        return len(self._get_textnotes(day_date))
 
     @db_session
     def update_textnote(self, tx_id: int, value: str = None, geo_coord: Json = None) -> None:
@@ -126,6 +133,8 @@ class PlanerDB:
         :param geo_coord: json (None means no value changes)
         """
         n = self.db.TextNote[tx_id]
+        if n.deleted:
+            return
         updated = False
         if value is not None:
             n.value = value
@@ -142,7 +151,9 @@ class PlanerDB:
         Delete selected textnote.
         :param tx_id: id of textnote
         """
-        self.db.TextNote[tx_id].delete()
+        if not self.db.TextNote[tx_id].deleted:
+            self.db.TextNote[tx_id].deleted = True
+            self.db.TextNote[tx_id].updated_at = datetime.now()
 
     @db_session
     def add_image(self, day_date: date, path: str) -> None:
@@ -163,7 +174,7 @@ class PlanerDB:
         :param day_date: selected date
         :return: Image (readonly values)
          """
-        for i in self.db.Image.select(lambda j: j.day == self._get_day(day_date)):
+        for i in self._get_images(day_date):
             _, _, _ = i.id, i.path, i.geo_coord  # for writing to cache
             yield i
 
@@ -174,8 +185,7 @@ class PlanerDB:
         :param day_date: selected day
         :return: bool
         """
-        n = self._get_day(day_date)
-        if n is None or len(n.images) == 0:
+        if self._get_day(day_date) is None or len(self._get_images(day_date)) == 0:
             return False
         return True
 
@@ -186,7 +196,7 @@ class PlanerDB:
         :param day_date: selected day
         :return: int
         """
-        return len(self._get_day(day_date).images)
+        return len(self._get_images(day_date))
 
     @db_session
     def update_image(self, im_id: int, path: str = None, geo_coord: Json = None) -> None:
@@ -197,6 +207,8 @@ class PlanerDB:
         :param geo_coord: json (None means no change value)
         """
         n = self.db.Image[im_id]
+        if n.deleted:
+            return
         updated = False
         if path is not None:
             n.path = path
@@ -213,7 +225,9 @@ class PlanerDB:
         Delete image.
         :param im_id: id of image to delete
         """
-        self.db.Image[im_id].delete()
+        if not self.db.Image[im_id].deleted:
+            self.db.Image[im_id].deleted = True
+            self.db.Image[im_id].updated_at = datetime.now()
 
     @db_session
     def make_profile(self, name: str) -> int:
