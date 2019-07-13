@@ -126,10 +126,15 @@ class PlanerDB:
         :param geo_coord: json (None means no value changes)
         """
         n = self.db.TextNote[tx_id]
+        updated = False
         if value is not None:
             n.value = value
+            updated = True
         if geo_coord is not None:
             n.geo_coord = geo_coord
+            updated = True
+        if updated:
+            n.updated_at = datetime.now()
 
     @db_session
     def delete_textnote(self, tx_id: int) -> None:
@@ -192,10 +197,15 @@ class PlanerDB:
         :param geo_coord: json (None means no change value)
         """
         n = self.db.Image[im_id]
+        updated = False
         if path is not None:
             n.path = path
+            updated = True
         if geo_coord is not None:
             n.geo_coord = geo_coord
+            updated = True
+        if updated:
+            n.updated_at = datetime.now()
 
     @db_session
     def delete_image(self, im_id: int) -> None:
