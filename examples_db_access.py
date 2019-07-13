@@ -44,6 +44,7 @@ for i in models.get_notes(dat):
     print("    ", i.note.id, i.note.date)
 
 models.set_curr_profile(old)
+models.update_profile(old, "Stary profil")
 print("Textnotes in old profile ({0}):".format(models.get_curr_profile_name()))
 for i in models.get_notes(dat):
     print(i.id, '"' + i.value + '"', i.geo_coord)
