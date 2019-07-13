@@ -1,4 +1,5 @@
 from datetime import date
+from datetime import datetime
 from pony.orm import *
 
 
@@ -24,6 +25,9 @@ class PlanerDB:
             day = Required(Day, column='note_id')
             value = Required(LongStr, column='text_note_value')
             geo_coord = Optional(Json)
+            created_at = Required(datetime, default=lambda: datetime.now())
+            updated_at = Required(datetime, default=lambda: datetime.now())
+            deleted = Required(bool, default='false')
 
         class Image(db.Entity):
             _table_ = 'images'
@@ -31,6 +35,9 @@ class PlanerDB:
             day = Required(Day)
             path = Required(str, column='image_path')
             geo_coord = Optional(Json)
+            created_at = Required(datetime, default=lambda: datetime.now())
+            updated_at = Required(datetime, default=lambda: datetime.now())
+            deleted = Required(bool, default='false')
 
         class Profile(db.Entity):
             _table_ = 'profiles'
