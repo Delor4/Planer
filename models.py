@@ -4,8 +4,8 @@ from pony.orm import *
 
 class PlanerDB:
 
-    def __init__(self, filename=':memory:'):
-        self.db = PlanerDB.open_database(filename)
+    def __init__(self, filename=':memory:', debug=False):
+        self.db = PlanerDB.open_database(filename, debug)
         self.curr_profile_id = PlanerDB.init_db(self.db)
 
     @staticmethod
@@ -39,10 +39,10 @@ class PlanerDB:
             days = Set(Day)
 
     @staticmethod
-    def open_database(filename=':memory:'):
+    def open_database(filename=':memory:', debug=False):
         db = Database()
         PlanerDB.define_entities(db)
-        # set_sql_debug(True)
+        set_sql_debug(debug)
         db.bind(provider='sqlite', filename=filename, create_db=True)
         db.generate_mapping(create_tables=True)
         return db
