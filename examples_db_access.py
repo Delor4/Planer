@@ -36,14 +36,14 @@ dat2 = datetime.datetime(2003, 5, 6)
 print("Date " + str(dat2) + " has images:", models.has_images(dat2))
 
 pr = models.make_profile("Nowy profil")
-old = models.set_profile(pr)
+old = models.set_curr_profile(pr)
 
 print("Textnotes in new profile ({0}):".format(models.get_curr_profile_name()))
 for i in models.get_notes(dat):
     print(i.id, '"' + i.value + '"', i.geo_coord)
     print("    ", i.note.id, i.note.date)
 
-models.set_profile(old)
+models.set_curr_profile(old)
 print("Textnotes in old profile ({0}):".format(models.get_curr_profile_name()))
 for i in models.get_notes(dat):
     print(i.id, '"' + i.value + '"', i.geo_coord)
