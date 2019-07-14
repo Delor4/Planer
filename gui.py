@@ -12,11 +12,12 @@ topMainFrame = Frame(mainWindow, width=1100, height=50)
 # rightMainFrame = Frame(mainWindow, width=1, height=700, bg="red")
 bottomMainFrame = Frame(mainWindow)
 
-bottomMainFrame.pack(side = BOTTOM)
-topMainFrame.pack(side = TOP)
-
 # menu options
 class PlanerMenu:
+    def __init__(self):
+        self.menuTopFrame = Frame(mainWindow, width=1100, height=50)
+        self.menuBottomFrame = Frame(mainWindow)
+
     def prevMonth(self):
         print("cofaj")
         self.month -= 1
@@ -26,7 +27,7 @@ class PlanerMenu:
         self.month += 4
 
     def about(self):
-        self.messagebox.showinfo("O nas", "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian")
+        messagebox.showinfo("O nas", "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian")
 
 class Day:
     def __init__(self):
@@ -37,6 +38,7 @@ class Day:
         messagebox.showinfo("Dzień X", "To jest okno przykładowe")
 
 dayObject = Day()
+topMenu = PlanerMenu()
 
 #---------MAIN MENU---------
 mainMenu = Menu(mainWindow) # Menu method from Tkinter
@@ -52,7 +54,7 @@ subMenu.add_cascade(label = "Zamknij")
 
 helpMenu = Menu(mainMenu)
 mainMenu.add_cascade(label = "Pomoc", menu = helpMenu)
-helpMenu.add_command(label = "O nas", command = PlanerMenu.about) # added showinfo window
+helpMenu.add_command(label = "O nas", command = topMenu.about) # added showinfo window
 
 #---------LAYOUT---------
 # calendar
@@ -63,20 +65,24 @@ row = 0
 cal.year = datetime.date.today().year
 cal.month = datetime.date.today().month
 
+
+topMenu.menuTopFrame.pack(side = TOP)
+topMenu.menuBottomFrame.pack(side = BOTTOM)
+
+
+left = Button(topMenu.menuTopFrame, text='<', command=lambda: topMenu.prevMonth(cal))
+left.pack(side = LEFT)
+
+right = Button(topMenu.menuTopFrame, text='>', command=lambda: topMenu.nextMonth(cal))
+right.pack(side = LEFT)
+
 # adding buttons for changing date
 
 for day in cal.itermonthdays2(cal.year, cal.month):
     if day[0] > 0:
-        Label(bottomMainFrame, text='col:{0}, row:{1}'.format(day[1], row), borderwidth=50).grid(row=row, column=day[1])
+        Label(topMenu.menuBottomFrame, text='col:{0}, row:{1}'.format(day[1], row), borderwidth=50).grid(row=row, column=day[1])
     if day[1] == 6:
         row += 1
-
-left = Button(topMainFrame, text='<', command=lambda: PlanerMenu.prevMonth(cal))
-left.pack(side = LEFT)
-
-right = Button(topMainFrame, text='>', command=lambda: PlanerMenu.nextMonth(cal))
-right.pack(side = LEFT)
-
 
 mainWindow.mainloop()
 
