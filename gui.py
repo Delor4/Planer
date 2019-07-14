@@ -44,16 +44,30 @@ helpMenu.add_command(label="O nas", command = about) # added showinfo window
 #     for column in range(7):
 #        Label(mainWindow, text = 'R%s/C%s'%(row, column), borderwidth = 50).grid(row = row, column = column)
 
-buttonDay = Button()
 
-#calendar
+# calendar
+# main
 cal = calendar.Calendar()
 row = 0
 for day in cal.itermonthdays2(2016, 1):
     if day[0] > 0:
-        print("col:{0}, row:{1}".format(day[1], row))
+        #print("col:{0}, row:{1}".format(day[1], row))
+        Label(mainWindow, text='R%s/C%s' % (row, day), borderwidth=50).grid(row=row, column=day)
     if day[1] == 6:
         row += 1
 
+class Day:
+    def __init__(self):
+        self.day = 0
+        print("Dzień tygodnia")
+
+    def openDay(self):
+        messagebox.showinfo("Dzień X", "To jest okno przykładowe")
+
+dayObject = Day()
+
+# day button
+buttonDay = Button(mainWindow, text = "Dzień", command = dayObject.openDay)
+buttonDay.pack()
 
 mainWindow.mainloop()
