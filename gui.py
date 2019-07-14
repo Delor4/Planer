@@ -1,3 +1,5 @@
+import controller
+from controller import *
 from tkinter import *
 from tkinter import messagebox
 import calendar
@@ -6,23 +8,16 @@ import datetime
 # creating main window
 mainWindow = Tk()
 
-# frames
-topMainFrame = Frame(mainWindow, width=1100, height=50)
-# leftMainFrame = Frame(mainWindow, width=1, height=700, bg="red")
-# rightMainFrame = Frame(mainWindow, width=1, height=700, bg="red")
-bottomMainFrame = Frame(mainWindow)
-
-# menu options
 class PlanerMenu:
     def __init__(self):
         self.menuTopFrame = Frame(mainWindow, width=1100, height=50)
         self.menuBottomFrame = Frame(mainWindow)
 
-    def prevMonth(self):
+    def prev_month(self):
         print("cofaj")
         self.month -= 1
 
-    def nextMonth(self):
+    def next_month(self):
         print("naprzod")
         self.month += 4
 
@@ -39,6 +34,13 @@ class Day:
 
 dayObject = Day()
 topMenu = PlanerMenu()
+# calendarControl = Calendar()
+
+# frames
+topMainFrame = Frame(mainWindow, width=1100, height=50)
+# leftMainFrame = Frame(mainWindow, width=1, height=700, bg="red")
+# rightMainFrame = Frame(mainWindow, width=1, height=700, bg="red")
+bottomMainFrame = Frame(mainWindow)
 
 #---------MAIN MENU---------
 mainMenu = Menu(mainWindow) # Menu method from Tkinter
@@ -60,24 +62,23 @@ helpMenu.add_command(label = "O nas", command = topMenu.about) # added showinfo 
 # calendar
 # main
 cal = calendar.Calendar()
+calendarControl = Calendar(1) # testowa implementacja controllera - utworzenie obiektu
+
 row = 0
 
 cal.year = datetime.date.today().year
 cal.month = datetime.date.today().month
 
-
 topMenu.menuTopFrame.pack(side = TOP)
 topMenu.menuBottomFrame.pack(side = BOTTOM)
 
-
-left = Button(topMenu.menuTopFrame, text='<', command=lambda: topMenu.prevMonth(cal))
+left = Button(topMenu.menuTopFrame, text='<', command=lambda: topMenu.prev_month(cal)) # trzeba zaimplementować controller
 left.pack(side = LEFT)
 
-right = Button(topMenu.menuTopFrame, text='>', command=lambda: topMenu.nextMonth(cal))
+right = Button(topMenu.menuTopFrame, text='>', command=lambda: topMenu.next_month(cal)) # trzeba zaimplementować controller
 right.pack(side = LEFT)
 
-# adding buttons for changing date
-
+# displaying calendar grid
 for day in cal.itermonthdays2(cal.year, cal.month):
     if day[0] > 0:
         Label(topMenu.menuBottomFrame, text='col:{0}, row:{1}'.format(day[1], row), borderwidth=50).grid(row=row, column=day[1])
