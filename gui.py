@@ -51,8 +51,8 @@ cal = calendar.Calendar()
 row = 0
 for day in cal.itermonthdays2(2016, 1):
     if day[0] > 0:
-        #print("col:{0}, row:{1}".format(day[1], row))
-        Label(mainWindow, text='R%s/C%s' % (row, day), borderwidth=50).grid(row=row, column=day)
+        # print("col:{0}, row:{1}".format(day[1], row))
+        Label(mainWindow, text='col:{0}, row:{1}'.format(day[1], row), borderwidth=50).grid(row=row, column=day[1])
     if day[1] == 6:
         row += 1
 
