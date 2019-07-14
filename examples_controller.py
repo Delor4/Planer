@@ -27,10 +27,6 @@ print(c.date)
 c.prev_month()
 print(c.date)
 
-
-# c.prev_month()
-# print(c.date)
-
 def test_list():
     a = []
     a.append({'a': "ff"})
@@ -41,11 +37,11 @@ def test_list():
 
 c.db.add_textnote(datetime.date(c.date.year, c.date.month, 5), "gfgfg")
 
-for t in c.get_month_data():
+for t in c.get_month_data_():
     print(t)
 
 print("ooo")
-for t in c.get_month_data_g():
+for t in c.get_month_data():
     print(t)
 
 no, im = c.get_day_data(5)
