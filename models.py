@@ -6,11 +6,11 @@ from pony.orm import *
 class PlanerDB:
 
     def __init__(self, filename=':memory:', debug=False):
-        self.db = PlanerDB.open_database(filename, debug)
-        self.curr_profile_id = PlanerDB.init_db(self.db)
+        self.db = PlanerDB._open_database(filename, debug)
+        self.curr_profile_id = PlanerDB._init_db(self.db)
 
     @staticmethod
-    def define_entities(db):
+    def _define_entities(db):
         class Day(db.Entity):
             _table_ = 'days'
             id = PrimaryKey(int, column='day_id', auto=True)
@@ -46,9 +46,9 @@ class PlanerDB:
             days = Set(Day)
 
     @staticmethod
-    def open_database(filename=':memory:', debug=False):
+    def _open_database(filename=':memory:', debug=False):
         db = Database()
-        PlanerDB.define_entities(db)
+        PlanerDB._define_entities(db)
         set_sql_debug(debug)
         db.bind(provider='sqlite', filename=filename, create_db=True)
         db.generate_mapping(create_tables=True)
@@ -56,7 +56,7 @@ class PlanerDB:
 
     @staticmethod
     @db_session
-    def init_db(db) -> int:
+    def _init_db(db) -> int:
         """
         Init database (make default profile if needed).
         :return: Id of default profile.
