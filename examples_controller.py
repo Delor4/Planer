@@ -41,7 +41,7 @@ c.db.add_textnote(datetime.date(c.date.year, c.date.month, 5), "Lorem ipsum dolo
 c.db.add_image(datetime.date(c.date.year, c.date.month, 5), "image1.jpg")
 c.db.add_image(datetime.date(c.date.year, c.date.month, 5), "image2.jpg")
 c.db.add_image(datetime.date(c.date.year, c.date.month, 5), "image3.jpg")
-for t in c.get_month_data_():
+for t in c.get_month_data_mock():
     print(t)
 
 print("ooo")
