@@ -5,8 +5,22 @@ from tkinter import messagebox
 import calendar
 import datetime
 
+
+class PlanerApp:
+    def __init__(self):
+        self.state = controller.Calendar()
+        self.mainWindow = Tk()
+
+    def run(self):
+        self.mainWindow.mainloop()
+
+
+if __name__ == '__main__':
+    PlanerApp().run()
+
 # creating main window
 mainWindow = Tk()
+
 
 class PlanerMenu:
     def __init__(self):
@@ -62,7 +76,7 @@ helpMenu.add_command(label = "O nas", command = topMenu.about) # added showinfo 
 # calendar
 # main
 cal = calendar.Calendar()
-calendarControl = Calendar(1) # testowa implementacja controllera - utworzenie obiektu
+calendarControl = Calendar() # testowa implementacja controllera - utworzenie obiektu
 
 row = 0
 
