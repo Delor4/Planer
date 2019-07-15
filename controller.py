@@ -93,9 +93,26 @@ class Calendar:
                    {'id': 3,
                     'value': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue, suscipit a, scelerisque sed, lacinia in, mi. Cras vel lorem. Etiam pellentesque aliquet tellus. Phasellus pharetra nulla ac diam. Quisque semper justo at risus. Donec venenatis, turpis vel hendrerit interdum, dui ligula ultricies purus, sed posuere libero dui id orci. Nam congue, pede vitae dapibus aliquet, elit magna vulputate arcu, vel tempus metus leo non est. Etiam sit amet lectus quis est congue mollis. Phasellus congue lacus eget neque. Phasellus ornare, ante vitae consectetuer consequat, purus sapien ultricies dolor, et mollis pede metus eget nisi. Praesent sodales velit quis augue. Cras suscipit, urna at aliquam rhoncus, urna quam viverra nisi, in interdum massa nibh nec erat.',
                     'geo_coord': {}}
-               ],
-        [
-            {'id': 1, 'path': 'image1.jpg', 'geo_coord': {}},
-            {'id': 2, 'path': 'image2.jpg', 'geo_coord': {}},
-            {'id': 3, 'path': 'image3.jpg', 'geo_coord': {}}
-        ]
+               ], [
+                   {'id': 1, 'path': 'image1.jpg', 'geo_coord': {}},
+                   {'id': 2, 'path': 'image2.jpg', 'geo_coord': {}},
+                   {'id': 3, 'path': 'image3.jpg', 'geo_coord': {}}
+               ]
+
+    def add_textnote(self, day, note):
+        self.db.add_textnote(self._make_date(day), note)
+
+    def update_textnote(self, id, value=None, geo_cord=None):
+        self.db.update_textnote(id, value, geo_cord)
+
+    def delete_textnote(self, id):
+        self.db.delete_textnote(id)
+
+    def add_images(self, day, path):
+        self.db.add_image(self._make_date(day), path)
+
+    def update_image(self, id, path, geo_cord):
+        self.db.update_image(id, path, geo_cord)
+
+    def delete_image(self, id):
+        self.db.delete_image(id)

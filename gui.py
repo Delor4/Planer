@@ -38,6 +38,7 @@ class PlanerMenu:
     def about(self):
         messagebox.showinfo("O nas", "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian")
 
+
 class Day:
     def __init__(self):
         self.day = 0
@@ -45,6 +46,7 @@ class Day:
 
     def openDay(self):
         messagebox.showinfo("Dzień X", "To jest okno przykładowe")
+
 
 dayObject = Day()
 topMenu = PlanerMenu()
@@ -56,51 +58,53 @@ topMainFrame = Frame(mainWindow, width=1100, height=50)
 # rightMainFrame = Frame(mainWindow, width=1, height=700, bg="red")
 bottomMainFrame = Frame(mainWindow)
 
-#---------MAIN MENU---------
-mainMenu = Menu(mainWindow) # Menu method from Tkinter
-mainWindow.config(menu = mainMenu)
+# ---------MAIN MENU---------
+mainMenu = Menu(mainWindow)  # Menu method from Tkinter
+mainWindow.config(menu=mainMenu)
 
 subMenu = Menu(mainMenu)
-mainMenu.add_cascade(label = "Plik", menu = subMenu)
-subMenu.add_cascade(label = "Nowy")
-subMenu.add_cascade(label = "Zapisz")
-subMenu.add_cascade(label = "Wczytaj")
+mainMenu.add_cascade(label="Plik", menu=subMenu)
+subMenu.add_cascade(label="Nowy")
+subMenu.add_cascade(label="Zapisz")
+subMenu.add_cascade(label="Wczytaj")
 subMenu.add_separator()
-subMenu.add_cascade(label = "Zamknij")
+subMenu.add_cascade(label="Zamknij")
 
 helpMenu = Menu(mainMenu)
-mainMenu.add_cascade(label = "Pomoc", menu = helpMenu)
-helpMenu.add_command(label = "O nas", command = topMenu.about) # added showinfo window
+mainMenu.add_cascade(label="Pomoc", menu=helpMenu)
+helpMenu.add_command(label="O nas", command=topMenu.about)  # added showinfo window
 
-#---------LAYOUT---------
+# ---------LAYOUT---------
 # calendar
 # main
 cal = calendar.Calendar()
-calendarControl = Calendar() # testowa implementacja controllera - utworzenie obiektu
+calendarControl = Calendar()  # testowa implementacja controllera - utworzenie obiektu
 
 row = 0
 
 cal.year = datetime.date.today().year
 cal.month = datetime.date.today().month
 
-topMenu.menuTopFrame.pack(side = TOP)
-topMenu.menuBottomFrame.pack(side = BOTTOM)
+topMenu.menuTopFrame.pack(side=TOP)
+topMenu.menuBottomFrame.pack(side=BOTTOM)
 
-left = Button(topMenu.menuTopFrame, text='<', command=lambda: topMenu.prev_month(cal)) # trzeba zaimplementować controller
-left.pack(side = LEFT)
+left = Button(topMenu.menuTopFrame, text='<',
+              command=lambda: topMenu.prev_month(cal))  # trzeba zaimplementować controller
+left.pack(side=LEFT)
 
-right = Button(topMenu.menuTopFrame, text='>', command=lambda: topMenu.next_month(cal)) # trzeba zaimplementować controller
-right.pack(side = LEFT)
+right = Button(topMenu.menuTopFrame, text='>',
+               command=lambda: topMenu.next_month(cal))  # trzeba zaimplementować controller
+right.pack(side=LEFT)
 
 # displaying calendar grid
 for day in cal.itermonthdays2(cal.year, cal.month):
     if day[0] > 0:
-        Label(topMenu.menuBottomFrame, text='col:{0}, row:{1}'.format(day[1], row), borderwidth=50).grid(row=row, column=day[1])
+        Label(topMenu.menuBottomFrame, text='col:{0}, row:{1}'.format(day[1], row), borderwidth=50).grid(row=row,
+                                                                                                         column=day[1])
     if day[1] == 6:
         row += 1
 
 mainWindow.mainloop()
-
 
 # topMainFrame.pack(side = TOP)
 # leftMainFrame.pack(side = LEFT)
