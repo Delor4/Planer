@@ -5,6 +5,7 @@ from tkinter import messagebox
 import calendar
 import datetime
 
+mainWindow = Tk()
 
 class PlanerApp:
     def __init__(self):
@@ -14,18 +15,20 @@ class PlanerApp:
     def run(self):
         self.mainWindow.mainloop()
 
+    # frames
+    topMainFrame = Frame(mainWindow, width=50, height=1)
+    # leftMainFrame = Frame(mainWindow, width=1, height=700, bg="red")
+    # rightMainFrame = Frame(mainWindow, width=1, height=700, bg="red")
+    bottomMainFrame = Frame(mainWindow)
 
-if __name__ == '__main__':
-    PlanerApp().run()
-
-# creating main window
-mainWindow = Tk()
+    if __name__ == '__main__':
+        run()
 
 
 class PlanerMenu:
     def __init__(self):
-        self.menuTopFrame = Frame(mainWindow, width=1100, height=50)
-        self.menuBottomFrame = Frame(mainWindow)
+        self.menuTopFrame = Frame(PlanerApp.mainWindow, width=1100, height=50)
+        self.menuBottomFrame = Frame(PlanerApp.mainWindow)
 
     def prev_month(self):
         print("cofaj")
@@ -36,7 +39,13 @@ class PlanerMenu:
         self.month += 4
 
     def about(self):
-        messagebox.showinfo("O nas", "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian")
+        aboutUs = open('about')
+        try:
+            textAbout = aboutUs.read()
+        finally:
+            textAbout.close()
+        messagebox.showinfo("O nas", textAbout)
+
 
 class Day:
     def __init__(self):
@@ -46,15 +55,10 @@ class Day:
     def openDay(self):
         messagebox.showinfo("Dzień X", "To jest okno przykładowe")
 
+
 dayObject = Day()
 topMenu = PlanerMenu()
 # calendarControl = Calendar()
-
-# frames
-topMainFrame = Frame(mainWindow, width=1100, height=50)
-# leftMainFrame = Frame(mainWindow, width=1, height=700, bg="red")
-# rightMainFrame = Frame(mainWindow, width=1, height=700, bg="red")
-bottomMainFrame = Frame(mainWindow)
 
 #---------MAIN MENU---------
 mainMenu = Menu(mainWindow) # Menu method from Tkinter
@@ -99,7 +103,7 @@ for day in cal.itermonthdays2(cal.year, cal.month):
     if day[1] == 6:
         row += 1
 
-mainWindow.mainloop()
+PlanerApp.run()
 
 
 # topMainFrame.pack(side = TOP)
