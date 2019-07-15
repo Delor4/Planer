@@ -39,30 +39,6 @@ class Calendar:
             )
         return notes, images
 
-    def get_day_data2(self, day):
-        self.day_selected = day
-        self.month_selected = self.month
-        self.year_selected = self.year
-        for i in self.db.get_notes(self.date.year, self.month_selected, self.day_selected):
-            print("test" + i.id + i.values)
-
-    def get_month_data_(self):
-        ret = []
-        cal = calendar.Calendar()
-        # row = 0
-        for day in cal.itermonthdays2(self.date.year, self.date.month):
-            if day[0] > 0:
-                b = {'day_of_month': day[0],
-                     # 'week_of_month': row,
-                     'day_of_week': day[1],
-                     'notes_count': self.db.count_textnotes(self._make_date(day[0])),
-                     'images_count': self.db.count_images(self._make_date(day[0]))
-                     }
-                ret.append(b)
-            # if day[1] == 6:
-            #    row += 1
-        return ret
-
     def get_month_data(self):
         row = 0
         for day in calendar.Calendar().itermonthdays2(self.date.year, self.date.month):
