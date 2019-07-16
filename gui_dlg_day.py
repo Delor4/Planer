@@ -18,6 +18,7 @@ class DayDialog:
 
             self.notes_data = []
 
+            self.notes_frame = None
             self.initUI()
 
         def ok(self):
@@ -30,17 +31,22 @@ class DayDialog:
         def cancel(self):
             self.parent.top.destroy()
 
+        def create_new_note(self):
+            txt = "Nowa notatka."
+            id = self.state.add_textnote(self.day, txt)
+            self.make_frame_note(self.notes_frame, {'id': id, 'value': txt})
+
         def initUI(self):
             notes, images = self.state.get_day_data(self.day)
             frame = ttk.Frame(self.window)
             frame.pack(fill=BOTH)
 
-            notes_frame = self.make_notes_frame(frame, notes)
+            self.notes_frame = self.make_notes_frame(frame, notes)
             images_frame = self.make_images_frame(frame, images)
             buttons_frame = self.make_buttons_frame(frame)
 
             buttons_frame.pack(side=BOTTOM, anchor=E)
-            notes_frame.pack(side=LEFT, fill=BOTH, padx=2, pady=2)
+            self.notes_frame.pack(side=LEFT, fill=BOTH, padx=2, pady=2)
             images_frame.pack(side=LEFT, fill=BOTH, padx=2, pady=2)
 
         def make_frame_note(self, frame, note_data):
@@ -56,7 +62,7 @@ class DayDialog:
 
         def make_notes_frame(self, frame, notes):
             notes_frame = ttk.LabelFrame(frame, text="Notatki")
-            ttk.Button(notes_frame, text="+").pack()
+            ttk.Button(notes_frame, text="+", command=self.create_new_note).pack()
             if len(notes) == 0:
                 ttk.Label(notes_frame, text="Brak notatek.").pack()
             for n in notes:
