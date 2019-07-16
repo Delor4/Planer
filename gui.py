@@ -1,6 +1,7 @@
 import controller
 from tkinter import *
 from tkinter import messagebox
+import gui_dlg_day
 
 
 class PlanerApp:
@@ -33,6 +34,10 @@ class PlanerApp:
         self.bottomFrame.forget()
         self.bottomFrame.destroy()
         self.bottomFrame = PlanerApp.CalFrame(self)
+
+    def show_day_dlg(self, day):
+        d = gui_dlg_day.DayDialog(self, day)
+        self.mainWindow.wait_window(d.top)
 
     class Menu:
         def __init__(self, window):
