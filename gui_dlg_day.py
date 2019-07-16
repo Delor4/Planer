@@ -22,6 +22,7 @@ class DayDialog:
             self.images_data = []
 
             self.notes_frame = None
+            self.images_frame = None
             self.initUI()
 
         def ok(self):
