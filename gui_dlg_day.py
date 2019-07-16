@@ -13,12 +13,6 @@ class DayDialog:
         self.top.grab_set()
         DayDialog.DayFrame(self, day, app)
 
-    def ok(self):
-        self.top.destroy()
-
-    def cancel(self):
-        self.top.destroy()
-
     class DayFrame:
         def __init__(self, parent, day: int, app):
             self.state = app.state
@@ -26,6 +20,13 @@ class DayDialog:
             self.window = parent.top
             self.parent = parent
             self.initUI()
+
+        def ok(self):
+            # save all. we need this?
+            self.parent.top.destroy()
+
+        def cancel(self):
+            self.parent.top.destroy()
 
         def initUI(self):
             notes, images = self.state.get_day_data(self.day)
@@ -61,6 +62,6 @@ class DayDialog:
 
         def make_buttons_frame(self, frame):
             buttons_frame = ttk.Frame(frame)
-            ttk.Button(buttons_frame, text='Anuluj', command=self.parent.cancel).pack(side=RIGHT)
-            ttk.Button(buttons_frame, text='Ok', command=self.parent.ok).pack(side=RIGHT)
+            ttk.Button(buttons_frame, text='Anuluj', command=self.cancel).pack(side=RIGHT)
+            ttk.Button(buttons_frame, text='Ok', command=self.ok).pack(side=RIGHT)
             return buttons_frame
