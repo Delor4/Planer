@@ -96,7 +96,7 @@ class PlanerApp:
             # displaying calendar grid
             for day in parent.state.get_month_data():
                 Label(menuBottomFrame,
-                      text='col:{0}, row:{1}\nday:{2}\nnotes: {3}, images:{4}'.format(day['day_of_week'],
+                      text='day:{2}\nnotes: {3}, images:{4}'.format(day['day_of_week'],
                                                                                       day['week_of_month'],
                                                                                       day['day_of_month'],
                                                                                       day['notes_count'],
