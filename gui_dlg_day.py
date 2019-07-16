@@ -1,8 +1,4 @@
-import controller
-from controller import *
 from tkinter import *
-from tkinter import messagebox
-import datetime
 from tkinter import ttk
 
 
@@ -19,10 +15,16 @@ class DayDialog:
             self.day = day
             self.window = parent.top
             self.parent = parent
+
+            self.notes_data = []
+
             self.initUI()
 
         def ok(self):
-            # save all. we need this?
+            for n in self.notes_data:
+                text = n['text_widget'].get("1.0", 'end-1c')
+                if text != n['old_value']:
+                    self.state.update_textnote(n['id'], text)
             self.parent.top.destroy()
 
         def cancel(self):
@@ -41,13 +43,24 @@ class DayDialog:
             notes_frame.pack(side=LEFT, fill=BOTH, padx=2, pady=2)
             images_frame.pack(side=LEFT, fill=BOTH, padx=2, pady=2)
 
+        def make_frame_note(self, frame, note_data):
+            f = Frame(frame)
+            tn = Text(f, height=4, wrap=WORD)
+            tn.insert("1.0", note_data['value'])
+            sy = Scrollbar(f)
+            sy.pack(side=RIGHT, fill=Y)
+            tn.pack()
+            sy.config(command=tn.yview)
+            f.pack()
+            self.notes_data.append({'id': note_data['id'], 'old_value': note_data['value'], 'text_widget': tn})
+
         def make_notes_frame(self, frame, notes):
             notes_frame = ttk.LabelFrame(frame, text="Notatki")
             ttk.Button(notes_frame, text="+").pack()
             if len(notes) == 0:
                 ttk.Label(notes_frame, text="Brak notatek.").pack()
             for n in notes:
-                ttk.Label(notes_frame, text=n['value']).pack()
+                self.make_frame_note(notes_frame, n)
             return notes_frame
 
         def make_images_frame(self, frame, images):
