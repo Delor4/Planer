@@ -100,7 +100,7 @@ class Calendar:
                ]
 
     def add_textnote(self, day, note):
-        self.db.add_textnote(self._make_date(day), note)
+        return self.db.add_textnote(self._make_date(day), note)
 
     def update_textnote(self, id, value=None, geo_cord=None):
         self.db.update_textnote(id, value, geo_cord)
@@ -108,8 +108,8 @@ class Calendar:
     def delete_textnote(self, id):
         self.db.delete_textnote(id)
 
-    def add_images(self, day, path):
-        self.db.add_image(self._make_date(day), path)
+    def add_image(self, day, path):
+        return self.db.add_image(self._make_date(day), path)
 
     def update_image(self, id, path, geo_cord):
         self.db.update_image(id, path, geo_cord)
