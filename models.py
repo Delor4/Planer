@@ -185,6 +185,17 @@ class PlanerDB:
             yield i
 
     @db_session
+    def get_image(self, image_id: int):
+        """
+        Returns Image associated with id. (readonly values)
+        :param image_id: id of image
+        :return: Image (readonly values)
+         """
+        i = self.db.Image[image_id]
+        _, _, _ = i.id, i.path, i.geo_coord  # for writing to cache
+        return i
+
+    @db_session
     def has_images(self, day_date: date) -> bool:
         """
         Checks wheter selected date has any image.
