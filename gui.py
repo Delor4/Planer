@@ -21,12 +21,12 @@ class PlanerApp:
         self.mainWindow.mainloop()
 
     def prev_month(self):
-        print("cofaj")
+        # print("cofaj")
         self.state.prev_month()
         self.calendar_refresh()
 
     def next_month(self):
-        print("naprzod")
+        # print("naprzod")
         self.state.next_month()
         self.calendar_refresh()
 
