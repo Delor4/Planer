@@ -44,12 +44,20 @@ class PlanerApp:
             self.mainMenu(window)
 
         def about(self):
-            aboutUs = open('about')
-            try:
-                textAbout = aboutUs.read()
-            finally:
-                textAbout.close()
-            messagebox.showinfo("O nas", textAbout)
+            # title.name = "About" # title as parameter
+            #
+            # self.aboutUs = open('about')
+            # try:
+            #     message.file = self.aboutUs.read() # message as parameter
+            # finally:
+            #     message.file.close()
+            #
+            #  with open('about') as file:
+            #      for line in file:
+            #          print(line.strip().split())
+            # title.name = "About"
+            # message.info = "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian"
+            messagebox.showinfo("About", "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian")
 
         def mainMenu(self, window):
             # ---------MAIN MENU---------
@@ -92,6 +100,11 @@ class PlanerApp:
         def __init__(self, parent):
             menuBottomFrame = Frame(parent.mainWindow)
             menuBottomFrame.pack(side=BOTTOM)
+
+            # displaying week days bar
+            # week_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+            # monday = Label(parent.mainWindow, text=week_days[0])
+            # monday.grid(row=0, column=0)
 
             # displaying calendar grid
             for day in parent.state.get_month_data():
