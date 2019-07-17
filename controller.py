@@ -161,3 +161,12 @@ class Calendar:
         image = Image.open(path)
         image.thumbnail((200, 120), Image.ANTIALIAS)
         image.save(os.path.join(self.get_images_folder(), "t_" + filename))
+
+    def make_profile(self, name):
+        return self.db.make_profile(name)
+
+    def update_profile(self, id, name):
+        return self.db.update_profile(id, name)
+
+    def set_current_profile(self, id):
+        return self.db.set_curr_profile(id)
