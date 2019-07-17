@@ -23,6 +23,9 @@ class DayDialog:
 
             self.notes_frame = None
             self.images_frame = None
+
+            self.no_notes = None
+            self.no_images = None
             self.initUI()
 
         def ok(self):
@@ -32,8 +35,8 @@ class DayDialog:
                     self.state.update_textnote(n['id'], text)
             self.parent.top.destroy()
 
-        def cancel(self):
-            self.parent.top.destroy()
+        # def cancel(self):
+        #    self.parent.top.destroy()
 
         def create_new_note(self):
             txt = "Nowa notatka."
@@ -44,12 +47,9 @@ class DayDialog:
             filename = filedialog.askopenfilename(initialdir=".", title="Select file",
                                                   filetypes=(("jpeg files", "*.jpg"), ("all files", "*.*")))
             if os.path.isfile(filename):
-                id = self.state.add_image(filename)
+                id = self.state.add_image(self.day, filename)
                 im = self.state.get_image(id)
-                self.make_frame_image(self.images_frame, {'id': im.id,
-                                                          'path': im.path,
-                                                          'geo_coord': im.geo_coord
-                                                          })
+                self.make_frame_image(self.images_frame, im)
 
         def initUI(self):
             notes, images = self.state.get_day_data(self.day)
@@ -65,6 +65,10 @@ class DayDialog:
             self.images_frame.pack(side=LEFT, fill=BOTH, padx=2, pady=2)
 
         def make_frame_note(self, frame, note_data):
+            if self.no_notes is not None:
+                self.no_notes.pack_forget()
+                self.no_notes.destroy()
+                self.no_notes = None
             f = Frame(frame)
             tn = Text(f, height=4, wrap=WORD)
             tn.insert("1.0", note_data['value'])
@@ -76,13 +80,18 @@ class DayDialog:
             self.notes_data.append({'id': note_data['id'], 'old_value': note_data['value'], 'text_widget': tn})
 
         def make_frame_image(self, frame, image_data):
+            if self.no_images is not None:
+                self.no_images.pack_forget()
+                self.no_images.destroy()
+                self.no_images = None
             ttk.Label(frame, text=image_data['path']).pack()
 
         def make_notes_frame(self, frame, notes):
             notes_frame = ttk.LabelFrame(frame, text="Notatki")
             ttk.Button(notes_frame, text="+", command=self.create_new_note).pack()
             if len(notes) == 0:
-                ttk.Label(notes_frame, text="Brak notatek.").pack()
+                self.no_notes = ttk.Label(notes_frame, text="Brak notatek.")
+                self.no_notes.pack()
             for n in notes:
                 self.make_frame_note(notes_frame, n)
             return notes_frame
@@ -92,13 +101,15 @@ class DayDialog:
             ttk.Button(images_frame, text="+", command=self.create_new_image).pack()
 
             if len(images) == 0:
-                ttk.Label(images_frame, text="Brak obrazów.").pack()
+                self.no_images = ttk.Label(images_frame, text="Brak obrazów.")
+                self.no_images.pack()
+
             for i in images:
                 self.make_frame_image(images_frame, i)
             return images_frame
 
         def make_buttons_frame(self, frame):
             buttons_frame = ttk.Frame(frame)
-            ttk.Button(buttons_frame, text='Anuluj', command=self.cancel).pack(side=RIGHT)
+            # ttk.Button(buttons_frame, text='Anuluj', command=self.cancel).pack(side=RIGHT)
             ttk.Button(buttons_frame, text='Ok', command=self.ok).pack(side=RIGHT)
             return buttons_frame

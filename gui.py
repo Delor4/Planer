@@ -128,7 +128,7 @@ class PlanerApp:
             # displaying calendar grid
             for day in parent.state.get_month_data():
                 form = LabelFrame(menuBottomFrame, text=day['day_of_month'])
-                form.grid(row=day['week_of_month'], column=day['day_of_week'])
+                form.grid(row=day['week_of_month'] + 1, column=day['day_of_week'])
                 label = Label(form,
                               text='day:{2}\nnotes: {3}, images:{4}'.format(day['day_of_week'],
                                                                             day['week_of_month'],
