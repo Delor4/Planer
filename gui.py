@@ -122,6 +122,15 @@ class PlanerApp:
             satLabel.grid(row=0, column=5)
             sunLabel.grid(row=0, column=6)
 
+            def mouseEventLMB(event):
+                PlanerApp().show_day_dlg(day)
+
+            def mouseEventRMB(event):
+                PlanerApp().show_day_dlg(day)
+
+            def mouseEventMMB(event):
+                PlanerApp().show_day_dlg(day)
+
             # displaying calendar grid
             for day in parent.state.get_month_data():
                 Label(menuBottomFrame,
