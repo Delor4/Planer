@@ -2,6 +2,7 @@ import controller
 from tkinter import *
 from tkinter import messagebox
 import gui_dlg_day
+import gui_dlg_profiles
 
 
 class PlanerApp:
@@ -11,7 +12,7 @@ class PlanerApp:
         self.mainWindow.iconbitmap("planer.ico")
         #self.mainWindow.tk.call('wm', 'iconphoto', self.mainWindow._w, PhotoImage(file='planer.png'))
         self.mainWindow.title("Planer")
-        self.menu = PlanerApp.Menu(self.mainWindow)
+        self.menu = PlanerApp.Menu(self.mainWindow, self)
         # frames
         self.topMainFrame = Frame(self.mainWindow, width=50, height=1)
         # leftMainFrame = Frame(mainWindow, width=1, height=700, bg="red")
@@ -43,8 +44,14 @@ class PlanerApp:
         self.mainWindow.wait_window(d.top)
         self.calendar_refresh()
 
+    def show_profiles_dlg(self):
+        d = gui_dlg_profiles.ProfilesDialog(self)
+        self.mainWindow.wait_window(d.top)
+        self.calendar_refresh()
+
     class Menu:
-        def __init__(self, window):
+        def __init__(self, window, parent):
+            self.parent = parent
             self.mainMenu(window)
 
         def about(self):
@@ -70,9 +77,7 @@ class PlanerApp:
 
             subMenu = Menu(mainMenu)
             mainMenu.add_cascade(label="Plik", menu=subMenu)
-            subMenu.add_cascade(label="Nowy")
-            subMenu.add_cascade(label="Zapisz")
-            subMenu.add_cascade(label="Wczytaj")
+            subMenu.add_cascade(label="Profile", command=self.parent.show_profiles_dlg)
             subMenu.add_separator()
             subMenu.add_cascade(label="Zamknij")
 
