@@ -4,6 +4,7 @@ import calendar
 import os
 import shutil
 from PIL import Image
+from pathlib import Path
 
 
 class Calendar:
@@ -134,7 +135,7 @@ class Calendar:
         filename = self.make_new_name(id, ext)
         shutil.copy(source_path, os.path.join(path_to_image, filename))
         self.db.update_image(id, path=filename)
-        thumbnail = self.make_thumbnail(os.path.join(path_to_image, filename),filename)
+        thumbnail = self.make_thumbnail(os.path.join(path_to_image, filename), filename)
         return id
 
     def get_images_folder(self):
@@ -151,13 +152,12 @@ class Calendar:
         return "img_" + str(id) + ext
 
     def create_folder(self, path):
-        # TODO: sprawdz czy dany folder istnieje i ewentualnie go stwórz
-        # TODO: wcześniej wywołaj rekurencyjnie dla folderu nadrzędnego
         if not os.path.exists(path):
+            parent_path = Path(path).parent
+            self.create_folder(parent_path)
             os.mkdir(path)
-        return
 
     def make_thumbnail(self, path, filename):
         image = Image.open(path)
         image.thumbnail((200, 120), Image.ANTIALIAS)
-        return image.save(os.path.join(self.get_images_folder(), "t_" + filename))
+        image.save(os.path.join(self.get_images_folder(), "t_" + filename))
