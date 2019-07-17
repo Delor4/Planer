@@ -114,6 +114,14 @@ class PlanerApp:
             satLabel = Label(menuBottomFrame, text="SATURDAY")
             sunLabel = Label(menuBottomFrame, text="SUNDAY")
 
+            monLabel.grid(row=0, column=0)
+            tueLabel.grid(row=0, column=1)
+            wedLabel.grid(row=0, column=2)
+            thuLabel.grid(row=0, column=3)
+            friLabel.grid(row=0, column=4)
+            satLabel.grid(row=0, column=5)
+            sunLabel.grid(row=0, column=6)
+
             # displaying calendar grid
             for day in parent.state.get_month_data():
                 Label(menuBottomFrame,
