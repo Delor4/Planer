@@ -116,3 +116,10 @@ class Calendar:
 
     def delete_image(self, id):
         self.db.delete_image(id)
+
+    def get_image(self, image_id):
+        i = self.db.get_image(image_id)
+        return {'id': i.id,
+                'path': i.path,
+                'geo_cord': i.geo_coord
+                }
