@@ -57,7 +57,7 @@ class DayDialog:
             frame = ttk.Frame(self.window)
             frame.pack(fill=BOTH)
 
-            self.notes_frame = self.make_notes_frame(frame, notes)
+            self.notes_frame = self.make_all_notes_frame(frame, notes)
             self.images_frame = self.make_images_frame(frame, images)
             buttons_frame = self.make_buttons_frame(frame)
 
@@ -95,14 +95,19 @@ class DayDialog:
             canvas.bind("<Button-1>", lambda event, d=image_data: self.on_image_click(event, d))
             self.images_data.append({'img': img})
 
-        def make_notes_frame(self, frame, notes):
+        def make_all_notes_frame(self, frame, notes):
             notes_frame = ttk.LabelFrame(frame, text="Notatki")
-            ttk.Button(notes_frame, text="+", command=self.create_new_note).pack()
+            notes_wrapper = ttk.LabelFrame(notes_frame, text="Wraper")
             if len(notes) == 0:
-                self.no_notes = ttk.Label(notes_frame, text="Brak notatek.")
+                self.no_notes = ttk.Label(notes_wrapper, text="Brak notatek.")
                 self.no_notes.pack()
             for n in notes:
-                self.make_frame_note(notes_frame, n)
+                self.make_frame_note(notes_wrapper, n)
+            notes_wrapper.pack()
+            notes_frame_bottom = ttk.LabelFrame(notes_frame, text="Bottom")
+            ttk.Button(notes_frame_bottom, text="↲", command=self.create_new_note).pack(side=RIGHT)
+            ttk.Entry(notes_frame_bottom).pack(fill=X)
+            notes_frame_bottom.pack(fill=X)
             return notes_frame
 
         def make_images_frame(self, frame, images):
