@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
+from PIL import ImageTk, Image
 import os
 
 
@@ -9,7 +10,7 @@ class DayDialog:
         self.top = Toplevel(app.mainWindow)
         self.top.transient(app.mainWindow)
         self.top.grab_set()
-        DayDialog.DayFrame(self, day, app)
+        self.dialog = DayDialog.DayFrame(self, day, app)
 
     class DayFrame:
         def __init__(self, parent, day: int, app):
@@ -84,7 +85,10 @@ class DayDialog:
                 self.no_images.pack_forget()
                 self.no_images.destroy()
                 self.no_images = None
-            ttk.Label(frame, text=image_data['path']).pack()
+            label = ttk.Label(frame, text=image_data['path'])
+            label.pack()
+            label.bind("<Button-1>", lambda event, d=image_data: self.on_image_click(event, d))
+            # self.images_data.append({label, image_data})
 
         def make_notes_frame(self, frame, notes):
             notes_frame = ttk.LabelFrame(frame, text="Notatki")
@@ -113,3 +117,27 @@ class DayDialog:
             # ttk.Button(buttons_frame, text='Anuluj', command=self.cancel).pack(side=RIGHT)
             ttk.Button(buttons_frame, text='Ok', command=self.ok).pack(side=RIGHT)
             return buttons_frame
+
+        def on_image_click(self, event, image_data):
+            self.show_image_viewer(image_data)
+
+        def show_image_viewer(self, image_data):
+            d = DayDialog.ImageViewerDialog(self.parent, image_data['path'])
+            self.parent.top.wait_window(d.top)
+
+    class ImageViewerDialog:
+        def __init__(self, parent, image_path):
+            self.top = Toplevel(parent.top)
+            self.top.transient(parent.top)
+            self.top.grab_set()
+            self.parent = parent
+            self.image_path = image_path
+            self.state = self.parent.dialog.state
+            self.img = None
+            self.init_ui()
+
+        def init_ui(self):
+            self.img = ImageTk.PhotoImage(Image.open(os.path.join(self.state.get_images_folder(), self.image_path)))
+            canvas = Canvas(self.top, width=self.img.width(), height=self.img.height())
+            canvas.pack()
+            canvas.create_image(0, 0, anchor=NW, image=self.img)
