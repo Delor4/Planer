@@ -85,10 +85,15 @@ class DayDialog:
                 self.no_images.pack_forget()
                 self.no_images.destroy()
                 self.no_images = None
-            label = ttk.Label(frame, text=image_data['path'])
-            label.pack()
-            label.bind("<Button-1>", lambda event, d=image_data: self.on_image_click(event, d))
-            # self.images_data.append({label, image_data})
+            i_frame = ttk.Frame(frame)
+            img = ImageTk.PhotoImage(
+                Image.open(os.path.join(self.state.get_images_folder(), 't_' + image_data['path'])))
+            canvas = Canvas(i_frame, width=img.width(), height=img.height())
+            canvas.pack()
+            canvas.create_image(0, 0, anchor=NW, image=img)
+            i_frame.pack()
+            canvas.bind("<Button-1>", lambda event, d=image_data: self.on_image_click(event, d))
+            self.images_data.append({'img': img})
 
         def make_notes_frame(self, frame, notes):
             notes_frame = ttk.LabelFrame(frame, text="Notatki")
