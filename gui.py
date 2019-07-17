@@ -38,6 +38,7 @@ class PlanerApp:
     def show_day_dlg(self, day):
         d = gui_dlg_day.DayDialog(self, day)
         self.mainWindow.wait_window(d.top)
+        self.calendar_refresh()
 
     class Menu:
         def __init__(self, window):
@@ -98,6 +99,8 @@ class PlanerApp:
 
     class CalFrame:
         def __init__(self, parent):
+            self.parent = parent
+
             menuBottomFrame = Frame(parent.mainWindow)
             menuBottomFrame.pack(side=BOTTOM)
 
@@ -122,27 +125,24 @@ class PlanerApp:
             satLabel.grid(row=0, column=5)
             sunLabel.grid(row=0, column=6)
 
-            def mouseEventLMB(event):
-                PlanerApp().show_day_dlg(day)
-
-            def mouseEventRMB(event):
-                PlanerApp().show_day_dlg(day)
-
-            def mouseEventMMB(event):
-                PlanerApp().show_day_dlg(day)
-
             # displaying calendar grid
             for day in parent.state.get_month_data():
-                Label(menuBottomFrame,
-                      text='day:{2}\nnotes: {3}, images:{4}'.format(day['day_of_week'],
-                                                                                      day['week_of_month'],
-                                                                                      day['day_of_month'],
-                                                                                      day['notes_count'],
-                                                                                      day['images_count']),
-                      borderwidth=50).grid(row=day['week_of_month'], column=day['day_of_week'])
+                form = LabelFrame(menuBottomFrame, text=day['day_of_month'])
+                form.grid(row=day['week_of_month'], column=day['day_of_week'])
+                label = Label(form,
+                              text='day:{2}\nnotes: {3}, images:{4}'.format(day['day_of_week'],
+                                                                            day['week_of_month'],
+                                                                            day['day_of_month'],
+                                                                            day['notes_count'],
+                                                                            day['images_count']),
+                              borderwidth=50)
+                label.grid()
 
-                Label.bind("<Button-1>", mouseEventLMB)
+                label.bind("<Button-1>", lambda event, d=day['day_of_month']: self.mouseEventLMB(event, d))
             self.bottomFrame = menuBottomFrame
+
+        def mouseEventLMB(self, event, day):
+            self.parent.show_day_dlg(day)
 
         def forget(self):
             self.bottomFrame.pack_forget()
