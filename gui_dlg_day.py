@@ -10,6 +10,9 @@ class DayDialog:
         self.top = Toplevel(app.mainWindow)
         self.top.transient(app.mainWindow)
         self.top.grab_set()
+        self.top.iconbitmap("planer.ico")
+        # self.top.tk.call('wm', 'iconphoto', self.mainWindow._w, PhotoImage(file='planer.png'))
+        self.top.title("Planer - {}".format(day))
         self.dialog = DayDialog.DayFrame(self, day, app)
 
     class DayFrame:
@@ -166,6 +169,9 @@ class DayDialog:
             self.top = Toplevel(parent.top)
             self.top.transient(parent.top)
             self.top.grab_set()
+            self.top.iconbitmap("planer.ico")
+            # self.top.tk.call('wm', 'iconphoto', self.mainWindow._w, PhotoImage(file='planer.png'))
+            self.top.title("Planer - ImageView")
             self.parent = parent
             self.image_path = image_path
             self.state = self.parent.dialog.state

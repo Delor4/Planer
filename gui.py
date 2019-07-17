@@ -8,6 +8,9 @@ class PlanerApp:
     def __init__(self):
         self.state = controller.Calendar()
         self.mainWindow = Tk()
+        self.mainWindow.iconbitmap("planer.ico")
+        #self.mainWindow.tk.call('wm', 'iconphoto', self.mainWindow._w, PhotoImage(file='planer.png'))
+        self.mainWindow.title("Planer")
         self.menu = PlanerApp.Menu(self.mainWindow)
         # frames
         self.topMainFrame = Frame(self.mainWindow, width=50, height=1)
