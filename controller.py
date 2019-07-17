@@ -3,6 +3,7 @@ import models
 import calendar
 import os
 import shutil
+from PIL import Image
 
 
 class Calendar:
@@ -133,6 +134,7 @@ class Calendar:
         filename = self.make_new_name(id, ext)
         shutil.copy(source_path, os.path.join(path_to_image, filename))
         self.db.update_image(id, path=filename)
+        thumbnail = self.make_thumbnail(os.path.join(path_to_image, filename),filename)
         return id
 
     def get_images_folder(self):
@@ -154,3 +156,8 @@ class Calendar:
         if not os.path.exists(path):
             os.mkdir(path)
         return
+
+    def make_thumbnail(self, path, filename):
+        image = Image.open(path)
+        image.thumbnail((200, 120), Image.ANTIALIAS)
+        return image.save(os.path.join(self.get_images_folder(), "t_" + filename))
