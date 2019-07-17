@@ -9,7 +9,9 @@ class Calendar:
     def __init__(self, _=None):
         d = datetime.date.today()
         self.date = datetime.date(d.year, d.month, 1)
-        self.db = models.PlanerDB()
+        # self.db = models.PlanerDB() # db in memory
+        self.create_folder(self.get_data_folder())
+        self.db = models.PlanerDB(os.path.join(self.get_data_folder(), 'notes.sqlite'))
 
     def prev_month(self):  # ustawienie poprzedniego miesiąca
         d = self.date - datetime.timedelta(28)
@@ -124,7 +126,8 @@ class Calendar:
                 }
 
     def add_image(self, day, source_path):
-        path_to_image = self.make_path()
+        path_to_image = self.get_images_folder()
+        self.create_folder(path_to_image)
         ext = self.get_extension(source_path)
         id = self.db.add_image(self._make_date(day), path_to_image)
         filename = self.make_new_name(id, ext)
@@ -132,9 +135,11 @@ class Calendar:
         self.db.update_image(id, path=filename)
         return id
 
-    def make_path(self):  # TODO sprawdzenie czy __file__ zwraca sciezke
-        app_path = os.path.abspath(os.path.dirname(__file__))
-        return os.path.join(app_path, "data", str(self.db.get_curr_profile()))
+    def get_images_folder(self):
+        return os.path.join(self.get_data_folder(), str(self.db.get_curr_profile()))
+
+    def get_data_folder(self):  # TODO sprawdzenie czy __file__ zawsze zwraca sciezke
+        return os.path.join(os.path.abspath(os.path.dirname(__file__)), "data")
 
     def get_extension(self, source_path):
         old_name, extension = os.path.splitext(source_path)
@@ -142,3 +147,8 @@ class Calendar:
 
     def make_new_name(self, id, ext):
         return "img_" + str(id) + ext
+
+    def create_folder(self, path):
+        # TODO: sprawdz czy dany folder istnieje i ewentualnie go stwórz
+        # TODO: wcześniej wywołaj rekurencyjnie dla folderu nadrzędnego
+        return
