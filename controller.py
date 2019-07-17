@@ -151,4 +151,6 @@ class Calendar:
     def create_folder(self, path):
         # TODO: sprawdz czy dany folder istnieje i ewentualnie go stwórz
         # TODO: wcześniej wywołaj rekurencyjnie dla folderu nadrzędnego
+        if not os.path.exists(path):
+            os.mkdir(path)
         return
