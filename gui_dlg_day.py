@@ -27,7 +27,7 @@ class DayDialog:
 
             self.no_notes = None
             self.no_images = None
-            self.initUI()
+            self.init_ui()
 
         def ok(self):
             for n in self.notes_data:
@@ -41,18 +41,18 @@ class DayDialog:
 
         def create_new_note(self):
             txt = "Nowa notatka."
-            id = self.state.add_textnote(self.day, txt)
-            self.make_frame_note(self.notes_frame, {'id': id, 'value': txt})
+            txt_id = self.state.add_textnote(self.day, txt)
+            self.make_frame_note(self.notes_frame, {'id': txt_id, 'value': txt})
 
         def create_new_image(self):
             filename = filedialog.askopenfilename(initialdir=".", title="Select file",
                                                   filetypes=(("jpeg files", "*.jpg"), ("all files", "*.*")))
             if os.path.isfile(filename):
-                id = self.state.add_image(self.day, filename)
-                im = self.state.get_image(id)
+                img_id = self.state.add_image(self.day, filename)
+                im = self.state.get_image(img_id)
                 self.make_frame_image(self.images_frame, im)
 
-        def initUI(self):
+        def init_ui(self):
             notes, images = self.state.get_day_data(self.day)
             frame = ttk.Frame(self.window)
             frame.pack(fill=BOTH)
@@ -123,7 +123,7 @@ class DayDialog:
             ttk.Button(buttons_frame, text='Ok', command=self.ok).pack(side=RIGHT)
             return buttons_frame
 
-        def on_image_click(self, event, image_data):
+        def on_image_click(self, _, image_data):
             self.show_image_viewer(image_data)
 
         def show_image_viewer(self, image_data):
