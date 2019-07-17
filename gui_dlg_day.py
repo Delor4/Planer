@@ -24,9 +24,14 @@ class DayDialog:
 
             self.notes_frame = None
             self.images_frame = None
+            self.buttons_frame = None
+            self.notes_bottom = None
 
             self.no_notes = None
             self.no_images = None
+
+            self.entry_text = StringVar()
+
             self.init_ui()
 
         def ok(self):
@@ -39,8 +44,7 @@ class DayDialog:
         # def cancel(self):
         #    self.parent.top.destroy()
 
-        def create_new_note(self):
-            txt = "Nowa notatka."
+        def create_new_note(self, txt):
             txt_id = self.state.add_textnote(self.day, txt)
             self.make_frame_note(self.notes_frame, {'id': txt_id, 'value': txt})
 
@@ -59,9 +63,12 @@ class DayDialog:
 
             self.notes_frame = self.make_all_notes_frame(frame, notes)
             self.images_frame = self.make_images_frame(frame, images)
-            buttons_frame = self.make_buttons_frame(frame)
+            self.buttons_frame = self.make_buttons_frame(frame)
 
-            buttons_frame.pack(side=BOTTOM, anchor=E)
+            self.repack()
+
+        def repack(self):
+            self.buttons_frame.pack(side=BOTTOM, anchor=E)
             self.notes_frame.pack(side=LEFT, fill=BOTH, padx=2, pady=2)
             self.images_frame.pack(side=LEFT, fill=BOTH, padx=2, pady=2)
 
@@ -97,18 +104,37 @@ class DayDialog:
 
         def make_all_notes_frame(self, frame, notes):
             notes_frame = ttk.LabelFrame(frame, text="Notatki")
-            notes_wrapper = ttk.LabelFrame(notes_frame, text="Wraper")
+            notes_wrapper = ttk.Frame(notes_frame)
             if len(notes) == 0:
                 self.no_notes = ttk.Label(notes_wrapper, text="Brak notatek.")
                 self.no_notes.pack()
             for n in notes:
                 self.make_frame_note(notes_wrapper, n)
             notes_wrapper.pack()
-            notes_frame_bottom = ttk.LabelFrame(notes_frame, text="Bottom")
-            ttk.Button(notes_frame_bottom, text="↲", command=self.create_new_note).pack(side=RIGHT)
-            ttk.Entry(notes_frame_bottom).pack(fill=X)
-            notes_frame_bottom.pack(fill=X)
+
+            self.create_notes_bottom(notes_frame)
+
             return notes_frame
+
+        def create_notes_bottom(self, frame):
+            self.notes_bottom = ttk.Frame(frame)
+            ttk.Button(self.notes_bottom, text="↲", command=self.on_new_note).pack(side=RIGHT)
+
+            e = ttk.Entry(self.notes_bottom, textvariable=self.entry_text)
+            e.pack(fill=X)
+            e.bind('<Return>', lambda event: self.on_new_note())
+
+            self.notes_bottom.pack(fill=X)
+
+        def on_new_note(self):
+            if self.entry_text.get() == "":
+                return
+            self.create_new_note(self.entry_text.get())
+            self.entry_text.set("")
+            self.notes_bottom.pack_forget()
+            self.notes_bottom.destroy()
+            self.create_notes_bottom(self.notes_frame)
+            self.repack()
 
         def make_images_frame(self, frame, images):
             images_frame = ttk.LabelFrame(frame, text="Obrazy")
