@@ -141,6 +141,7 @@ class PlanerApp:
                                                                                       day['images_count']),
                       borderwidth=50).grid(row=day['week_of_month'], column=day['day_of_week'])
 
+                Label.bind("<Button-1>", mouseEventLMB)
             self.bottomFrame = menuBottomFrame
 
         def forget(self):
