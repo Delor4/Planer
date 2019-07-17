@@ -21,12 +21,12 @@ class PlanerApp:
         self.mainWindow.mainloop()
 
     def prev_month(self):
-        print("cofaj")
+        # print("cofaj")
         self.state.prev_month()
         self.calendar_refresh()
 
     def next_month(self):
-        print("naprzod")
+        # print("naprzod")
         self.state.next_month()
         self.calendar_refresh()
 
@@ -44,12 +44,20 @@ class PlanerApp:
             self.mainMenu(window)
 
         def about(self):
-            aboutUs = open('about')
-            try:
-                textAbout = aboutUs.read()
-            finally:
-                textAbout.close()
-            messagebox.showinfo("O nas", textAbout)
+            # title.name = "About" # title as parameter
+            #
+            # self.aboutUs = open('about')
+            # try:
+            #     message.file = self.aboutUs.read() # message as parameter
+            # finally:
+            #     message.file.close()
+            #
+            #  with open('about') as file:
+            #      for line in file:
+            #          print(line.strip().split())
+            # title.name = "About"
+            # message.info = "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian"
+            messagebox.showinfo("About", "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian")
 
         def mainMenu(self, window):
             # ---------MAIN MENU---------
@@ -93,6 +101,36 @@ class PlanerApp:
             menuBottomFrame = Frame(parent.mainWindow)
             menuBottomFrame.pack(side=BOTTOM)
 
+            # displaying week days bar
+            # week_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+            # monday = Label(parent.mainWindow, text=week_days[0])
+            # monday.grid(row=0, column=0)
+
+            monLabel = Label(menuBottomFrame, text="MONDAY")
+            tueLabel = Label(menuBottomFrame, text="TUESDAY")
+            wedLabel = Label(menuBottomFrame, text="WEDNESDAY")
+            thuLabel = Label(menuBottomFrame, text="THURSDAY")
+            friLabel = Label(menuBottomFrame, text="FRIDAY")
+            satLabel = Label(menuBottomFrame, text="SATURDAY")
+            sunLabel = Label(menuBottomFrame, text="SUNDAY")
+
+            monLabel.grid(row=0, column=0)
+            tueLabel.grid(row=0, column=1)
+            wedLabel.grid(row=0, column=2)
+            thuLabel.grid(row=0, column=3)
+            friLabel.grid(row=0, column=4)
+            satLabel.grid(row=0, column=5)
+            sunLabel.grid(row=0, column=6)
+
+            def mouseEventLMB(event):
+                PlanerApp().show_day_dlg(day)
+
+            def mouseEventRMB(event):
+                PlanerApp().show_day_dlg(day)
+
+            def mouseEventMMB(event):
+                PlanerApp().show_day_dlg(day)
+
             # displaying calendar grid
             for day in parent.state.get_month_data():
                 Label(menuBottomFrame,
@@ -103,6 +141,7 @@ class PlanerApp:
                                                                                       day['images_count']),
                       borderwidth=50).grid(row=day['week_of_month'], column=day['day_of_week'])
 
+                Label.bind("<Button-1>", mouseEventLMB)
             self.bottomFrame = menuBottomFrame
 
         def forget(self):
