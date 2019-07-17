@@ -1,6 +1,8 @@
 import datetime
 import models
 import calendar
+import os
+import shutil
 
 
 class Calendar:
@@ -108,9 +110,6 @@ class Calendar:
     def delete_textnote(self, id):
         self.db.delete_textnote(id)
 
-    def add_image(self, day, path):
-        return self.db.add_image(self._make_date(day), path)
-
     def update_image(self, id, path, geo_cord):
         self.db.update_image(id, path, geo_cord)
 
@@ -123,3 +122,23 @@ class Calendar:
                 'path': i.path,
                 'geo_cord': i.geo_coord
                 }
+
+    def add_image(self, day, source_path):
+        path_to_image = self.make_path()
+        ext = self.get_extension(source_path)
+        id = self.db.add_image(self._make_date(day), path_to_image)
+        filename = self.make_new_name(id, ext)
+        shutil.copy(source_path, path_to_image + "/" + filename)
+        self.db.update_image(id, path=filename)
+        return id
+
+    def make_path(self):  # TODO sprawdzenie czy __file__ zwraca sciezke
+        app_path = os.path.abspath(os.path.dirname(__file__))
+        return os.path.join(app_path + "/data/" + self.db.get_curr_profile())
+
+    def get_extension(self, source_path):
+        old_name, extension = os.path.splitext(source_path)
+        return extension
+
+    def make_new_name(self, id, ext):
+        return "img_" + id + "." + ext
