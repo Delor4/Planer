@@ -77,6 +77,16 @@ class DayDialog:
             self.notes_frame.pack(side=LEFT, fill=BOTH, padx=2, pady=2)
             self.images_frame.pack(side=LEFT, fill=BOTH, padx=2, pady=2)
 
+        def remove_note(self, n_id):
+            for note in self.notes_data:
+                if note['id'] == n_id:
+                    self.state.delete_textnote(n_id)
+                    note['frame'].pack_forget()
+                    note['frame'].destroy()
+                    self.notes_data.remove(note)
+                    self.repack()
+                    break
+
         def make_frame_note(self, frame, note_data):
             if self.no_notes is not None:
                 self.no_notes.pack_forget()
@@ -90,7 +100,10 @@ class DayDialog:
             tn.pack()
             sy.config(command=tn.yview)
             f.pack()
-            self.notes_data.append({'id': note_data['id'], 'old_value': note_data['value'], 'text_widget': tn})
+            close_button = Button(f, text='x', command=lambda id=note_data['id']: self.remove_note(id))
+            close_button.place(relx=1, x=-18, y=-3, anchor=NE)
+            self.notes_data.append(
+                {'id': note_data['id'], 'old_value': note_data['value'], 'text_widget': tn, 'frame': f})
 
         def make_frame_image(self, frame, image_data):
             if self.no_images is not None:
