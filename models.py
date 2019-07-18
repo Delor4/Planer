@@ -44,6 +44,13 @@ class PlanerDB:
             id = PrimaryKey(int, column='profile_id', auto=True)
             name = Required(str, column='profile_name')
             days = Set(Day)
+            language = Required('Language', default=1)
+
+        class Language(db.Entity):
+            id = PrimaryKey(int, auto=True)
+            eng_name = Required(str)
+            native_name = Optional(str)
+            profiles = Set(Profile)
 
     @staticmethod
     def _open_database(filename=':memory:', debug=False):
