@@ -35,6 +35,7 @@ class DayDialog:
             self.no_images = None
 
             self.entry_text = StringVar()
+            self.initial_dir = '.'
 
             self.init_ui()
 
@@ -53,12 +54,14 @@ class DayDialog:
             self.make_frame_note(self.notes_frame, {'id': txt_id, 'value': txt})
 
         def create_new_image(self):
-            filename = filedialog.askopenfilename(initialdir=".", title=self.T("Select file"), filetypes=
+            print(self.initial_dir)
+            filename = filedialog.askopenfilename(initialdir=self.initial_dir, title=self.T("Select file"), filetypes=
             ((self.T("jpeg files"), "*.jpg"), (self.T("all files"), "*.*")))
             if os.path.isfile(filename):
                 img_id = self.state.add_image(self.day, filename)
                 im = self.state.get_image(img_id)
                 self.make_frame_image(self.images_frame, im)
+                self.initial_dir = os.path.dirname(filename)
 
         def init_ui(self):
             notes, images = self.state.get_day_data(self.day)
