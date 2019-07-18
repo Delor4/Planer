@@ -6,8 +6,9 @@ from pony.orm import *
 class PlanerDB:
 
     def __init__(self, filename=':memory:', debug=False):
+        self.first_run = False
         self.db = PlanerDB._open_database(filename, debug)
-        self.curr_profile_id = PlanerDB._init_db(self.db)
+        self.curr_profile_id = self._init_db(self.db)
 
     @staticmethod
     def _define_entities(db):
@@ -66,9 +67,8 @@ class PlanerDB:
         db.generate_mapping(create_tables=True)
         return db
 
-    @staticmethod
     @db_session
-    def _init_db(db) -> int:
+    def _init_db(self, db) -> int:
         """
         Init database (make default profile if needed).
         :return: Id of default profile.
@@ -78,6 +78,7 @@ class PlanerDB:
             db.Language(eng_name="english", native_name="english")
             db.Language(eng_name="polish", native_name="polski")
             db.commit()
+            self.first_run = True
 
         profiles = select(u.id for u in db.Profile)
         if profiles.count() == 0:
@@ -359,3 +360,9 @@ class PlanerDB:
         langs = select(l for l in self.db.Language)
         for l in langs:
             yield {'id': l.id, 'eng_name': l.eng_name, 'native_name': l.native_name}
+
+    def is_first_run(self) -> bool:
+        """
+        Returns true for first run (with new database).
+        """
+        return self.first_run
