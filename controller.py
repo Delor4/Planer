@@ -124,5 +124,8 @@ class Calendar:
     def set_current_profile(self, id):
         return self.db.set_curr_profile(id)
 
-    def get_all_profiles(self, ):
-        return self.db.get_all_profiles
+    def get_all_profiles(self):
+        return self.db.get_all_profiles()
+
+    def get_curr_profile(self):
+        return self.db.get_curr_profile()
