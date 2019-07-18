@@ -96,6 +96,10 @@ class PlanerApp:
             mainMenu.add_cascade(label=self.T("Options").capitalize(), menu=optMenu)
             optMenu.add_cascade(label=self.T("Language").capitalize())
 
+            langMenu = Menu(optMenu)
+            langMenu.add_cascade(label=self.T("Option 1").capitalize(), menu=optMenu)
+            langMenu.add_cascade(label=self.T("Option 1").capitalize())
+
             helpMenu = Menu(mainMenu)
             mainMenu.add_cascade(label=self.T("Help").capitalize(), menu=helpMenu)
             helpMenu.add_command(label=self.T("About").capitalize(), command=self.about)  # added showinfo window
@@ -106,7 +110,7 @@ class PlanerApp:
             menuTopFrame = Frame(window, width=1100, height=50)
             menuTopFrame.pack(side=TOP)
 
-            left = Button(menuTopFrame, text='<', command=lambda: parent.prev_month())
+            left = Button(menuTopFrame, text='<', command=lambda: parent.prev_month(), highlightcolor = "red")
             left.pack(side=LEFT)
 
             right = Button(menuTopFrame, text='>', command=lambda: parent.next_month())
@@ -147,7 +151,7 @@ class PlanerApp:
 
             # displaying calendar grid
             for day in parent.state.get_month_data():
-                form = LabelFrame(menuBottomFrame, text=day['day_of_month'])
+                form = LabelFrame(menuBottomFrame, text=day['day_of_month'], )
                 form.grid(row=day['week_of_month'] + 1, column=day['day_of_week'])
                 label = Label(form,
                               text='day:{2}\nnotes: {3}, images:{4}'.format(day['day_of_week'],
@@ -155,7 +159,7 @@ class PlanerApp:
                                                                             day['day_of_month'],
                                                                             day['notes_count'],
                                                                             day['images_count']),
-                              borderwidth=50)
+                              borderwidth=50, bg="white")
                 label.grid()
 
                 label.bind("<Button-1>", lambda event, d=day['day_of_month']: self.mouseEventLMB(event, d))
