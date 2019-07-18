@@ -45,12 +45,17 @@ class PlanerDB:
             name = Required(str, column='profile_name')
             days = Set(Day)
             language = Required('Language', default=1)
+            config = Optional('Config')
 
         class Language(db.Entity):
             id = PrimaryKey(int, auto=True)
             eng_name = Required(str)
             native_name = Optional(str)
             profiles = Set(Profile)
+
+        class Config(db.Entity):
+            id = PrimaryKey(int, auto=True)
+            profile = Required(Profile)
 
     @staticmethod
     def _open_database(filename=':memory:', debug=False):
@@ -78,9 +83,10 @@ class PlanerDB:
         if profiles.count() == 0:
             u = db.Profile(name='Default profile')
             commit()
+            db.Config(id=1, profile=u)
             return u.id
-        for i in profiles:
-            return i
+
+        return db.Config[1].profile.id
 
     @db_session
     def _get_day(self, day_date: date):
@@ -293,7 +299,10 @@ class PlanerDB:
         """
         u = self.db.Profile[profile_id]
         tmp = self.curr_profile_id
+
         self.curr_profile_id = u.id
+        self.db.Config[1].profile = u
+
         return tmp
 
     def get_curr_profile(self) -> int:
