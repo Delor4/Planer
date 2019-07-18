@@ -309,3 +309,31 @@ class PlanerDB:
         for i in select(u for u in self.db.Profile):
             _, _ = i.id, i.name  # for writing to cache
             yield i
+
+    @db_session
+    def get_language(self):
+        return self._get_lang_stub()
+
+    @db_session
+    def set_language(self, lang_id):
+        return self._set_lang_stub(lang_id)
+
+    @db_session
+    def get_all_languages(self):
+        return self._get_all_langs_stub()
+
+    lang = 1
+
+    def _get_lang_stub(self):
+        global lang
+        return lang
+
+    def _set_lang_stub(self, lang_id):
+        global lang
+        lang = lang_id
+
+    def _get_all_langs_stub(self):
+        return [
+            {'id': 1, 'eng_name': 'polish', 'native_name': 'polski'},
+            {'id': 2, 'eng_name': 'english', 'native_name': 'english'}
+        ]
