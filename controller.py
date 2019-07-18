@@ -130,6 +130,15 @@ class Calendar:
     def get_curr_profile(self):
         return self.db.get_curr_profile()
 
+    def get_language(self):
+        return self.db.get_language()
+
+    def set_language(self, l_id):
+        return self.db.set_language(l_id)
+
+    def get_all_languages(self):
+        return self.db.get_all_languages()
+
     def translate(self, tag):
         print("To translate:", tag)
         return tag
