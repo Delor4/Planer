@@ -121,12 +121,12 @@ class PlanerApp:
             # monday.grid(row=0, column=0)
 
             monLabel = Label(menuBottomFrame, text=self.T("monday").upper())
-            tueLabel = Label(menuBottomFrame, text=self.T("tuesday"))
-            wedLabel = Label(menuBottomFrame, text=self.T("wednesday"))
-            thuLabel = Label(menuBottomFrame, text=self.T("thursday"))
-            friLabel = Label(menuBottomFrame, text=self.T("friday"))
-            satLabel = Label(menuBottomFrame, text=self.T("saturday"))
-            sunLabel = Label(menuBottomFrame, text=self.T("sunday"))
+            tueLabel = Label(menuBottomFrame, text=self.T("tuesday").upper())
+            wedLabel = Label(menuBottomFrame, text=self.T("wednesday").upper())
+            thuLabel = Label(menuBottomFrame, text=self.T("thursday").upper())
+            friLabel = Label(menuBottomFrame, text=self.T("friday").upper())
+            satLabel = Label(menuBottomFrame, text=self.T("saturday").upper())
+            sunLabel = Label(menuBottomFrame, text=self.T("sunday").upper())
 
             monLabel.grid(row=0, column=0)
             tueLabel.grid(row=0, column=1)
