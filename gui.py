@@ -27,7 +27,7 @@ class PlanerApp:
     def set_icon(window):
         if platform.system() == 'Windows':
             window.iconbitmap("planer.ico")
-        if platform.system() == 'Linux':
+        elif platform.system() == 'Linux':
             window.tk.call('wm', 'iconphoto', window._w, PhotoImage(file='planer.png'))
 
     def run(self):
