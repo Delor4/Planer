@@ -303,9 +303,8 @@ class PlanerDB:
     def get_all_profiles(self):
         """
         Returns all profiles. (generator)
-        :return: Profile (readonly values)
+        :return: dict{'id': int, 'name': str}
          """
 
         for i in select(u for u in self.db.Profile):
-            _, _ = i.id, i.name  # for writing to cache
-            yield i
+            yield {'id': i.id, 'name': i.name}
