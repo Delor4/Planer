@@ -23,6 +23,9 @@ class PlanerApp:
         self.topFrame = PlanerApp.NavFrame(self.mainWindow, self)
         self.bottomFrame = PlanerApp.CalFrame(self)
 
+    def close_window(self):
+        self.mainWindow.destroy()
+
     @staticmethod
     def set_icon(window):
         if platform.system() == 'Windows':
@@ -34,12 +37,10 @@ class PlanerApp:
         self.mainWindow.mainloop()
 
     def prev_month(self):
-        # print("cofaj")
         self.state.prev_month()
         self.calendar_refresh()
 
     def next_month(self):
-        # print("naprzod")
         self.state.next_month()
         self.calendar_refresh()
 
@@ -89,7 +90,7 @@ class PlanerApp:
             mainMenu.add_cascade(label=self.T("Plik").capitalize(), menu=subMenu)
             subMenu.add_cascade(label=self.T("Profile").capitalize(), command=self.parent.show_profiles_dlg)
             subMenu.add_separator()
-            subMenu.add_cascade(label=self.T("Zamknij").capitalize())
+            subMenu.add_command(label=self.T("Zamknij").capitalize(), command=self.parent.close_window)
 
             helpMenu = Menu(mainMenu)
             mainMenu.add_cascade(label=self.T("Pomoc").capitalize(), menu=helpMenu)
@@ -124,10 +125,6 @@ class PlanerApp:
             menuBottomFrame.pack(side=BOTTOM)
 
             # displaying week days bar
-            # week_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-            # monday = Label(parent.mainWindow, text=week_days[0])
-            # monday.grid(row=0, column=0)
-
             monLabel = Label(menuBottomFrame, text=self.T("monday").upper())
             tueLabel = Label(menuBottomFrame, text=self.T("tuesday").upper())
             wedLabel = Label(menuBottomFrame, text=self.T("wednesday").upper())
