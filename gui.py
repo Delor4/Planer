@@ -87,18 +87,18 @@ class PlanerApp:
             window.config(menu=mainMenu)
 
             subMenu = Menu(mainMenu)
-            mainMenu.add_cascade(label=self.T("Plik").capitalize(), menu=subMenu)
+            mainMenu.add_cascade(label=self.T("File").capitalize(), menu=subMenu)
             subMenu.add_cascade(label=self.T("Profile").capitalize(), command=self.parent.show_profiles_dlg)
             subMenu.add_separator()
-            subMenu.add_command(label=self.T("Zamknij").capitalize(), command=self.parent.close_window)
+            subMenu.add_command(label=self.T("Close").capitalize(), command=self.parent.close_window)
 
             optMenu = Menu(mainMenu)
-            mainMenu.add_cascade(label=self.T("Opcje").capitalize(), menu=optMenu)
-            optMenu.add_cascade(label=self.T("Język").capitalize())
+            mainMenu.add_cascade(label=self.T("Options").capitalize(), menu=optMenu)
+            optMenu.add_cascade(label=self.T("Language").capitalize())
 
             helpMenu = Menu(mainMenu)
-            mainMenu.add_cascade(label=self.T("Pomoc").capitalize(), menu=helpMenu)
-            helpMenu.add_command(label=self.T("O nas").capitalize(), command=self.about)  # added showinfo window
+            mainMenu.add_cascade(label=self.T("Help").capitalize(), menu=helpMenu)
+            helpMenu.add_command(label=self.T("About").capitalize(), command=self.about)  # added showinfo window
             return mainMenu
 
     class NavFrame:
