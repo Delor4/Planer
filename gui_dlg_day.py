@@ -10,6 +10,7 @@ class DayDialog:
         self.top = Toplevel(app.mainWindow)
         self.top.transient(app.mainWindow)
         self.top.grab_set()
+        self.T = app.state.translate
         self.top.iconbitmap("planer.ico")
         # self.top.tk.call('wm', 'iconphoto', self.mainWindow._w, PhotoImage(file='planer.png'))
         self.top.title("Planer - {}".format(day))
@@ -21,7 +22,7 @@ class DayDialog:
             self.day = day
             self.window = parent.top
             self.parent = parent
-            self.T = self.state.translate
+            self.T = parent.T
 
             self.notes_data = []
             self.images_data = []
@@ -107,7 +108,7 @@ class DayDialog:
             self.images_data.append({'img': img})
 
         def make_all_notes_frame(self, frame, notes):
-            notes_frame = ttk.LabelFrame(frame, text=self.T("Notatki"))
+            notes_frame = ttk.LabelFrame(frame, text=self.T("notes").capitalize())
             notes_wrapper = ttk.Frame(notes_frame)
             if len(notes) == 0:
                 self.no_notes = ttk.Label(notes_wrapper, text=self.T("Brak notatek."))
@@ -141,7 +142,7 @@ class DayDialog:
             self.repack()
 
         def make_images_frame(self, frame, images):
-            images_frame = ttk.LabelFrame(frame, text=self.T("Obrazy"))
+            images_frame = ttk.LabelFrame(frame, text=self.T("images").capitalize())
             ttk.Button(images_frame, text="+", command=self.create_new_image).pack()
 
             if len(images) == 0:
@@ -154,8 +155,8 @@ class DayDialog:
 
         def make_buttons_frame(self, frame):
             buttons_frame = ttk.Frame(frame)
-            # ttk.Button(buttons_frame, text='Anuluj', command=self.cancel).pack(side=RIGHT)
-            ttk.Button(buttons_frame, text='Ok', command=self.ok).pack(side=RIGHT)
+            # ttk.Button(buttons_frame, text=self.T('Anuluj'), command=self.cancel).pack(side=RIGHT)
+            ttk.Button(buttons_frame, text=self.T('Ok'), command=self.ok).pack(side=RIGHT)
             return buttons_frame
 
         def on_image_click(self, _, image_data):
@@ -170,6 +171,9 @@ class DayDialog:
             self.top = Toplevel(parent.top)
             self.top.transient(parent.top)
             self.top.grab_set()
+
+            self.T = parent.T
+
             self.top.iconbitmap("planer.ico")
             # self.top.tk.call('wm', 'iconphoto', self.mainWindow._w, PhotoImage(file='planer.png'))
             self.top.title("Planer - {}".format(self.T("ImageView")))
