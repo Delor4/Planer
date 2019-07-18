@@ -68,6 +68,12 @@ class PlanerDB:
         Init database (make default profile if needed).
         :return: Id of default profile.
         """
+        langs = select(l for l in db.Language)
+        if langs.count() == 0:
+            db.Language(eng_name="polish", native_name="polski")
+            db.Language(eng_name="english", native_name="english")
+            db.commit()
+
         profiles = select(u.id for u in db.Profile)
         if profiles.count() == 0:
             u = db.Profile(name='Default profile')
@@ -312,35 +318,36 @@ class PlanerDB:
         Returns all profiles. (generator)
         :return: Profile (readonly values)
          """
-
         for i in select(u for u in self.db.Profile):
             _, _ = i.id, i.name  # for writing to cache
             yield i
 
     @db_session
-    def get_language(self):
-        return self._get_lang_stub()
+    def get_language(self) -> int:
+        """
+        Returns id of currently selected language.
+        :return: id of language.
+        """
+        u = self.db.Profile[self.get_curr_profile()]
+        return u.language.id
 
     @db_session
-    def set_language(self, lang_id):
-        return self._set_lang_stub(lang_id)
+    def set_language(self, lang_id: int) -> int:
+        """
+        Sets the current language.
+        :param lang_id: Id of language.
+        :return: Id of previous language.
+        """
+        old_l = self.get_language()
+        self.db.Profile[self.get_curr_profile()].language = self.db.Language[lang_id]
+        return old_l
 
     @db_session
     def get_all_languages(self):
-        return self._get_all_langs_stub()
-
-    lang = 1
-
-    def _get_lang_stub(self):
-        global lang
-        return lang
-
-    def _set_lang_stub(self, lang_id):
-        global lang
-        lang = lang_id
-
-    def _get_all_langs_stub(self):
-        return [
-            {'id': 1, 'eng_name': 'polish', 'native_name': 'polski'},
-            {'id': 2, 'eng_name': 'english', 'native_name': 'english'}
-        ]
+        """
+        Returns all languages. (generator)
+        :return: dict{'id': int, 'eng_name': str, 'native_name': str}
+         """
+        langs = select(l for l in self.db.Language)
+        for l in langs:
+            yield {'id': l.id, 'eng_name': l.eng_name, 'native_name': l.native_name}
