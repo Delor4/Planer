@@ -21,6 +21,7 @@ class DayDialog:
             self.day = day
             self.window = parent.top
             self.parent = parent
+            self.T = self.state.translate
 
             self.notes_data = []
             self.images_data = []
@@ -52,8 +53,8 @@ class DayDialog:
             self.make_frame_note(self.notes_frame, {'id': txt_id, 'value': txt})
 
         def create_new_image(self):
-            filename = filedialog.askopenfilename(initialdir=".", title="Select file",
-                                                  filetypes=(("jpeg files", "*.jpg"), ("all files", "*.*")))
+            filename = filedialog.askopenfilename(initialdir=".", title=self.T("Select file"), filetypes=
+            ((self.T("jpeg files"), "*.jpg"), (self.T("all files"), "*.*")))
             if os.path.isfile(filename):
                 img_id = self.state.add_image(self.day, filename)
                 im = self.state.get_image(img_id)
@@ -106,10 +107,10 @@ class DayDialog:
             self.images_data.append({'img': img})
 
         def make_all_notes_frame(self, frame, notes):
-            notes_frame = ttk.LabelFrame(frame, text="Notatki")
+            notes_frame = ttk.LabelFrame(frame, text=self.T("Notatki"))
             notes_wrapper = ttk.Frame(notes_frame)
             if len(notes) == 0:
-                self.no_notes = ttk.Label(notes_wrapper, text="Brak notatek.")
+                self.no_notes = ttk.Label(notes_wrapper, text=self.T("Brak notatek."))
                 self.no_notes.pack()
             for n in notes:
                 self.make_frame_note(notes_wrapper, n)
@@ -140,11 +141,11 @@ class DayDialog:
             self.repack()
 
         def make_images_frame(self, frame, images):
-            images_frame = ttk.LabelFrame(frame, text="Obrazy")
+            images_frame = ttk.LabelFrame(frame, text=self.T("Obrazy"))
             ttk.Button(images_frame, text="+", command=self.create_new_image).pack()
 
             if len(images) == 0:
-                self.no_images = ttk.Label(images_frame, text="Brak obrazów.")
+                self.no_images = ttk.Label(images_frame, text=self.T("Brak obrazów."))
                 self.no_images.pack()
 
             for i in images:
@@ -171,7 +172,7 @@ class DayDialog:
             self.top.grab_set()
             self.top.iconbitmap("planer.ico")
             # self.top.tk.call('wm', 'iconphoto', self.mainWindow._w, PhotoImage(file='planer.png'))
-            self.top.title("Planer - ImageView")
+            self.top.title("Planer - {}".format(self.T("ImageView")))
             self.parent = parent
             self.image_path = image_path
             self.state = self.parent.dialog.state

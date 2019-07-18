@@ -126,3 +126,7 @@ class Calendar:
 
     def get_all_profiles(self, ):
         return self.db.get_all_profiles
+
+    def translate(self, tag):
+        print("To translate:", tag)
+        return tag
