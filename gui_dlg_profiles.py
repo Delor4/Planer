@@ -9,8 +9,7 @@ class ProfilesDialog:
         self.top = Toplevel(app.mainWindow)
         self.top.transient(app.mainWindow)
         self.top.grab_set()
-        self.top.iconbitmap("planer.ico")
-        # self.top.tk.call('wm', 'iconphoto', self.mainWindow._w, PhotoImage(file='planer.png'))
+        app.set_icon(self.top)
         self.top.title("Planer - Profile")
         self.main_frame = None
         self.init_ui()

@@ -1,3 +1,5 @@
+import platform
+
 import controller
 from tkinter import *
 from tkinter import messagebox
@@ -10,8 +12,7 @@ class PlanerApp:
         self.state = controller.Calendar()
         self.mainWindow = Tk()
         self.T = self.state.translate
-        self.mainWindow.iconbitmap("planer.ico")
-        # self.mainWindow.tk.call('wm', 'iconphoto', self.mainWindow._w, PhotoImage(file='planer.png'))
+        PlanerApp.set_icon(self.mainWindow)
         self.mainWindow.title("Planer")
         self.menu = PlanerApp.Menu(self.mainWindow, self)
         # frames
@@ -21,6 +22,13 @@ class PlanerApp:
         self.bottomMainFrame = Frame(self.mainWindow)
         self.topFrame = PlanerApp.NavFrame(self.mainWindow, self)
         self.bottomFrame = PlanerApp.CalFrame(self)
+
+    @staticmethod
+    def set_icon(window):
+        if platform.system() == 'Windows':
+            window.iconbitmap("planer.ico")
+        if platform.system() == 'Linux':
+            window.tk.call('wm', 'iconphoto', window._w, PhotoImage(file='planer.png'))
 
     def run(self):
         self.mainWindow.mainloop()
