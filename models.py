@@ -70,8 +70,8 @@ class PlanerDB:
         """
         langs = select(l for l in db.Language)
         if langs.count() == 0:
-            db.Language(eng_name="polish", native_name="polski")
             db.Language(eng_name="english", native_name="english")
+            db.Language(eng_name="polish", native_name="polski")
             db.commit()
 
         profiles = select(u.id for u in db.Profile)
