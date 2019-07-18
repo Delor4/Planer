@@ -1,7 +1,7 @@
 - obsługa języków (controller, gui)
 - kasowanie profili (models, controller, gui)
-- kasowanie notatek (DayDialog)
-- kasowanie obrazów (DayDialog)
+- <del>kasowanie notatek (DayDialog)</del>
+- <del>kasowanie obrazów (DayDialog)</del>
 - <del>flaga pierwszego uruchomienia  (models.py)</del>
 - pytanie o wybór języka przy pierwszym uruchomieniu (gui)
 - synchronizacja z zewnętrznym serwerem 
