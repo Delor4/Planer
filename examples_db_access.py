@@ -90,3 +90,9 @@ print("Aktulny język: {}".format(db.get_language()))
 
 db.set_language(2)
 print("Język po zmianie: {}".format(db.get_language()))
+
+old = db.set_curr_profile(2)
+print("Język profilu '{1}': {0}".format(db.get_language(), db.get_curr_profile_name()))
+
+db.set_curr_profile(old)
+print("Język profilu '{1}': {0}".format(db.get_language(), db.get_curr_profile_name()))
