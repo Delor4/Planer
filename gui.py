@@ -92,6 +92,10 @@ class PlanerApp:
             subMenu.add_separator()
             subMenu.add_command(label=self.T("Zamknij").capitalize(), command=self.parent.close_window)
 
+            optMenu = Menu(mainMenu)
+            mainMenu.add_cascade(label=self.T("Opcje").capitalize(), menu=optMenu)
+            optMenu.add_cascade(label=self.T("Język").capitalize())
+
             helpMenu = Menu(mainMenu)
             mainMenu.add_cascade(label=self.T("Pomoc").capitalize(), menu=helpMenu)
             helpMenu.add_command(label=self.T("O nas").capitalize(), command=self.about)  # added showinfo window
