@@ -9,8 +9,9 @@ class PlanerApp:
     def __init__(self):
         self.state = controller.Calendar()
         self.mainWindow = Tk()
+        self.T = self.state.translate
         self.mainWindow.iconbitmap("planer.ico")
-        #self.mainWindow.tk.call('wm', 'iconphoto', self.mainWindow._w, PhotoImage(file='planer.png'))
+        # self.mainWindow.tk.call('wm', 'iconphoto', self.mainWindow._w, PhotoImage(file='planer.png'))
         self.mainWindow.title("Planer")
         self.menu = PlanerApp.Menu(self.mainWindow, self)
         # frames
@@ -52,6 +53,7 @@ class PlanerApp:
     class Menu:
         def __init__(self, window, parent):
             self.parent = parent
+            self.T = parent.T
             self.mainMenu(window)
 
         def about(self):
@@ -76,14 +78,14 @@ class PlanerApp:
             window.config(menu=mainMenu)
 
             subMenu = Menu(mainMenu)
-            mainMenu.add_cascade(label="Plik", menu=subMenu)
-            subMenu.add_cascade(label="Profile", command=self.parent.show_profiles_dlg)
+            mainMenu.add_cascade(label=self.T("Plik").capitalize(), menu=subMenu)
+            subMenu.add_cascade(label=self.T("Profile").capitalize(), command=self.parent.show_profiles_dlg)
             subMenu.add_separator()
-            subMenu.add_cascade(label="Zamknij")
+            subMenu.add_cascade(label=self.T("Zamknij").capitalize())
 
             helpMenu = Menu(mainMenu)
-            mainMenu.add_cascade(label="Pomoc", menu=helpMenu)
-            helpMenu.add_command(label="O nas", command=self.about)  # added showinfo window
+            mainMenu.add_cascade(label=self.T("Pomoc").capitalize(), menu=helpMenu)
+            helpMenu.add_command(label=self.T("O nas").capitalize(), command=self.about)  # added showinfo window
             return mainMenu
 
     class NavFrame:
@@ -108,6 +110,7 @@ class PlanerApp:
     class CalFrame:
         def __init__(self, parent):
             self.parent = parent
+            self.T = self.parent.T
 
             menuBottomFrame = Frame(parent.mainWindow)
             menuBottomFrame.pack(side=BOTTOM)
@@ -117,13 +120,13 @@ class PlanerApp:
             # monday = Label(parent.mainWindow, text=week_days[0])
             # monday.grid(row=0, column=0)
 
-            monLabel = Label(menuBottomFrame, text="MONDAY")
-            tueLabel = Label(menuBottomFrame, text="TUESDAY")
-            wedLabel = Label(menuBottomFrame, text="WEDNESDAY")
-            thuLabel = Label(menuBottomFrame, text="THURSDAY")
-            friLabel = Label(menuBottomFrame, text="FRIDAY")
-            satLabel = Label(menuBottomFrame, text="SATURDAY")
-            sunLabel = Label(menuBottomFrame, text="SUNDAY")
+            monLabel = Label(menuBottomFrame, text=self.T("monday").upper())
+            tueLabel = Label(menuBottomFrame, text=self.T("tuesday").upper())
+            wedLabel = Label(menuBottomFrame, text=self.T("wednesday").upper())
+            thuLabel = Label(menuBottomFrame, text=self.T("thursday").upper())
+            friLabel = Label(menuBottomFrame, text=self.T("friday").upper())
+            satLabel = Label(menuBottomFrame, text=self.T("saturday").upper())
+            sunLabel = Label(menuBottomFrame, text=self.T("sunday").upper())
 
             monLabel.grid(row=0, column=0)
             tueLabel.grid(row=0, column=1)

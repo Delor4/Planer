@@ -44,6 +44,13 @@ class PlanerDB:
             id = PrimaryKey(int, column='profile_id', auto=True)
             name = Required(str, column='profile_name')
             days = Set(Day)
+            language = Required('Language', default=1)
+
+        class Language(db.Entity):
+            id = PrimaryKey(int, auto=True)
+            eng_name = Required(str)
+            native_name = Optional(str)
+            profiles = Set(Profile)
 
     @staticmethod
     def _open_database(filename=':memory:', debug=False):
@@ -61,6 +68,12 @@ class PlanerDB:
         Init database (make default profile if needed).
         :return: Id of default profile.
         """
+        langs = select(l for l in db.Language)
+        if langs.count() == 0:
+            db.Language(eng_name="english", native_name="english")
+            db.Language(eng_name="polish", native_name="polski")
+            db.commit()
+
         profiles = select(u.id for u in db.Profile)
         if profiles.count() == 0:
             u = db.Profile(name='Default profile')
@@ -305,6 +318,35 @@ class PlanerDB:
         Returns all profiles. (generator)
         :return: dict{'id': int, 'name': str}
          """
-
         for i in select(u for u in self.db.Profile):
             yield {'id': i.id, 'name': i.name}
+
+    @db_session
+    def get_language(self) -> int:
+        """
+        Returns id of currently selected language.
+        :return: id of language.
+        """
+        u = self.db.Profile[self.get_curr_profile()]
+        return u.language.id
+
+    @db_session
+    def set_language(self, lang_id: int) -> int:
+        """
+        Sets the current language.
+        :param lang_id: Id of language.
+        :return: Id of previous language.
+        """
+        old_l = self.get_language()
+        self.db.Profile[self.get_curr_profile()].language = self.db.Language[lang_id]
+        return old_l
+
+    @db_session
+    def get_all_languages(self):
+        """
+        Returns all languages. (generator)
+        :return: dict{'id': int, 'eng_name': str, 'native_name': str}
+         """
+        langs = select(l for l in self.db.Language)
+        for l in langs:
+            yield {'id': l.id, 'eng_name': l.eng_name, 'native_name': l.native_name}
