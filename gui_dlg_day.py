@@ -87,6 +87,12 @@ class DayDialog:
                     self.repack()
                     break
 
+        def remove_image(self, i_id, frame):
+            self.state.delete_image(i_id)
+            frame.pack_forget()
+            frame.destroy()
+            self.repack()
+
         def make_frame_note(self, frame, note_data):
             if self.no_notes is not None:
                 self.no_notes.pack_forget()
@@ -117,6 +123,9 @@ class DayDialog:
             canvas.pack()
             canvas.create_image(0, 0, anchor=NW, image=img)
             i_frame.pack()
+            close_button = Button(i_frame, text='x',
+                                  command=lambda id=image_data['id'], fr=i_frame: self.remove_image(id, fr))
+            close_button.place(relx=1, x=-3, y=-3, anchor=NE)
             canvas.bind("<Button-1>", lambda event, d=image_data: self.on_image_click(event, d))
             self.images_data.append({'img': img})
 
