@@ -28,6 +28,15 @@ class PlanerApp:
     def close_window(self):
         self.mainWindow.destroy()
 
+    def refresh(self):
+        self.menu.menu.destroy()
+        self.lang.set(self.state.get_language())
+        self.menu = PlanerApp.Menu(self.mainWindow, self)
+        self.topFrame.destroy()
+        self.topFrame = PlanerApp.NavFrame(self.mainWindow, self)
+        self.bottomFrame.destroy()
+        self.bottomFrame = PlanerApp.CalFrame(self)
+
     @staticmethod
     def set_icon(window):
         if platform.system() == 'Windows':
@@ -59,14 +68,14 @@ class PlanerApp:
     def show_profiles_dlg(self):
         d = gui_dlg_profiles.ProfilesDialog(self)
         self.mainWindow.wait_window(d.top)
-        self.calendar_refresh()
+        self.refresh()
 
     class Menu:
         def __init__(self, window, parent):
             self.parent = parent
             self.state = parent.state
             self.T = parent.T
-            self.mainMenu(window)
+            self.menu = self.mainMenu(window)
 
         def about(self):
             # title.name = "About" # title as parameter
@@ -84,10 +93,15 @@ class PlanerApp:
             # message.info = "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian"
             messagebox.showinfo("About", "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian")
 
+        def on_change_language(self, l_id):
+            self.state.set_language(l_id)
+            self.parent.refresh()
+
         def create_lang_submenu(self, menu):
             for lang in self.state.get_all_languages():
                 menu.add_radiobutton(label="{0} ({1})".format(lang['native_name'], lang['eng_name']),
-                                     var=self.parent.lang, value=lang['id'])
+                                     var=self.parent.lang, value=lang['id'],
+                                     command=lambda lid=lang['id']: self.on_change_language(lid))
 
         def mainMenu(self, window):
             # ---------MAIN MENU---------
@@ -99,20 +113,15 @@ class PlanerApp:
             mainMenu.add_cascade(label=self.T("File").capitalize(), menu=subMenu)
             subMenu.add_cascade(label=self.T("Profile").capitalize(), command=self.parent.show_profiles_dlg)
 
-            langMenu = Menu(subMenu)
-            subMenu.add_cascade(label=self.T("Language").capitalize(), menu=langMenu)
-            self.create_lang_submenu(langMenu)
-
             subMenu.add_separator()
             subMenu.add_command(label=self.T("Close").capitalize(), command=self.parent.close_window)
 
             optMenu = Menu(mainMenu)
             mainMenu.add_cascade(label=self.T("Options").capitalize(), menu=optMenu)
-            optMenu.add_cascade(label=self.T("Language").capitalize())
 
             langMenu = Menu(optMenu)
-            langMenu.add_cascade(label=self.T("Option 1").capitalize(), menu=optMenu)
-            langMenu.add_cascade(label=self.T("Option 1").capitalize())
+            optMenu.add_cascade(label=self.T("Language").capitalize(), menu=langMenu)
+            self.create_lang_submenu(langMenu)
 
             helpMenu = Menu(mainMenu)
             mainMenu.add_cascade(label=self.T("Help").capitalize(), menu=helpMenu)
@@ -124,7 +133,7 @@ class PlanerApp:
             menuTopFrame = Frame(window, width=1100, height=50)
             menuTopFrame.pack(side=TOP)
 
-            left = Button(menuTopFrame, text='<', command=lambda: parent.prev_month(), highlightcolor = "red")
+            left = Button(menuTopFrame, text='<', command=lambda: parent.prev_month(), highlightcolor="red")
             left.pack(side=LEFT)
 
             right = Button(menuTopFrame, text='>', command=lambda: parent.next_month())
