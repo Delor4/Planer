@@ -2,7 +2,7 @@
 - kasowanie profili (models, controller, gui)
 - kasowanie notatek (DayDialog)
 - kasowanie obrazów (DayDialog)
-- flaga pierwszego uruchomienia  (models.py)
+- <del>flaga pierwszego uruchomienia  (models.py)</del>
 - pytanie o wybór języka przy pierwszym uruchomieniu (gui)
 - synchronizacja z zewnętrznym serwerem 
         (baza danych lub api)
