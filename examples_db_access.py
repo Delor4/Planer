@@ -81,3 +81,12 @@ for i in db.get_images(dat):
 print("Lista profili:")
 for i in db.get_all_profiles():
     print(i.id, i.name)
+
+print("Lista języków:")
+for l in db.get_all_languages():
+    print(l['id'], l['eng_name'], l['native_name'])
+
+print("Aktulny język: {}".format(db.get_language()))
+
+db.set_language(2)
+print("Język po zmianie: {}".format(db.get_language()))
