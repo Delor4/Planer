@@ -15,6 +15,18 @@ class PlanerApp:
         PlanerApp.set_icon(self.mainWindow)
         self.mainWindow.title("Planer")
         self.lang = IntVar()
+
+        self.menu = None
+        self.topMainFrame = None
+        self.bottomMainFrame = None
+        self.topFrame = None
+        self.bottomFrame = None
+        self.init_ui()
+
+    def close_window(self):
+        self.mainWindow.destroy()
+
+    def init_ui(self):
         self.lang.set(self.state.get_language())
         self.menu = PlanerApp.Menu(self.mainWindow, self)
         # frames
@@ -25,17 +37,11 @@ class PlanerApp:
         self.topFrame = PlanerApp.NavFrame(self.mainWindow, self)
         self.bottomFrame = PlanerApp.CalFrame(self)
 
-    def close_window(self):
-        self.mainWindow.destroy()
-
     def refresh(self):
         self.menu.menu.destroy()
-        self.lang.set(self.state.get_language())
-        self.menu = PlanerApp.Menu(self.mainWindow, self)
         self.topFrame.destroy()
-        self.topFrame = PlanerApp.NavFrame(self.mainWindow, self)
         self.bottomFrame.destroy()
-        self.bottomFrame = PlanerApp.CalFrame(self)
+        self.init_ui()
 
     @staticmethod
     def set_icon(window):
