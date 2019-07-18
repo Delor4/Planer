@@ -14,6 +14,8 @@ class PlanerApp:
         self.T = self.state.translate
         PlanerApp.set_icon(self.mainWindow)
         self.mainWindow.title("Planer")
+        self.lang = IntVar()
+        self.lang.set(self.state.get_language())
         self.menu = PlanerApp.Menu(self.mainWindow, self)
         # frames
         self.topMainFrame = Frame(self.mainWindow, width=50, height=1)
@@ -62,6 +64,7 @@ class PlanerApp:
     class Menu:
         def __init__(self, window, parent):
             self.parent = parent
+            self.state = parent.state
             self.T = parent.T
             self.mainMenu(window)
 
@@ -81,14 +84,25 @@ class PlanerApp:
             # message.info = "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian"
             messagebox.showinfo("About", "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian")
 
+        def create_lang_submenu(self, menu):
+            for lang in self.state.get_all_languages():
+                menu.add_radiobutton(label="{0} ({1})".format(lang['native_name'], lang['eng_name']),
+                                     var=self.parent.lang, value=lang['id'])
+
         def mainMenu(self, window):
             # ---------MAIN MENU---------
-            mainMenu = Menu(window)  # Menu method from Tkinter
+
+            mainMenu = Menu(window)
             window.config(menu=mainMenu)
 
             subMenu = Menu(mainMenu)
             mainMenu.add_cascade(label=self.T("Plik").capitalize(), menu=subMenu)
             subMenu.add_cascade(label=self.T("Profile").capitalize(), command=self.parent.show_profiles_dlg)
+
+            langMenu = Menu(subMenu)
+            subMenu.add_cascade(label=self.T("Language").capitalize(), menu=langMenu)
+            self.create_lang_submenu(langMenu)
+
             subMenu.add_separator()
             subMenu.add_command(label=self.T("Zamknij").capitalize(), command=self.parent.close_window)
 
