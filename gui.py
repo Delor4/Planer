@@ -13,7 +13,6 @@ class PlanerApp:
         self.mainWindow = Tk()
         self.T = self.state.translate
         PlanerApp.set_icon(self.mainWindow)
-        self.mainWindow.title("Planer")
         self.lang = IntVar()
 
         self.menu = None
@@ -27,6 +26,7 @@ class PlanerApp:
         self.mainWindow.destroy()
 
     def init_ui(self):
+        self.mainWindow.title("Planer - {}".format(self.state.get_curr_profile_name()))
         self.lang.set(self.state.get_language())
         self.menu = PlanerApp.Menu(self.mainWindow, self)
         # frames
