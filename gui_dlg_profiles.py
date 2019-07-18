@@ -28,6 +28,9 @@ class ProfilesDialog:
         self.state.set_current_profile(profile_id)
         self.refresh()
 
+    def on_exit(self):
+        self.top.destroy()
+
     def init_ui(self):
         self.main_frame = Frame(self.top)
 
@@ -46,7 +49,7 @@ class ProfilesDialog:
             profile_frame.pack(fill=X, anchor=E)
 
         Button(add_frame, text="+", command=self.on_new_profile).pack()
-        Button(bottom_frame, text="Ok").pack(side=RIGHT)
+        Button(bottom_frame, text="Ok", command=self.on_exit).pack(side=RIGHT)
 
         profiles_frame.pack(fill=X)
         add_frame.pack()
