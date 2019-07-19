@@ -224,7 +224,7 @@ class PlanerApp(PlanerBaseDialog):
             text = []
             for n in self.state.get_textnotes(day):
                 text.append(n['value'])
-            tooltip.Tooltip(form, text="\n".join(text))
+            tooltip.Tooltip(form, text="\n------\n".join(text))
 
         def on_day_click(self, _, day):
             self.parent.show_day_dlg(day)
