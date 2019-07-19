@@ -87,7 +87,7 @@ class PlanerApp(PlanerBaseDialog):
             for line in open('about'):
                 team.append(line.strip().encode('windows-1250').decode('utf-8'))
 
-            text = [self.app_name, ""]
+            text = [self.parent.app_name, ""]
             text.extend(team)
 
             messagebox.showinfo(self.T("about_title"), "\n".join(text))
