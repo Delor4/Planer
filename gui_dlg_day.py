@@ -4,6 +4,8 @@ from tkinter import filedialog
 from PIL import ImageTk, Image
 import os
 
+import gui_dlg_imageviewer
+
 
 class DayDialog:
     def __init__(self, app, day: int):
@@ -189,28 +191,7 @@ class DayDialog:
             self.show_image_viewer(image_data)
 
         def show_image_viewer(self, image_data):
-            d = DayDialog.ImageViewerDialog(self.parent, image_data['path'])
+            d = gui_dlg_imageviewer.ImageViewerDialog(self.parent, image_data['path'])
             self.parent.top.wait_window(d.top)
 
-    class ImageViewerDialog:
-        def __init__(self, parent, image_path):
-            self.top = Toplevel(parent.top)
-            self.top.transient(parent.top)
-            self.top.grab_set()
 
-            self.T = parent.T
-
-            from gui import PlanerApp
-            PlanerApp.set_icon(self.top)
-            self.top.title("Planer - {}".format(self.T("imageview_title")))  # ImageView
-            self.parent = parent
-            self.image_path = image_path
-            self.state = self.parent.dialog.state
-            self.img = None
-            self.init_ui()
-
-        def init_ui(self):
-            self.img = ImageTk.PhotoImage(Image.open(os.path.join(self.state.get_images_folder(), self.image_path)))
-            canvas = Canvas(self.top, width=self.img.width(), height=self.img.height())
-            canvas.pack()
-            canvas.create_image(0, 0, anchor=NW, image=self.img)
