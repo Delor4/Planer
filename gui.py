@@ -10,39 +10,39 @@ import gui_dlg_profiles
 class PlanerApp:
     def __init__(self):
         self.state = controller.Calendar()
-        self.mainWindow = Tk()
+        self.main_window = Tk()
         self.T = self.state.translate
-        PlanerApp.set_icon(self.mainWindow)
+        PlanerApp.set_icon(self.main_window)
         self.lang = IntVar()
         self.profile = IntVar()
 
         self.menu = None
-        self.topMainFrame = None
-        self.bottomMainFrame = None
-        self.topFrame = None
-        self.bottomFrame = None
+        self.top_main_frame = None
+        self.bottom_main_frame = None
+        self.top_frame = None
+        self.bottom_frame = None
         self.init_ui()
 
     def close_window(self):
-        self.mainWindow.destroy()
+        self.main_window.destroy()
 
     def init_ui(self):
-        self.mainWindow.title("Planer - {}".format(self.state.get_curr_profile_name()))
+        self.main_window.title("Planer - {}".format(self.state.get_curr_profile_name()))
         self.lang.set(self.state.get_language())
         self.profile.set(self.state.get_curr_profile())
-        self.menu = PlanerApp.Menu(self.mainWindow, self)
+        self.menu = PlanerApp.Menu(self.main_window, self)
         # frames
-        self.topMainFrame = Frame(self.mainWindow, width=50, height=1)
-        # leftMainFrame = Frame(mainWindow, width=1, height=700, bg="red")
-        # rightMainFrame = Frame(mainWindow, width=1, height=700, bg="red")
-        self.bottomMainFrame = Frame(self.mainWindow)
-        self.topFrame = PlanerApp.NavFrame(self.mainWindow, self)
-        self.bottomFrame = PlanerApp.CalFrame(self)
+        self.top_main_frame = Frame(self.main_window, width=50, height=1)
+        # leftMainFrame = Frame(main_window, width=1, height=700, bg="red")
+        # rightMainFrame = Frame(main_window, width=1, height=700, bg="red")
+        self.bottom_main_frame = Frame(self.main_window)
+        self.top_frame = PlanerApp.NavFrame(self.main_window, self)
+        self.bottom_frame = PlanerApp.CalFrame(self)
 
     def refresh(self):
         self.menu.menu.destroy()
-        self.topFrame.destroy()
-        self.bottomFrame.destroy()
+        self.top_frame.destroy()
+        self.bottom_frame.destroy()
         self.init_ui()
 
     @staticmethod
@@ -53,7 +53,7 @@ class PlanerApp:
             window.tk.call('wm', 'iconphoto', window._w, PhotoImage(file='planer.png'))
 
     def run(self):
-        self.mainWindow.mainloop()
+        self.main_window.mainloop()
 
     def prev_month(self):
         self.state.prev_month()
@@ -64,18 +64,18 @@ class PlanerApp:
         self.refresh()
 
     def calendar_refresh(self):
-        self.bottomFrame.forget()
-        self.bottomFrame.destroy()
-        self.bottomFrame = PlanerApp.CalFrame(self)
+        self.bottom_frame.forget()
+        self.bottom_frame.destroy()
+        self.bottom_frame = PlanerApp.CalFrame(self)
 
     def show_day_dlg(self, day):
         d = gui_dlg_day.DayDialog(self, day)
-        self.mainWindow.wait_window(d.top)
+        self.main_window.wait_window(d.top)
         self.refresh()
 
     def show_profiles_dlg(self):
         d = gui_dlg_profiles.ProfilesDialog(self)
-        self.mainWindow.wait_window(d.top)
+        self.main_window.wait_window(d.top)
         self.refresh()
 
     class Menu:
@@ -99,7 +99,8 @@ class PlanerApp:
             #          print(line.strip().split())
             # title.name = "About"
             # message.info = "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian"
-            messagebox.showinfo(self.T("about_title"), "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian")
+            messagebox.showinfo(self.T("about_title"),
+                                "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian")
 
         def on_change_profile(self, p_id):
             self.state.set_current_profile(p_id)
@@ -173,20 +174,20 @@ class PlanerApp:
             self.state = parent.state
             self.T = parent.T
 
-            menuTopFrame = Frame(window, width=1100, height=50)
-            menuTopFrame.pack(side=TOP)
+            menu_top_frame = Frame(window, width=1100, height=50)
+            menu_top_frame.pack(side=TOP)
 
-            left = Button(menuTopFrame, text='<', command=lambda: parent.prev_month(), highlightcolor="red")
+            left = Button(menu_top_frame, text='<', command=lambda: parent.prev_month(), highlightcolor="red")
             left.pack(side=LEFT)
 
-            Label(menuTopFrame,
+            Label(menu_top_frame,
                   text="{1} {0}".format(self.state.get_year(), self.T("month_" + str(self.state.get_month())))).pack(
                 side=LEFT)
 
-            right = Button(menuTopFrame, text='>', command=lambda: parent.next_month())
+            right = Button(menu_top_frame, text='>', command=lambda: parent.next_month())
             right.pack(side=LEFT)
 
-            self.topFrame = menuTopFrame
+            self.topFrame = menu_top_frame
 
         def forget(self):
             self.topFrame.pack_forget()
@@ -199,17 +200,17 @@ class PlanerApp:
             self.parent = parent
             self.T = self.parent.T
 
-            menuBottomFrame = Frame(parent.mainWindow)
-            menuBottomFrame.pack(side=BOTTOM)
+            menu_bottom_frame = Frame(parent.main_window)
+            menu_bottom_frame.pack(side=BOTTOM)
 
             # displaying week days bar
             for day_nr in range(7):
-                dayLabel = Label(menuBottomFrame, text=self.T("weekday_" + str(day_nr)).upper())
-                dayLabel.grid(row=0, column=day_nr)
+                day_label = Label(menu_bottom_frame, text=self.T("weekday_" + str(day_nr)).upper())
+                day_label.grid(row=0, column=day_nr)
 
             # displaying calendar grid
             for day in parent.state.get_month_data():
-                form = LabelFrame(menuBottomFrame, text=day['day_of_month'], )
+                form = LabelFrame(menu_bottom_frame, text=day['day_of_month'], )
                 form.grid(row=day['week_of_month'] + 1, column=day['day_of_week'])
                 label = Label(form,
                               text='day:{2}\nnotes: {3}, images:{4}'.format(day['day_of_week'],
@@ -220,10 +221,10 @@ class PlanerApp:
                               borderwidth=50, bg="white")
                 label.grid()
 
-                label.bind("<Button-1>", lambda event, d=day['day_of_month']: self.mouseEventLMB(event, d))
-            self.bottomFrame = menuBottomFrame
+                label.bind("<Button-1>", lambda event, d=day['day_of_month']: self.on_day_click(event, d))
+            self.bottomFrame = menu_bottom_frame
 
-        def mouseEventLMB(self, event, day):
+        def on_day_click(self, _, day):
             self.parent.show_day_dlg(day)
 
         def forget(self):

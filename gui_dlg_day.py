@@ -9,8 +9,8 @@ import gui_dlg_imageviewer
 
 class DayDialog:
     def __init__(self, app, day: int):
-        self.top = Toplevel(app.mainWindow)
-        self.top.transient(app.mainWindow)
+        self.top = Toplevel(app.main_window)
+        self.top.transient(app.main_window)
         self.top.grab_set()
         self.T = app.state.translate
         self.state = app.state

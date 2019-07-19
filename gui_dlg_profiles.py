@@ -7,8 +7,8 @@ class ProfilesDialog:
     def __init__(self, app):
         self.state = app.state
         self.T = app.T
-        self.top = Toplevel(app.mainWindow)
-        self.top.transient(app.mainWindow)
+        self.top = Toplevel(app.main_window)
+        self.top.transient(app.main_window)
         self.top.grab_set()
         app.set_icon(self.top)
         self.top.title("Planer - {}".format(self.T("profiles_config_title")))  # Profiles config
@@ -47,7 +47,7 @@ class ProfilesDialog:
             Button(profile_frame, text=self.T("delete").capitalize()).pack(side=RIGHT, anchor=E)
             Button(profile_frame, text=self.T("edit").capitalize()).pack(side=RIGHT)
             Button(profile_frame, text=self.T("select").capitalize(),
-                   command=lambda id=p['id']: self.on_select_profile(id)).pack(side=RIGHT)
+                   command=lambda pid=p['id']: self.on_select_profile(pid)).pack(side=RIGHT)
             profile_frame.pack(fill=X, anchor=E)
 
         Button(add_frame, text=self.T("new_profile").capitalize(), command=self.on_new_profile).pack()
