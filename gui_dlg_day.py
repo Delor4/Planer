@@ -5,18 +5,14 @@ from PIL import ImageTk, Image
 import os
 
 import gui_dlg_imageviewer
+from PlanerBaseDialog import PlanerBaseDialog
 
 
-class DayDialog:
-    def __init__(self, app, day: int):
-        self.top = Toplevel(app.main_window)
-        self.top.transient(app.main_window)
-        self.top.grab_set()
-        self.T = app.state.translate
-        self.state = app.state
-        app.set_icon(self.top)
-        self.top.title("{0} - {1}".format(app.app_name, self.state.get_data_string(day)))
-        self.dialog = DayDialog.DayFrame(self, day, app)
+class DayDialog(PlanerBaseDialog):
+    def __init__(self, parent, day: int):
+        PlanerBaseDialog.__init__(self, parent)
+        self.set_title(self.state.get_data_string(day))
+        self.dialog = DayDialog.DayFrame(self, day, self.app)
 
     class DayFrame:
         def __init__(self, parent, day: int, app):

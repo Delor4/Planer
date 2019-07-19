@@ -1,18 +1,13 @@
 from tkinter import *
 
-from tkinter import Toplevel
+from PlanerBaseDialog import PlanerBaseDialog
 
 
-class ProfilesDialog:
-    def __init__(self, app):
-        self.app = app
-        self.state = app.state
-        self.T = app.T
-        self.top = Toplevel(app.main_window)
-        self.top.transient(app.main_window)
-        self.top.grab_set()
-        app.set_icon(self.top)
-        self.top.title("{0} - {1}".format(app.app_name, self.T("profiles_config_title")))  # Profiles config
+class ProfilesDialog(PlanerBaseDialog):
+    def __init__(self, parent):
+        PlanerBaseDialog.__init__(self, parent)
+        self.set_title(self.T("profiles_config_title"))  # Profiles config
+
         self.main_frame = None
         self.input_ok = False
         self.input_top = None
@@ -40,7 +35,7 @@ class ProfilesDialog:
         self.refresh()
 
     def on_exit(self):
-        self.top.destroy()
+        self.close_window()
 
     def init_ui(self):
         self.main_frame = Frame(self.top)

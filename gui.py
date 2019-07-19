@@ -4,7 +4,7 @@ import controller
 from tkinter import *
 from tkinter import messagebox
 import gui_dlg_day
-import gui_dlg_profiles
+#import gui_dlg_profiles
 import tooltip
 
 
@@ -12,10 +12,11 @@ class PlanerApp:
     app_name = "Planer"
 
     def __init__(self):
+        self.app = self
         self.state = controller.Calendar()
-        self.main_window = Tk()
+        self.top = Tk()
         self.T = self.state.translate
-        PlanerApp.set_icon(self.main_window)
+        PlanerApp.set_icon(self.top)
         self.lang = IntVar()
         self.profile = IntVar()
 
@@ -27,19 +28,19 @@ class PlanerApp:
         self.init_ui()
 
     def close_window(self):
-        self.main_window.destroy()
+        self.top.destroy()
 
     def init_ui(self):
-        self.main_window.title("{0} - {1}".format(PlanerApp.app_name, self.state.get_curr_profile_name()))
+        self.top.title("{0} - {1}".format(PlanerApp.app_name, self.state.get_curr_profile_name()))
         self.lang.set(self.state.get_language())
         self.profile.set(self.state.get_curr_profile())
-        self.menu = PlanerApp.Menu(self.main_window, self)
+        self.menu = PlanerApp.Menu(self.top, self)
         # frames
-        self.top_main_frame = Frame(self.main_window, width=50, height=1)
-        # leftMainFrame = Frame(main_window, width=1, height=700, bg="red")
-        # rightMainFrame = Frame(main_window, width=1, height=700, bg="red")
-        self.bottom_main_frame = Frame(self.main_window)
-        self.top_frame = PlanerApp.NavFrame(self.main_window, self)
+        self.top_main_frame = Frame(self.top, width=50, height=1)
+        # leftMainFrame = Frame(top, width=1, height=700, bg="red")
+        # rightMainFrame = Frame(top, width=1, height=700, bg="red")
+        self.bottom_main_frame = Frame(self.top)
+        self.top_frame = PlanerApp.NavFrame(self.top, self)
         self.bottom_frame = PlanerApp.CalFrame(self)
 
     def refresh(self):
@@ -56,7 +57,7 @@ class PlanerApp:
             window.tk.call('wm', 'iconphoto', window._w, PhotoImage(file='planer.png'))
 
     def run(self):
-        self.main_window.mainloop()
+        self.top.mainloop()
 
     def prev_month(self):
         self.state.prev_month()
@@ -73,12 +74,13 @@ class PlanerApp:
 
     def show_day_dlg(self, day):
         d = gui_dlg_day.DayDialog(self, day)
-        self.main_window.wait_window(d.top)
+        self.top.wait_window(d.top)
         self.refresh()
 
     def show_profiles_dlg(self):
+        import gui_dlg_profiles
         d = gui_dlg_profiles.ProfilesDialog(self)
-        self.main_window.wait_window(d.top)
+        self.top.wait_window(d.top)
         self.refresh()
 
     class Menu:
@@ -199,7 +201,7 @@ class PlanerApp:
             self.T = self.parent.T
             self.state = parent.state
 
-            menu_bottom_frame = Frame(parent.main_window)
+            menu_bottom_frame = Frame(parent.top)
             menu_bottom_frame.pack(side=BOTTOM)
 
             # displaying week days bar

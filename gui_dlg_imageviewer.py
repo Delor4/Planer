@@ -3,23 +3,17 @@ from tkinter import *
 
 from PIL import ImageTk, Image
 
-from gui import PlanerApp
+from PlanerBaseDialog import PlanerBaseDialog
 
 
-class ImageViewerDialog:
+class ImageViewerDialog(PlanerBaseDialog):
     def __init__(self, parent, image_path):
-        self.top = Toplevel(parent.top)
-        self.top.transient(parent.top)
-        self.top.grab_set()
+        PlanerBaseDialog.__init__(self, parent)
+        self.set_title(self.T("imageview_title"))  # ImageView
 
-        self.T = parent.T
-
-        PlanerApp.set_icon(self.top)
-        self.top.title("{0} - {1}".format(PlanerApp.app_name, self.T("imageview_title")))  # ImageView
-        self.parent = parent
         self.image_path = image_path
-        self.state = self.parent.dialog.state
         self.img = None
+
         self.init_ui()
 
     def init_ui(self):
