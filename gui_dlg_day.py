@@ -27,7 +27,6 @@ class DayDialog(gui_base_dialog.PlanerBaseModalDialog):
         self.no_images = None
 
         self.entry_text = StringVar()
-        self.initial_dir = '.'
 
         self.init_ui()
 
@@ -43,8 +42,8 @@ class DayDialog(gui_base_dialog.PlanerBaseModalDialog):
         self.make_frame_note(self.notes_frame, {'id': txt_id, 'value': txt})
 
     def create_new_image(self):
-        print(self.initial_dir)
-        filename = filedialog.askopenfilename(initialdir=self.initial_dir,
+        print(self.app.initial_dir)
+        filename = filedialog.askopenfilename(initialdir=self.app.initial_dir,
                                               title=self.T("select_file_title"),
                                               filetypes=((self.T("jpeg files"), "*.jpg"),
                                                          (self.T("all_files"), "*.*")))
@@ -52,7 +51,7 @@ class DayDialog(gui_base_dialog.PlanerBaseModalDialog):
             img_id = self.state.add_image(self.day, filename)
             im = self.state.get_image(img_id)
             self.make_frame_image(self.images_frame, im)
-            self.initial_dir = os.path.dirname(filename)
+            self.app.initial_dir = os.path.dirname(filename)
 
     def init_ui(self):
         notes, images = self.state.get_day_data(self.day)

@@ -28,6 +28,9 @@ class PlanerApp(PlanerBaseDialog):
         self.bottom_main_frame = None
         self.top_frame = None
         self.bottom_frame = None
+
+        self.initial_dir = '.'
+
         self.init_ui()
 
     def init_ui(self):
