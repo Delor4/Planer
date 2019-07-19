@@ -160,4 +160,4 @@ class Calendar:
         # TODO: zwraca tekst przypisany do taga
         # TODO: język tekstu: self.(db.)get_language()
         print("To translate:", tag)
-        return tag
+        return "{" + tag + "}"
