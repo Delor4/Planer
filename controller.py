@@ -77,6 +77,7 @@ class Calendar:
         self.db.update_image(id, path, geo_cord)
 
     def delete_image(self, id):
+        self.delete_image_files(id)
         self.db.delete_image(id)
 
     def get_image(self, image_id):
@@ -85,6 +86,10 @@ class Calendar:
                 'path': i.path,
                 'geo_cord': i.geo_coord
                 }
+
+    def delete_image_files(self, image_id):
+        # TODO: tu kasowanie plików (obraz główny i thumb) powiązanych z rekordem image_id
+        return
 
     def add_image(self, day, source_path):
         path_to_image = self.get_images_folder()
@@ -152,5 +157,7 @@ class Calendar:
         return self.db.get_all_languages()
 
     def translate(self, tag):
+        # TODO: zwraca tekst przypisany do taga
+        # TODO: język tekstu: self.(db.)get_language()
         print("To translate:", tag)
         return tag
