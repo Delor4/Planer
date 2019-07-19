@@ -24,7 +24,7 @@ class ProfilesDialog:
         self.init_ui()
 
     def on_new_profile(self):
-        text = self.get_user_text("enter_profile_name")  # Wprowadź nazwę profilu:
+        text = self.get_user_text(self.T("enter_profile_name"))  # Wprowadź nazwę profilu:
         if text is not None and len(text) > 0:
             self.state.make_profile(text)
         self.refresh()
@@ -34,7 +34,7 @@ class ProfilesDialog:
         self.refresh()
 
     def on_edit_profile(self, profile_id):
-        text = self.get_user_text("enter_profile_name", self.state.get_profile_name(profile_id))  # Wprowadź nazwę profilu:
+        text = self.get_user_text(self.T("enter_profile_name"), self.state.get_profile_name(profile_id))  # Wprowadź nazwę profilu:
         if text is not None and len(text) > 0:
             self.state.update_profile(profile_id, text)
         self.refresh()
