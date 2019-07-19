@@ -117,22 +117,22 @@ class PlanerApp:
 
         def create_file_menu(self, menu):
             file_menu = Menu(menu)
-            menu.add_cascade(label=self.T("File").capitalize(), menu=file_menu)
-            file_menu.add_cascade(label=self.T("Profile").capitalize(), command=self.parent.show_profiles_dlg)
+            menu.add_cascade(label=self.T("file").capitalize(), menu=file_menu)
+            file_menu.add_cascade(label=self.T("profile").capitalize(), command=self.parent.show_profiles_dlg)
             file_menu.add_separator()
-            file_menu.add_command(label=self.T("Close").capitalize(), command=self.parent.close_window)
+            file_menu.add_command(label=self.T("close").capitalize(), command=self.parent.close_window)
             return file_menu
 
         def create_options_menu(self, menu):
             options_menu = Menu(menu)
-            menu.add_cascade(label=self.T("Options").capitalize(), menu=options_menu)
+            menu.add_cascade(label=self.T("options").capitalize(), menu=options_menu)
 
             self.create_lang_submenu(options_menu)
             return options_menu
 
         def create_lang_submenu(self, menu):
             lang_menu = Menu(menu)
-            menu.add_cascade(label=self.T("Language").capitalize(), menu=lang_menu)
+            menu.add_cascade(label=self.T("language").capitalize(), menu=lang_menu)
 
             for lang in self.state.get_all_languages():
                 lang_menu.add_radiobutton(label="{0} ({1})".format(lang['native_name'], lang['eng_name']),
@@ -141,8 +141,8 @@ class PlanerApp:
 
         def create_help_menu(self, menu):
             help_menu = Menu(menu)
-            menu.add_cascade(label=self.T("Help").capitalize(), menu=help_menu)
-            help_menu.add_command(label=self.T("About").capitalize(), command=self.about)
+            menu.add_cascade(label=self.T("help").capitalize(), menu=help_menu)
+            help_menu.add_command(label=self.T("about").capitalize(), command=self.about)
             return help_menu
 
     class NavFrame:
