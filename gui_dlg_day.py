@@ -5,12 +5,12 @@ from PIL import ImageTk, Image
 import os
 
 import gui_dlg_imageviewer
-from gui_base_dialog import PlanerBaseDialog
+import gui_base_dialog
 
 
-class DayDialog(PlanerBaseDialog):
+class DayDialog(gui_base_dialog.PlanerBaseDialog):
     def __init__(self, parent, day: int):
-        PlanerBaseDialog.__init__(self, parent)
+        gui_base_dialog.PlanerBaseDialog.__init__(self, parent)
         self.set_title(self.state.get_data_string(day))
 
         self.day = day

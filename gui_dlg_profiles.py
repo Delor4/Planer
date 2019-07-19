@@ -1,11 +1,11 @@
 from tkinter import *
 
-from gui_base_dialog import PlanerBaseDialog
+import gui_base_dialog
 
 
-class ProfilesDialog(PlanerBaseDialog):
+class ProfilesDialog(gui_base_dialog.PlanerBaseDialog):
     def __init__(self, parent):
-        PlanerBaseDialog.__init__(self, parent)
+        gui_base_dialog.PlanerBaseDialog.__init__(self, parent)
         self.set_title(self.T("profiles_config_title"))  # Profiles config
 
         self.main_frame = None
@@ -29,7 +29,8 @@ class ProfilesDialog(PlanerBaseDialog):
         self.refresh()
 
     def on_edit_profile(self, profile_id):
-        text = self.get_user_text(self.T("enter_profile_name"), self.state.get_profile_name(profile_id))  # Wprowadź nazwę profilu:
+        text = self.get_user_text(self.T("enter_profile_name"),
+                                  self.state.get_profile_name(profile_id))  # Wprowadź nazwę profilu:
         if text is not None and len(text) > 0:
             self.state.update_profile(profile_id, text)
         self.refresh()
@@ -71,9 +72,9 @@ class ProfilesDialog(PlanerBaseDialog):
 
         input_top.transient(self.top)
         input_top.grab_set()
-        self.app.set_icon(input_top)
+        gui_base_dialog.PlanerBaseDialog.set_icon(input_top)
         if title is None:
-            title = self.app.app_name
+            title = gui_base_dialog.PlanerBaseDialog.app_name
         input_top.title(title)
         value = StringVar()
         if text is not None:

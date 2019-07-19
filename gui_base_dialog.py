@@ -1,9 +1,9 @@
+import platform
 from tkinter import *
-
-from gui import PlanerApp
 
 
 class PlanerBaseDialog:
+    app_name = "Planer"
 
     def __init__(self, parent, title: str = None):
         self.parent = parent
@@ -15,7 +15,7 @@ class PlanerBaseDialog:
         self.top.transient(parent.top)
         self.top.grab_set()
 
-        PlanerApp.set_icon(self.top)
+        PlanerBaseDialog.set_icon(self.top)
 
         self.set_title(title)
 
@@ -23,7 +23,14 @@ class PlanerBaseDialog:
         self.top.destroy()
 
     def set_title(self, title: str = None):
-        tmp_title = PlanerApp.app_name
+        tmp_title = PlanerBaseDialog.app_name
         if title is not None:
             tmp_title += " - " + title
         self.top.title(tmp_title)
+
+    @staticmethod
+    def set_icon(window):
+        if platform.system() == 'Windows':
+            window.iconbitmap("planer.ico")
+        elif platform.system() == 'Linux':
+            window.tk.call('wm', 'iconphoto', window._w, PhotoImage(file='planer.png'))

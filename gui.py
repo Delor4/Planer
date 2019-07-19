@@ -3,20 +3,22 @@ import platform
 import controller
 from tkinter import *
 from tkinter import messagebox
-import gui_dlg_day
-#import gui_dlg_profiles
+
 import tooltip
+
+import gui_dlg_day
+import gui_dlg_profiles
+from gui_base_dialog import PlanerBaseDialog
 
 
 class PlanerApp:
-    app_name = "Planer"
 
     def __init__(self):
         self.app = self
         self.state = controller.Calendar()
         self.top = Tk()
         self.T = self.state.translate
-        PlanerApp.set_icon(self.top)
+        PlanerBaseDialog.set_icon(self.top)
         self.lang = IntVar()
         self.profile = IntVar()
 
@@ -31,7 +33,7 @@ class PlanerApp:
         self.top.destroy()
 
     def init_ui(self):
-        self.top.title("{0} - {1}".format(PlanerApp.app_name, self.state.get_curr_profile_name()))
+        self.top.title("{0} - {1}".format(PlanerBaseDialog.app_name, self.state.get_curr_profile_name()))
         self.lang.set(self.state.get_language())
         self.profile.set(self.state.get_curr_profile())
         self.menu = PlanerApp.Menu(self.top, self)
@@ -48,13 +50,6 @@ class PlanerApp:
         self.top_frame.destroy()
         self.bottom_frame.destroy()
         self.init_ui()
-
-    @staticmethod
-    def set_icon(window):
-        if platform.system() == 'Windows':
-            window.iconbitmap("planer.ico")
-        elif platform.system() == 'Linux':
-            window.tk.call('wm', 'iconphoto', window._w, PhotoImage(file='planer.png'))
 
     def run(self):
         self.top.mainloop()
@@ -78,7 +73,7 @@ class PlanerApp:
         self.refresh()
 
     def show_profiles_dlg(self):
-        import gui_dlg_profiles
+        # import gui_dlg_profiles
         d = gui_dlg_profiles.ProfilesDialog(self)
         self.top.wait_window(d.top)
         self.refresh()
@@ -95,7 +90,7 @@ class PlanerApp:
             for line in open('about'):
                 team.append(line.strip().encode('windows-1250').decode('utf-8'))
 
-            text = [PlanerApp.app_name, ""]
+            text = [PlanerBaseDialog.app_name, ""]
             text.extend(team)
 
             messagebox.showinfo(self.T("about_title"), "\n".join(text))

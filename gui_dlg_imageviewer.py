@@ -3,12 +3,12 @@ from tkinter import *
 
 from PIL import ImageTk, Image
 
-from gui_base_dialog import PlanerBaseDialog
+import gui_base_dialog
 
 
-class ImageViewerDialog(PlanerBaseDialog):
+class ImageViewerDialog(gui_base_dialog.PlanerBaseDialog):
     def __init__(self, parent, image_path):
-        PlanerBaseDialog.__init__(self, parent)
+        gui_base_dialog.PlanerBaseDialog.__init__(self, parent)
         self.set_title(self.T("imageview_title"))  # ImageView
 
         self.image_path = image_path
