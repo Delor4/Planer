@@ -6,6 +6,7 @@ from tkinter import Toplevel
 class ProfilesDialog:
     def __init__(self, app):
         self.state = app.state
+        self.T = app.T
         self.top = Toplevel(app.mainWindow)
         self.top.transient(app.mainWindow)
         self.top.grab_set()
@@ -20,7 +21,7 @@ class ProfilesDialog:
         self.init_ui()
 
     def on_new_profile(self):
-        self.state.make_profile("Default profile name")
+        self.state.make_profile(self.T("Default profile name"))  # TODO: change tag to: new_profile_name
         self.refresh()
 
     def on_select_profile(self, profile_id):
@@ -39,15 +40,17 @@ class ProfilesDialog:
 
         for p in self.state.get_all_profiles():
             profile_frame = Frame(profiles_frame)
-            l = Label(profile_frame, text="{0}: {1}".format(p['id'], p['name']))
-            l.pack(side=LEFT)
+            name_label = Label(profile_frame, text="{0}: {1}".format(p['id'], p['name']))
+            name_label.pack(side=LEFT)
             if self.state.get_curr_profile() == p['id']:
-                l.config(bg="white")
-            Button(profile_frame, text="Edit").pack(side=RIGHT, anchor=E)
-            Button(profile_frame, text="Select", command=lambda id=p['id']: self.on_select_profile(id)).pack(side=RIGHT)
+                name_label.config(bg="white")
+            Button(profile_frame, text=self.T("delete").capitalize()).pack(side=RIGHT, anchor=E)
+            Button(profile_frame, text=self.T("edit").capitalize()).pack(side=RIGHT)
+            Button(profile_frame, text=self.T("select").capitalize(),
+                   command=lambda id=p['id']: self.on_select_profile(id)).pack(side=RIGHT)
             profile_frame.pack(fill=X, anchor=E)
 
-        Button(add_frame, text="+", command=self.on_new_profile).pack()
+        Button(add_frame, text=self.T("new_profile").capitalize(), command=self.on_new_profile).pack()
         Button(bottom_frame, text="Ok", command=self.on_exit).pack(side=RIGHT)
 
         profiles_frame.pack(fill=X)
