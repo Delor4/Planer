@@ -58,6 +58,12 @@ class Calendar:
             if day[1] == 6:
                 row += 1
 
+    def get_month(self):
+        return self.date.month
+
+    def get_year(self):
+        return self.date.year
+
     def add_textnote(self, day, note):
         return self.db.add_textnote(self._make_date(day), note)
 
@@ -110,10 +116,13 @@ class Calendar:
             self.create_folder(parent_path)
             os.mkdir(path)
 
+    def thumbnail_from_filename(self, filename):
+        return "t_" + filename
+
     def make_thumbnail(self, path, filename):
         image = Image.open(path)
         image.thumbnail((200, 120), Image.ANTIALIAS)
-        image.save(os.path.join(self.get_images_folder(), "t_" + filename))
+        image.save(os.path.join(self.get_images_folder(), self.thumbnail_from_filename(filename)))
 
     def make_profile(self, name):
         return self.db.make_profile(name)
