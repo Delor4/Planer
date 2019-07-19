@@ -67,28 +67,36 @@ class ProfilesDialog(gui_base_dialog.PlanerBaseModalDialog):
         self.main_frame.pack()
 
     def get_user_text(self, prompt, text=None, title=None):
-        input_top = Toplevel(self.top)
-        self.input_top = input_top
+        opts = TextDialog.Opts()
+        td = TextDialog(self, opts, prompt, text=text, title=title)
+        self.top.wait_window(td.top)
+        if opts.ok:
+            return opts.value.get()
 
-        input_top.transient(self.top)
-        input_top.grab_set()
-        self._set_icon(input_top)
-        if title is None:
-            title = self.app_name
-        input_top.title(title)
-        value = StringVar()
+
+class TextDialog(gui_base_dialog.PlanerBaseModalDialog):
+    class Opts:
+        def __init__(self):
+            self.value = StringVar()
+            self.ok = False
+
+    def __init__(self, parent, opts: Opts, prompt: str, text: str = None, title: str = None):
+        gui_base_dialog.PlanerBaseModalDialog.__init__(self, parent, title=title)
+        self.opts = opts
+
+        self.opts.ok = False
         if text is not None:
-            value.set(text)
-        self.input_ok = False
-        Label(input_top, text=prompt).pack(anchor=W)
-        e = Entry(input_top, textvariable=value)
+            self.opts.value.set(text)
+
+        self.init_ui(prompt)
+
+    def init_ui(self, prompt: str):
+        Label(self.top, text=prompt).pack(anchor=W)
+        e = Entry(self.top, textvariable=self.opts.value)
         e.pack(fill=X)
         e.bind('<Return>', lambda event: self.on_input_ok())
-        Button(input_top, text=self.T("ok"), command=self.on_input_ok).pack(anchor=E)
-        self.top.wait_window(input_top)
-        if self.input_ok:
-            return value.get()
+        Button(self.top, text=self.T("ok"), command=self.on_input_ok).pack(anchor=E)
 
     def on_input_ok(self):
-        self.input_ok = True
-        self.input_top.destroy()
+        self.opts.ok = True
+        self.close_window()
