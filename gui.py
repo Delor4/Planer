@@ -31,7 +31,7 @@ class PlanerApp(PlanerBaseDialog):
         self.init_ui()
 
     def init_ui(self):
-        self.top.title("{0} - {1}".format(PlanerBaseDialog.app_name, self.state.get_curr_profile_name()))
+        self.top.title("{0} - {1}".format(self.app_name, self.state.get_curr_profile_name()))
         self.lang.set(self.state.get_language())
         self.profile.set(self.state.get_curr_profile())
         self.menu = PlanerApp.Menu(self.top, self)
@@ -71,7 +71,6 @@ class PlanerApp(PlanerBaseDialog):
         self.refresh()
 
     def show_profiles_dlg(self):
-        # import gui_dlg_profiles
         d = gui_dlg_profiles.ProfilesDialog(self)
         self.top.wait_window(d.top)
         self.refresh()
@@ -88,7 +87,7 @@ class PlanerApp(PlanerBaseDialog):
             for line in open('about'):
                 team.append(line.strip().encode('windows-1250').decode('utf-8'))
 
-            text = [PlanerBaseDialog.app_name, ""]
+            text = [self.app_name, ""]
             text.extend(team)
 
             messagebox.showinfo(self.T("about_title"), "\n".join(text))

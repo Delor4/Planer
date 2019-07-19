@@ -72,9 +72,9 @@ class ProfilesDialog(gui_base_dialog.PlanerBaseModalDialog):
 
         input_top.transient(self.top)
         input_top.grab_set()
-        gui_base_dialog.PlanerBaseDialog.set_icon(input_top)
+        self._set_icon(input_top)
         if title is None:
-            title = gui_base_dialog.PlanerBaseDialog.app_name
+            title = self.app_name
         input_top.title(title)
         value = StringVar()
         if text is not None:

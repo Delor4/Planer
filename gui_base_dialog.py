@@ -13,7 +13,7 @@ class PlanerBaseDialog:
 
         self.top = window
 
-        PlanerBaseDialog.set_icon(self.top)
+        self.set_icon()
 
         self.set_title(title)
 
@@ -21,13 +21,16 @@ class PlanerBaseDialog:
         self.top.destroy()
 
     def set_title(self, title: str = None):
-        tmp_title = PlanerBaseDialog.app_name
+        tmp_title = self.app_name
         if title is not None:
             tmp_title += " - " + title
         self.top.title(tmp_title)
 
+    def set_icon(self):
+        self._set_icon(self.top)
+
     @staticmethod
-    def set_icon(window):
+    def _set_icon(window):
         if platform.system() == 'Windows':
             window.iconbitmap("planer.ico")
         elif platform.system() == 'Linux':
