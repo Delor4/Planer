@@ -55,11 +55,11 @@ class PlanerApp:
 
     def prev_month(self):
         self.state.prev_month()
-        self.calendar_refresh()
+        self.refresh()
 
     def next_month(self):
         self.state.next_month()
-        self.calendar_refresh()
+        self.refresh()
 
     def calendar_refresh(self):
         self.bottomFrame.forget()
@@ -69,7 +69,7 @@ class PlanerApp:
     def show_day_dlg(self, day):
         d = gui_dlg_day.DayDialog(self, day)
         self.mainWindow.wait_window(d.top)
-        self.calendar_refresh()
+        self.refresh()
 
     def show_profiles_dlg(self):
         d = gui_dlg_profiles.ProfilesDialog(self)
@@ -136,11 +136,18 @@ class PlanerApp:
 
     class NavFrame:
         def __init__(self, window, parent):
+            self.state = parent.state
+            self.T = parent.T
+
             menuTopFrame = Frame(window, width=1100, height=50)
             menuTopFrame.pack(side=TOP)
 
             left = Button(menuTopFrame, text='<', command=lambda: parent.prev_month(), highlightcolor="red")
             left.pack(side=LEFT)
+
+            Label(menuTopFrame,
+                  text="{1} {0}".format(self.state.get_year(), self.T("month_" + str(self.state.get_month())))).pack(
+                side=LEFT)
 
             right = Button(menuTopFrame, text='>', command=lambda: parent.next_month())
             right.pack(side=LEFT)
