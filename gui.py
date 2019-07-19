@@ -14,6 +14,7 @@ class PlanerApp:
         self.T = self.state.translate
         PlanerApp.set_icon(self.mainWindow)
         self.lang = IntVar()
+        self.profile = IntVar()
 
         self.menu = None
         self.topMainFrame = None
@@ -28,6 +29,7 @@ class PlanerApp:
     def init_ui(self):
         self.mainWindow.title("Planer - {}".format(self.state.get_curr_profile_name()))
         self.lang.set(self.state.get_language())
+        self.profile.set(self.state.get_curr_profile())
         self.menu = PlanerApp.Menu(self.mainWindow, self)
         # frames
         self.topMainFrame = Frame(self.mainWindow, width=50, height=1)
@@ -99,6 +101,10 @@ class PlanerApp:
             # message.info = "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian"
             messagebox.showinfo("About", "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian")
 
+        def on_change_profile(self, p_id):
+            self.state.set_current_profile(p_id)
+            self.parent.refresh()
+
         def on_change_language(self, l_id):
             self.state.set_language(l_id)
             self.parent.refresh()
@@ -118,10 +124,21 @@ class PlanerApp:
         def create_file_menu(self, menu):
             file_menu = Menu(menu)
             menu.add_cascade(label=self.T("file").capitalize(), menu=file_menu)
-            file_menu.add_cascade(label=self.T("profile").capitalize(), command=self.parent.show_profiles_dlg)
+
+            self.create_profiles_submenu(file_menu)
+
             file_menu.add_separator()
             file_menu.add_command(label=self.T("close").capitalize(), command=self.parent.close_window)
             return file_menu
+
+        def create_profiles_submenu(self, menu):
+            profiles_menu = Menu(menu)
+            menu.add_cascade(label=self.T("profile").capitalize(), menu=profiles_menu)
+
+            for prof in self.state.get_all_profiles():
+                profiles_menu.add_radiobutton(label="{0}: {1}".format(str(prof['id']), prof['name']),
+                                              var=self.parent.profile, value=prof['id'],
+                                              command=lambda pid=prof['id']: self.on_change_profile(pid))
 
         def create_options_menu(self, menu):
             options_menu = Menu(menu)
