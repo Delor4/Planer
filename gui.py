@@ -139,6 +139,10 @@ class PlanerApp:
                 profiles_menu.add_radiobutton(label="{0}: {1}".format(str(prof['id']), prof['name']),
                                               var=self.parent.profile, value=prof['id'],
                                               command=lambda pid=prof['id']: self.on_change_profile(pid))
+            profiles_menu.add_separator()
+            profiles_menu.add_command(label=self.T("configure").capitalize(), command=self.parent.show_profiles_dlg)
+
+            return profiles_menu
 
         def create_options_menu(self, menu):
             options_menu = Menu(menu)
@@ -155,6 +159,8 @@ class PlanerApp:
                 lang_menu.add_radiobutton(label="{0} ({1})".format(lang['native_name'], lang['eng_name']),
                                           var=self.parent.lang, value=lang['id'],
                                           command=lambda lid=lang['id']: self.on_change_language(lid))
+
+            return lang_menu
 
         def create_help_menu(self, menu):
             help_menu = Menu(menu)
