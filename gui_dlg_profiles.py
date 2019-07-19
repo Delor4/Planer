@@ -24,7 +24,9 @@ class ProfilesDialog:
         self.init_ui()
 
     def on_new_profile(self):
-        self.state.make_profile(self.T("new_profile_name"))  # Default profile name
+        text = self.get_user_text("enter_profile_name")  # Wprowadź nazwę profilu:
+        if text is not None and len(text) > 0:
+            self.state.make_profile(text)
         self.refresh()
 
     def on_select_profile(self, profile_id):
@@ -32,7 +34,7 @@ class ProfilesDialog:
         self.refresh()
 
     def on_edit_profile(self, profile_id):
-        text = self.get_user_text("enter_profile_name")  # Wprowadź nazwę profilu:
+        text = self.get_user_text("enter_profile_name", self.state.get_profile_name(profile_id))  # Wprowadź nazwę profilu:
         if text is not None and len(text) > 0:
             self.state.update_profile(profile_id, text)
         self.refresh()
@@ -68,7 +70,7 @@ class ProfilesDialog:
         bottom_frame.pack(fill=X, side=BOTTOM)
         self.main_frame.pack()
 
-    def get_user_text(self, prompt, title=None):
+    def get_user_text(self, prompt, text=None, title=None):
         input_top = Toplevel(self.top)
         self.input_top = input_top
 
@@ -79,9 +81,13 @@ class ProfilesDialog:
             title = self.app.app_name
         input_top.title(title)
         value = StringVar()
+        if text is not None:
+            value.set(text)
         self.input_ok = False
         Label(input_top, text=prompt).pack(anchor=W)
-        Entry(input_top, textvariable=value).pack(fill=X)
+        e = Entry(input_top, textvariable=value)
+        e.pack(fill=X)
+        e.bind('<Return>', lambda event: self.on_input_ok())
         Button(input_top, text=self.T("ok"), command=self.on_input_ok).pack(anchor=E)
         self.top.wait_window(input_top)
         if self.input_ok:

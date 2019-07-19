@@ -137,6 +137,9 @@ class Calendar:
     def get_curr_profile(self):
         return self.db.get_curr_profile()
 
+    def get_profile_name(self, p_id):
+        return self.db.get_profile_name(p_id)
+
     def get_curr_profile_name(self):
         return self.db.get_curr_profile_name()
 

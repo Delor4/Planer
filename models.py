@@ -311,13 +311,21 @@ class PlanerDB:
         return self.curr_profile_id
 
     @db_session
+    def get_profile_name(self, profile_id) -> str:
+        """
+        Returns the name of the selected profile.
+        :return: Name of profile.
+        """
+        u = self.db.Profile[profile_id]
+        return u.name
+
+    @db_session
     def get_curr_profile_name(self) -> str:
         """
         Returns the name of the currently selected profile.
         :return: Name of profile.
         """
-        u = self.db.Profile[self.get_curr_profile()]
-        return u.name
+        return self.get_profile_name(self.get_curr_profile())
 
     @db_session
     def get_all_profiles(self):
