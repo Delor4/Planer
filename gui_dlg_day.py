@@ -11,8 +11,9 @@ class DayDialog:
         self.top.transient(app.mainWindow)
         self.top.grab_set()
         self.T = app.state.translate
+        self.state = app.state
         app.set_icon(self.top)
-        self.top.title("Planer - {}".format(day))
+        self.top.title("Planer - {}".format(self.state.get_data_string(day)))
         self.dialog = DayDialog.DayFrame(self, day, app)
 
     class DayFrame:
@@ -55,8 +56,8 @@ class DayDialog:
 
         def create_new_image(self):
             print(self.initial_dir)
-            filename = filedialog.askopenfilename(initialdir=self.initial_dir, title=self.T("Select file"), filetypes=
-            ((self.T("jpeg files"), "*.jpg"), (self.T("all files"), "*.*")))
+            filename = filedialog.askopenfilename(initialdir=self.initial_dir, title=self.T("select_file"), filetypes=
+            ((self.T("jpeg files"), "*.jpg"), (self.T("all_files"), "*.*")))
             if os.path.isfile(filename):
                 img_id = self.state.add_image(self.day, filename)
                 im = self.state.get_image(img_id)
@@ -135,7 +136,7 @@ class DayDialog:
             notes_frame = ttk.LabelFrame(frame, text=self.T("notes").capitalize())
             notes_wrapper = ttk.Frame(notes_frame)
             if len(notes) == 0:
-                self.no_notes = ttk.Label(notes_wrapper, text=self.T("Brak notatek."))
+                self.no_notes = ttk.Label(notes_wrapper, text=self.T("no_notes"))  # Brak notatek.
                 self.no_notes.pack()
             for n in notes:
                 self.make_frame_note(notes_wrapper, n)
@@ -170,7 +171,7 @@ class DayDialog:
             ttk.Button(images_frame, text="+", command=self.create_new_image).pack()
 
             if len(images) == 0:
-                self.no_images = ttk.Label(images_frame, text=self.T("Brak obrazów."))
+                self.no_images = ttk.Label(images_frame, text=self.T("no_images"))  # Brak obrazów.
                 self.no_images.pack()
 
             for i in images:
@@ -179,8 +180,8 @@ class DayDialog:
 
         def make_buttons_frame(self, frame):
             buttons_frame = ttk.Frame(frame)
-            # ttk.Button(buttons_frame, text=self.T('Anuluj'), command=self.cancel).pack(side=RIGHT)
-            ttk.Button(buttons_frame, text=self.T('Ok'), command=self.ok).pack(side=RIGHT)
+            # ttk.Button(buttons_frame, text=self.T('cancel'), command=self.cancel).pack(side=RIGHT)
+            ttk.Button(buttons_frame, text=self.T('ok'), command=self.ok).pack(side=RIGHT)
             return buttons_frame
 
         def on_image_click(self, _, image_data):
@@ -200,7 +201,7 @@ class DayDialog:
 
             from gui import PlanerApp
             PlanerApp.set_icon(self.top)
-            self.top.title("Planer - {}".format(self.T("ImageView")))
+            self.top.title("Planer - {}".format(self.T("imageview_title")))  # ImageView
             self.parent = parent
             self.image_path = image_path
             self.state = self.parent.dialog.state

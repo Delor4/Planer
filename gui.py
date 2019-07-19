@@ -99,7 +99,7 @@ class PlanerApp:
             #          print(line.strip().split())
             # title.name = "About"
             # message.info = "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian"
-            messagebox.showinfo("About", "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian")
+            messagebox.showinfo(self.T("about_title"), "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian")
 
         def on_change_profile(self, p_id):
             self.state.set_current_profile(p_id)

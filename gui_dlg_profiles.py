@@ -51,7 +51,7 @@ class ProfilesDialog:
             profile_frame.pack(fill=X, anchor=E)
 
         Button(add_frame, text=self.T("new_profile").capitalize(), command=self.on_new_profile).pack()
-        Button(bottom_frame, text="Ok", command=self.on_exit).pack(side=RIGHT)
+        Button(bottom_frame, text=self.T("ok"), command=self.on_exit).pack(side=RIGHT)
 
         profiles_frame.pack(fill=X)
         add_frame.pack()
