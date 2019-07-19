@@ -89,21 +89,16 @@ class PlanerApp:
             self.menu = self.create_main_menu(window)
 
         def about(self):
-            # title.name = "About" # title as parameter
-            #
-            # self.aboutUs = open('about')
-            # try:
-            #     message.file = self.aboutUs.read() # message as parameter
-            # finally:
-            #     message.file.close()
-            #
-            #  with open('about') as file:
-            #      for line in file:
-            #          print(line.strip().split())
-            # title.name = "About"
-            # message.info = "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian"
-            messagebox.showinfo(self.T("about_title"),
-                                "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian")
+            team = list()
+            for line in open('about'):
+                team.append(line.strip().encode('windows-1250').decode('utf-8'))
+
+            text = [PlanerApp.app_name, ""]
+            text.extend(team)
+
+            messagebox.showinfo(self.T("about_title"), "\n".join(text))
+            # messagebox.showinfo(self.T("about_title"),
+            #                    "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian")
 
         def on_change_profile(self, p_id):
             self.state.set_current_profile(p_id)
