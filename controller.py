@@ -11,6 +11,7 @@ class Calendar:
     def __init__(self, _=None):
         d = datetime.date.today()
         self.date = datetime.date(d.year, d.month, 1)
+        self.T = self.translate
         # self.db = models.PlanerDB() # db in memory
         self.create_folder(self.get_data_folder())
         self.db = models.PlanerDB(os.path.join(self.get_data_folder(), 'notes.sqlite'))
@@ -25,6 +26,9 @@ class Calendar:
 
     def _make_date(self, day):
         return datetime.date(self.date.year, self.date.month, day)
+
+    def get_data_string(self, day):
+        return '{:%Y-%m-%d}'.format(self._make_date(day))
 
     def get_day_data(self, day):
         notes = []
