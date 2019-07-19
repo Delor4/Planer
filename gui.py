@@ -81,7 +81,7 @@ class PlanerApp:
             self.parent = parent
             self.state = parent.state
             self.T = parent.T
-            self.menu = self.mainMenu(window)
+            self.menu = self.create_main_menu(window)
 
         def about(self):
             # title.name = "About" # title as parameter
@@ -103,36 +103,47 @@ class PlanerApp:
             self.state.set_language(l_id)
             self.parent.refresh()
 
-        def create_lang_submenu(self, menu):
-            for lang in self.state.get_all_languages():
-                menu.add_radiobutton(label="{0} ({1})".format(lang['native_name'], lang['eng_name']),
-                                     var=self.parent.lang, value=lang['id'],
-                                     command=lambda lid=lang['id']: self.on_change_language(lid))
-
-        def mainMenu(self, window):
+        def create_main_menu(self, window):
             # ---------MAIN MENU---------
 
-            mainMenu = Menu(window)
-            window.config(menu=mainMenu)
+            main_menu = Menu(window)
+            window.config(menu=main_menu)
 
-            subMenu = Menu(mainMenu)
-            mainMenu.add_cascade(label=self.T("File").capitalize(), menu=subMenu)
-            subMenu.add_cascade(label=self.T("Profile").capitalize(), command=self.parent.show_profiles_dlg)
+            self.create_file_menu(main_menu)
+            self.create_options_menu(main_menu)
+            self.create_help_menu(main_menu)
 
-            subMenu.add_separator()
-            subMenu.add_command(label=self.T("Close").capitalize(), command=self.parent.close_window)
+            return main_menu
 
-            optMenu = Menu(mainMenu)
-            mainMenu.add_cascade(label=self.T("Options").capitalize(), menu=optMenu)
+        def create_file_menu(self, menu):
+            file_menu = Menu(menu)
+            menu.add_cascade(label=self.T("File").capitalize(), menu=file_menu)
+            file_menu.add_cascade(label=self.T("Profile").capitalize(), command=self.parent.show_profiles_dlg)
+            file_menu.add_separator()
+            file_menu.add_command(label=self.T("Close").capitalize(), command=self.parent.close_window)
+            return file_menu
 
-            langMenu = Menu(optMenu)
-            optMenu.add_cascade(label=self.T("Language").capitalize(), menu=langMenu)
-            self.create_lang_submenu(langMenu)
+        def create_options_menu(self, menu):
+            options_menu = Menu(menu)
+            menu.add_cascade(label=self.T("Options").capitalize(), menu=options_menu)
 
-            helpMenu = Menu(mainMenu)
-            mainMenu.add_cascade(label=self.T("Help").capitalize(), menu=helpMenu)
-            helpMenu.add_command(label=self.T("About").capitalize(), command=self.about)  # added showinfo window
-            return mainMenu
+            self.create_lang_submenu(options_menu)
+            return options_menu
+
+        def create_lang_submenu(self, menu):
+            lang_menu = Menu(menu)
+            menu.add_cascade(label=self.T("Language").capitalize(), menu=lang_menu)
+
+            for lang in self.state.get_all_languages():
+                lang_menu.add_radiobutton(label="{0} ({1})".format(lang['native_name'], lang['eng_name']),
+                                          var=self.parent.lang, value=lang['id'],
+                                          command=lambda lid=lang['id']: self.on_change_language(lid))
+
+        def create_help_menu(self, menu):
+            help_menu = Menu(menu)
+            menu.add_cascade(label=self.T("Help").capitalize(), menu=help_menu)
+            help_menu.add_command(label=self.T("About").capitalize(), command=self.about)
+            return help_menu
 
     class NavFrame:
         def __init__(self, window, parent):
@@ -170,7 +181,7 @@ class PlanerApp:
 
             # displaying week days bar
             for day_nr in range(7):
-                dayLabel = Label(menuBottomFrame, text=self.T("weekday_"+str(day_nr)).upper())
+                dayLabel = Label(menuBottomFrame, text=self.T("weekday_" + str(day_nr)).upper())
                 dayLabel.grid(row=0, column=day_nr)
 
             # displaying calendar grid
