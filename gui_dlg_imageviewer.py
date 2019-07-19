@@ -3,7 +3,7 @@ from tkinter import *
 
 from PIL import ImageTk, Image
 
-from PlanerBaseDialog import PlanerBaseDialog
+from gui_base_dialog import PlanerBaseDialog
 
 
 class ImageViewerDialog(PlanerBaseDialog):

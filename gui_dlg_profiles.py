@@ -1,6 +1,6 @@
 from tkinter import *
 
-from PlanerBaseDialog import PlanerBaseDialog
+from gui_base_dialog import PlanerBaseDialog
 
 
 class ProfilesDialog(PlanerBaseDialog):
