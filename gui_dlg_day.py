@@ -49,17 +49,16 @@ class DayDialog:
                     self.state.update_textnote(n['id'], text)
             self.parent.top.destroy()
 
-        # def cancel(self):
-        #    self.parent.top.destroy()
-
         def create_new_note(self, txt):
             txt_id = self.state.add_textnote(self.day, txt)
             self.make_frame_note(self.notes_frame, {'id': txt_id, 'value': txt})
 
         def create_new_image(self):
             print(self.initial_dir)
-            filename = filedialog.askopenfilename(initialdir=self.initial_dir, title=self.T("select_file"), filetypes=
-            ((self.T("jpeg files"), "*.jpg"), (self.T("all_files"), "*.*")))
+            filename = filedialog.askopenfilename(initialdir=self.initial_dir,
+                                                  title=self.T("select_file_title"),
+                                                  filetypes=((self.T("jpeg files"), "*.jpg"),
+                                                             (self.T("all_files"), "*.*")))
             if os.path.isfile(filename):
                 img_id = self.state.add_image(self.day, filename)
                 im = self.state.get_image(img_id)
@@ -111,7 +110,7 @@ class DayDialog:
             tn.pack()
             sy.config(command=tn.yview)
             f.pack()
-            close_button = Button(f, text='x', command=lambda id=note_data['id']: self.remove_note(id))
+            close_button = Button(f, text='x', command=lambda nid=note_data['id']: self.remove_note(nid))
             close_button.place(relx=1, x=-18, y=-3, anchor=NE)
             self.notes_data.append(
                 {'id': note_data['id'], 'old_value': note_data['value'], 'text_widget': tn, 'frame': f})
@@ -130,7 +129,7 @@ class DayDialog:
             canvas.create_image(0, 0, anchor=NW, image=img)
             i_frame.pack()
             close_button = Button(i_frame, text='x',
-                                  command=lambda id=image_data['id'], fr=i_frame: self.remove_image(id, fr))
+                                  command=lambda im_id=image_data['id'], fr=i_frame: self.remove_image(im_id, fr))
             close_button.place(relx=1, x=-3, y=-3, anchor=NE)
             canvas.bind("<Button-1>", lambda event, d=image_data: self.on_image_click(event, d))
             self.images_data.append({'img': img})
@@ -183,7 +182,6 @@ class DayDialog:
 
         def make_buttons_frame(self, frame):
             buttons_frame = ttk.Frame(frame)
-            # ttk.Button(buttons_frame, text=self.T('cancel'), command=self.cancel).pack(side=RIGHT)
             ttk.Button(buttons_frame, text=self.T('ok'), command=self.ok).pack(side=RIGHT)
             return buttons_frame
 
@@ -193,5 +191,3 @@ class DayDialog:
         def show_image_viewer(self, image_data):
             d = gui_dlg_imageviewer.ImageViewerDialog(self.parent, image_data['path'])
             self.parent.top.wait_window(d.top)
-
-
