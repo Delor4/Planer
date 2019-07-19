@@ -6,9 +6,9 @@ from PIL import ImageTk, Image
 import gui_base_dialog
 
 
-class ImageViewerDialog(gui_base_dialog.PlanerBaseDialog):
+class ImageViewerDialog(gui_base_dialog.PlanerBaseModalDialog):
     def __init__(self, parent, image_path):
-        gui_base_dialog.PlanerBaseDialog.__init__(self, parent)
+        gui_base_dialog.PlanerBaseModalDialog.__init__(self, parent)
         self.set_title(self.T("imageview_title"))  # ImageView
 
         self.image_path = image_path

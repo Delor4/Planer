@@ -8,9 +8,9 @@ import gui_dlg_imageviewer
 import gui_base_dialog
 
 
-class DayDialog(gui_base_dialog.PlanerBaseDialog):
+class DayDialog(gui_base_dialog.PlanerBaseModalDialog):
     def __init__(self, parent, day: int):
-        gui_base_dialog.PlanerBaseDialog.__init__(self, parent)
+        gui_base_dialog.PlanerBaseModalDialog.__init__(self, parent)
         self.set_title(self.state.get_data_string(day))
 
         self.day = day

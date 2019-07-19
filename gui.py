@@ -11,14 +11,15 @@ import gui_dlg_profiles
 from gui_base_dialog import PlanerBaseDialog
 
 
-class PlanerApp:
+class PlanerApp(PlanerBaseDialog):
 
     def __init__(self):
         self.app = self
         self.state = controller.Calendar()
-        self.top = Tk()
         self.T = self.state.translate
-        PlanerBaseDialog.set_icon(self.top)
+
+        PlanerBaseDialog.__init__(self, self, window=Tk())
+
         self.lang = IntVar()
         self.profile = IntVar()
 
@@ -28,9 +29,6 @@ class PlanerApp:
         self.top_frame = None
         self.bottom_frame = None
         self.init_ui()
-
-    def close_window(self):
-        self.top.destroy()
 
     def init_ui(self):
         self.top.title("{0} - {1}".format(PlanerBaseDialog.app_name, self.state.get_curr_profile_name()))

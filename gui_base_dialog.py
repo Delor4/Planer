@@ -5,15 +5,13 @@ from tkinter import *
 class PlanerBaseDialog:
     app_name = "Planer"
 
-    def __init__(self, parent, title: str = None):
+    def __init__(self, parent, title: str = None, window=None):
         self.parent = parent
         self.app = parent.app
         self.state = parent.state
         self.T = parent.T
 
-        self.top = Toplevel(parent.top)
-        self.top.transient(parent.top)
-        self.top.grab_set()
+        self.top = window
 
         PlanerBaseDialog.set_icon(self.top)
 
@@ -34,3 +32,11 @@ class PlanerBaseDialog:
             window.iconbitmap("planer.ico")
         elif platform.system() == 'Linux':
             window.tk.call('wm', 'iconphoto', window._w, PhotoImage(file='planer.png'))
+
+
+class PlanerBaseModalDialog(PlanerBaseDialog):
+    def __init__(self, parent, title: str = None):
+        self.top = Toplevel(parent.top)
+        self.top.transient(parent.top)
+        self.top.grab_set()
+        PlanerBaseDialog.__init__(self, parent, title=title, window=self.top)

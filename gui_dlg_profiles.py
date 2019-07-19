@@ -3,9 +3,9 @@ from tkinter import *
 import gui_base_dialog
 
 
-class ProfilesDialog(gui_base_dialog.PlanerBaseDialog):
+class ProfilesDialog(gui_base_dialog.PlanerBaseModalDialog):
     def __init__(self, parent):
-        gui_base_dialog.PlanerBaseDialog.__init__(self, parent)
+        gui_base_dialog.PlanerBaseModalDialog.__init__(self, parent)
         self.set_title(self.T("profiles_config_title"))  # Profiles config
 
         self.main_frame = None
