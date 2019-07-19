@@ -169,21 +169,9 @@ class PlanerApp:
             menuBottomFrame.pack(side=BOTTOM)
 
             # displaying week days bar
-            monLabel = Label(menuBottomFrame, text=self.T("monday").upper())
-            tueLabel = Label(menuBottomFrame, text=self.T("tuesday").upper())
-            wedLabel = Label(menuBottomFrame, text=self.T("wednesday").upper())
-            thuLabel = Label(menuBottomFrame, text=self.T("thursday").upper())
-            friLabel = Label(menuBottomFrame, text=self.T("friday").upper())
-            satLabel = Label(menuBottomFrame, text=self.T("saturday").upper())
-            sunLabel = Label(menuBottomFrame, text=self.T("sunday").upper())
-
-            monLabel.grid(row=0, column=0)
-            tueLabel.grid(row=0, column=1)
-            wedLabel.grid(row=0, column=2)
-            thuLabel.grid(row=0, column=3)
-            friLabel.grid(row=0, column=4)
-            satLabel.grid(row=0, column=5)
-            sunLabel.grid(row=0, column=6)
+            for day_nr in range(7):
+                dayLabel = Label(menuBottomFrame, text=self.T("weekday_"+str(day_nr)).upper())
+                dayLabel.grid(row=0, column=day_nr)
 
             # displaying calendar grid
             for day in parent.state.get_month_data():
