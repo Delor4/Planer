@@ -120,12 +120,11 @@ class PlanerDB:
     def get_notes(self, day_date: date):
         """
         Returns textnotes associated with date. (generator)
-        :param day_date: selected day
-        :return: TextNote (readonly values)
+        :param day_date: selected date
+        :return: dict{'id': int, 'value': str, 'geo_coord': Json}
         """
         for i in self._get_textnotes(day_date):
-            _, _, _ = i.id, i.value, i.geo_coord  # for writing to cache
-            yield i
+            yield {'id': i.id, 'value': i.value, 'geo_coord': i.geo_coord}
 
     @db_session
     def has_textnotes(self, day_date: date) -> bool:
@@ -201,8 +200,7 @@ class PlanerDB:
         :return: Image (readonly values)
          """
         for i in self._get_images(day_date):
-            _, _, _ = i.id, i.path, i.geo_coord  # for writing to cache
-            yield i
+            yield {'id': i.id, 'path': i.path, 'geo_coord': i.geo_coord}
 
     @db_session
     def get_image(self, image_id: int):
@@ -212,8 +210,7 @@ class PlanerDB:
         :return: Image (readonly values)
          """
         i = self.db.Image[image_id]
-        _, _, _ = i.id, i.path, i.geo_coord  # for writing to cache
-        return i
+        return {'id': i.id, 'path': i.path, 'geo_coord': i.geo_coord}
 
     @db_session
     def has_images(self, day_date: date) -> bool:

@@ -33,20 +33,10 @@ class Calendar:
     def get_day_data(self, day):
         notes = []
         for i in self.db.get_notes(self._make_date(day)):
-            notes.append(
-                {'id': i.id,
-                 'value': i.value,
-                 'geo_coord': i.geo_coord
-                 }
-            )
+            notes.append(i)
         images = []
         for i in self.db.get_images(self._make_date(day)):
-            images.append(
-                {'id': i.id,
-                 'path': i.path,
-                 'geo_coord': i.geo_coord
-                 }
-            )
+            images.append(i)
         return notes, images
 
     def get_month_data(self):
@@ -71,6 +61,9 @@ class Calendar:
     def add_textnote(self, day, note):
         return self.db.add_textnote(self._make_date(day), note)
 
+    def get_textnotes(self, day):
+        return self.db.get_notes(self._make_date(day))
+
     def update_textnote(self, id, value=None, geo_cord=None):
         self.db.update_textnote(id, value, geo_cord)
 
@@ -85,11 +78,7 @@ class Calendar:
         self.db.delete_image(id)
 
     def get_image(self, image_id):
-        i = self.db.get_image(image_id)
-        return {'id': i.id,
-                'path': i.path,
-                'geo_cord': i.geo_coord
-                }
+        return self.db.get_image(image_id)
 
     def delete_image_files(self, image_id):
         # TODO: tu kasowanie plików (obraz główny i thumb) powiązanych z rekordem image_id

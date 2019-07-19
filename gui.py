@@ -5,6 +5,7 @@ from tkinter import *
 from tkinter import messagebox
 import gui_dlg_day
 import gui_dlg_profiles
+import tooltip
 
 
 class PlanerApp:
@@ -199,6 +200,7 @@ class PlanerApp:
         def __init__(self, parent):
             self.parent = parent
             self.T = self.parent.T
+            self.state = parent.state
 
             menu_bottom_frame = Frame(parent.main_window)
             menu_bottom_frame.pack(side=BOTTOM)
@@ -210,7 +212,7 @@ class PlanerApp:
 
             # displaying calendar grid
             for day in parent.state.get_month_data():
-                form = LabelFrame(menu_bottom_frame, text=day['day_of_month'], )
+                form = LabelFrame(menu_bottom_frame, text=day['day_of_month'])
                 form.grid(row=day['week_of_month'] + 1, column=day['day_of_week'])
                 label = Label(form,
                               text='day:{2}\nnotes: {3}, images:{4}'.format(day['day_of_week'],
@@ -222,6 +224,11 @@ class PlanerApp:
                 label.grid()
 
                 label.bind("<Button-1>", lambda event, d=day['day_of_month']: self.on_day_click(event, d))
+                if day['notes_count'] > 0:
+                    text = []
+                    for n in self.state.get_textnotes(day['day_of_month']):
+                        text.append(n['value'])
+                    tooltip.Tooltip(form, text="\n".join(text))
             self.bottomFrame = menu_bottom_frame
 
         def on_day_click(self, _, day):
