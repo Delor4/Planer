@@ -11,7 +11,7 @@ class ProfilesDialog:
         self.top.transient(app.main_window)
         self.top.grab_set()
         app.set_icon(self.top)
-        self.top.title("Planer - {}".format(self.T("profiles_config_title")))  # Profiles config
+        self.top.title("{0} - {1}".format(app.app_name, self.T("profiles_config_title")))  # Profiles config
         self.main_frame = None
         self.init_ui()
 

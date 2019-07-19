@@ -9,6 +9,8 @@ import tooltip
 
 
 class PlanerApp:
+    app_name = "Planer"
+
     def __init__(self):
         self.state = controller.Calendar()
         self.main_window = Tk()
@@ -28,7 +30,7 @@ class PlanerApp:
         self.main_window.destroy()
 
     def init_ui(self):
-        self.main_window.title("Planer - {}".format(self.state.get_curr_profile_name()))
+        self.main_window.title("{0} - {1}".format(PlanerApp.app_name, self.state.get_curr_profile_name()))
         self.lang.set(self.state.get_language())
         self.profile.set(self.state.get_curr_profile())
         self.menu = PlanerApp.Menu(self.main_window, self)

@@ -15,7 +15,7 @@ class DayDialog:
         self.T = app.state.translate
         self.state = app.state
         app.set_icon(self.top)
-        self.top.title("Planer - {}".format(self.state.get_data_string(day)))
+        self.top.title("{0} - {1}".format(app.app_name, self.state.get_data_string(day)))
         self.dialog = DayDialog.DayFrame(self, day, app)
 
     class DayFrame:

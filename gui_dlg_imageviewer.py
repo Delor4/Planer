@@ -15,7 +15,7 @@ class ImageViewerDialog:
         self.T = parent.T
 
         PlanerApp.set_icon(self.top)
-        self.top.title("Planer - {}".format(self.T("imageview_title")))  # ImageView
+        self.top.title("{0} - {1}".format(PlanerApp.app_name, self.T("imageview_title")))  # ImageView
         self.parent = parent
         self.image_path = image_path
         self.state = self.parent.dialog.state
