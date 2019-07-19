@@ -121,7 +121,8 @@ class DayDialog:
                 self.no_images = None
             i_frame = ttk.Frame(frame)
             img = ImageTk.PhotoImage(
-                Image.open(os.path.join(self.state.get_images_folder(), 't_' + image_data['path'])))
+                Image.open(os.path.join(self.state.get_images_folder(),
+                                        self.state.thumbnail_from_filename(image_data['path']))))
             canvas = Canvas(i_frame, width=img.width(), height=img.height())
             canvas.pack()
             canvas.create_image(0, 0, anchor=NW, image=img)
