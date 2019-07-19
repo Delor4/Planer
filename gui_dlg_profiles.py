@@ -11,7 +11,7 @@ class ProfilesDialog:
         self.top.transient(app.mainWindow)
         self.top.grab_set()
         app.set_icon(self.top)
-        self.top.title("Planer - Profile")
+        self.top.title("Planer - {}".format(self.T("profiles_config_title")))  # Profiles config
         self.main_frame = None
         self.init_ui()
 
@@ -21,7 +21,7 @@ class ProfilesDialog:
         self.init_ui()
 
     def on_new_profile(self):
-        self.state.make_profile(self.T("Default profile name"))  # TODO: change tag to: new_profile_name
+        self.state.make_profile(self.T("new_profile_name"))  # Default profile name
         self.refresh()
 
     def on_select_profile(self, profile_id):
