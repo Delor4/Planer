@@ -224,12 +224,16 @@ class PlanerApp:
                 label.grid()
 
                 label.bind("<Button-1>", lambda event, d=day['day_of_month']: self.on_day_click(event, d))
+
                 if day['notes_count'] > 0:
-                    text = []
-                    for n in self.state.get_textnotes(day['day_of_month']):
-                        text.append(n['value'])
-                    tooltip.Tooltip(form, text="\n".join(text))
+                    self.add_tooltip_for_day(form, day['day_of_month'])
             self.bottomFrame = menu_bottom_frame
+
+        def add_tooltip_for_day(self, form, day):
+            text = []
+            for n in self.state.get_textnotes(day):
+                text.append(n['value'])
+            tooltip.Tooltip(form, text="\n".join(text))
 
         def on_day_click(self, _, day):
             self.parent.show_day_dlg(day)
