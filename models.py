@@ -152,6 +152,18 @@ class PlanerDB:
         return self.db.Image.select(lambda j: (j.day == self._get_day(day_date)) and (j.deleted is False))
 
     @db_session
+    def _textnote_to_dict(self, tn):
+        return {'id': tn.id, 'value': tn.value, 'geo_coord': tn.geo_coord}
+
+    @db_session
+    def _image_to_dict(self, im):
+        return {'id': im.id, 'path': im.path, 'geo_coord': im.geo_coord}
+
+    @db_session
+    def _profile_to_dict(self, pr):
+        return {'id': pr.id, 'name': pr.name}
+
+    @db_session
     def add_textnote(self, day_date: date, note: str) -> int:
         """
         Adding new textnote to day.
@@ -174,7 +186,7 @@ class PlanerDB:
         :return: dict{'id': int, 'value': str, 'geo_coord': Json}
         """
         for i in self._get_textnotes(day_date):
-            yield {'id': i.id, 'value': i.value, 'geo_coord': i.geo_coord}
+            yield self._textnote_to_dict(i)
 
     @db_session
     def has_textnotes(self, day_date: date) -> bool:
@@ -223,11 +235,13 @@ class PlanerDB:
         Delete selected textnote.
         :param tx_id: id of textnote
         """
-        if not self.db.TextNote[tx_id].deleted:
-            self._call_hook("on_before_delete_textnote", {'note_id': tx_id})
-            self.db.TextNote[tx_id].deleted = True
-            self.db.TextNote[tx_id].updated_at = datetime.now()
-            self._call_hook("on_after_delete_textnote", {'note_id': tx_id})
+        tn = self.db.TextNote[tx_id]
+        if not tn.deleted:
+            self._call_hook("on_before_delete_textnote", self._textnote_to_dict(tn))
+            tmp = self._textnote_to_dict(tn)
+            tn.deleted = True
+            tn.updated_at = datetime.now()
+            self._call_hook("on_after_delete_textnote", tmp)
 
     @db_session
     def add_image(self, day_date: date, path: str) -> int:
@@ -252,7 +266,7 @@ class PlanerDB:
         :return: Image (readonly values)
          """
         for i in self._get_images(day_date):
-            yield {'id': i.id, 'path': i.path, 'geo_coord': i.geo_coord}
+            yield self._image_to_dict(i)
 
     @db_session
     def get_image(self, image_id: int):
@@ -262,7 +276,7 @@ class PlanerDB:
         :return: Image (readonly values)
          """
         i = self.db.Image[image_id]
-        return {'id': i.id, 'path': i.path, 'geo_coord': i.geo_coord}
+        return self._image_to_dict(i)
 
     @db_session
     def has_images(self, day_date: date) -> bool:
@@ -311,11 +325,13 @@ class PlanerDB:
         Delete image's data from db.
         :param im_id: id of image to delete
         """
-        if not self.db.Image[im_id].deleted:
-            self._call_hook("on_before_delete_image", {'image_id': im_id})
-            self.db.Image[im_id].deleted = True
-            self.db.Image[im_id].updated_at = datetime.now()
-            self._call_hook("on_after_delete_image", {'image_id': im_id})
+        im = self.db.Image[im_id]
+        if not im.deleted:
+            self._call_hook("on_before_delete_image", self._image_to_dict(im))
+            tmp = self._image_to_dict(im)
+            im.deleted = True
+            im.updated_at = datetime.now()
+            self._call_hook("on_after_delete_image", tmp)
 
     @db_session
     def make_profile(self, name: str) -> int:
@@ -388,7 +404,7 @@ class PlanerDB:
         :return: dict{'id': int, 'name': str}
          """
         for i in select(u for u in self.db.Profile):
-            yield {'id': i.id, 'name': i.name}
+            yield self._profile_to_dict(i)
 
     @db_session
     def delete_profile(self, p_id: int) -> None:
@@ -397,9 +413,10 @@ class PlanerDB:
             Currently selected profile can't be deleted.
         """
         if p_id != self.get_curr_profile():
-            self._call_hook("on_before_delete_profile", {'profile_id': p_id})
+            self._call_hook("on_before_delete_profile", self._profile_to_dict(self.db.Profile[p_id]))
+            tmp = self._profile_to_dict(self.db.Profile[p_id])
             self.db.Profile[p_id].delete()
-            self._call_hook("on_after_delete_profile", {'profile_id': p_id})
+            self._call_hook("on_after_delete_profile", tmp)
 
     @db_session
     def get_language(self) -> int:
