@@ -1,5 +1,3 @@
-import platform
-
 import controller
 from tkinter import *
 from tkinter import messagebox
