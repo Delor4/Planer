@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 
 import gui_base_dialog
 
@@ -20,7 +21,7 @@ class ProfilesDialog(gui_base_dialog.PlanerBaseModalDialog):
 
     def on_new_profile(self):
         text = self.get_user_text(self.T("enter_profile_name"),  # Wprowadź nazwę profilu:
-                                  title=self.T("new_profile_title")) # Nowy profil
+                                  title=self.T("new_profile_title"))  # Nowy profil
         if text is not None and len(text) > 0:
             self.state.make_profile(text)
         self.refresh()
@@ -30,11 +31,19 @@ class ProfilesDialog(gui_base_dialog.PlanerBaseModalDialog):
         self.refresh()
 
     def on_edit_profile(self, profile_id):
-        text = self.get_user_text(self.T("enter_profile_name"), # Wprowadź nazwę profilu:
+        text = self.get_user_text(self.T("enter_profile_name"),  # Wprowadź nazwę profilu:
                                   self.state.get_profile_name(profile_id),
                                   title=self.T("edit_profile_title"))  # Zmień profil
         if text is not None and len(text) > 0:
             self.state.update_profile(profile_id, text)
+        self.refresh()
+
+    def on_delete_profile(self, profile_id):
+        if profile_id == self.state.get_curr_profile():
+            messagebox.showinfo(self.T("caption_title"),
+                                self.T("delete_error_curr_profile"))  # Aktywny profil nie może zostać usunięty.
+        else:
+            self.state.delete_profile(profile_id)
         self.refresh()
 
     def on_exit(self):
@@ -53,7 +62,8 @@ class ProfilesDialog(gui_base_dialog.PlanerBaseModalDialog):
             name_label.pack(side=LEFT)
             if self.state.get_curr_profile() == p['id']:
                 name_label.config(bg="white")
-            Button(profile_frame, text=self.T("delete").capitalize()).pack(side=RIGHT, anchor=E)
+            Button(profile_frame, text=self.T("delete").capitalize(),
+                   command=lambda pid=p['id']: self.on_delete_profile(pid)).pack(side=RIGHT, anchor=E)
             Button(profile_frame, text=self.T("edit").capitalize(),
                    command=lambda pid=p['id']: self.on_edit_profile(pid)).pack(side=RIGHT)
             Button(profile_frame, text=self.T("select").capitalize(),
