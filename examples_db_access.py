@@ -7,6 +7,47 @@ db = models.PlanerDB()  # db in memory
 
 dat = datetime.datetime(2014, 5, 9)
 
+
+def show_before_delete_image(data):
+    print(">>hook>> Przygotowanie do usunięcia obrazu:", data)
+    return True
+
+
+def show_after_delete_image(data):
+    print(">>hook>> Sprzątanie po usunięciu obrazu:", data)
+    return True
+
+
+def show_before_delete_note(data):
+    print(">>hook>> Przygotowanie do usunięcia notatki:", data)
+    return True
+
+
+def show_after_delete_note(data):
+    print(">>hook>> Sprzątanie po usunięciu notatki:", data)
+    return True
+
+
+def show_before_delete_profile(data):
+    print(">>hook>> Przygotowanie do usunięcia profilu:", data)
+    return True
+
+
+def show_after_delete_profile(data):
+    print(">>hook>> Sprzątanie po usunięciu profilu:", data)
+    return True
+
+
+# registering hooks
+db.add_hook("on_before_delete_image", show_before_delete_image)
+db.add_hook("on_after_delete_image", show_after_delete_image)
+
+db.add_hook("on_before_delete_textnote", show_before_delete_note)
+db.add_hook("on_after_delete_textnote", show_after_delete_note)
+
+db.add_hook("on_before_delete_profile", show_before_delete_profile)
+db.add_hook("on_after_delete_profile", show_after_delete_profile)
+
 # adding some data to DB
 db.add_image(dat, "/fff/tt/image.jpeg")
 img = db.add_image(dat, "/fff/tt/image2.jpeg")
@@ -106,4 +147,3 @@ for i in db.get_all_profiles():
 npr = db.make_profile("Nowy profil {}{}{}")
 old = db.set_curr_profile(npr)
 db.delete_profile(npr)
-
