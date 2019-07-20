@@ -85,17 +85,17 @@ class Calendar:
     def get_textnotes(self, day):
         return self.db.get_notes(self._make_date(day))
 
-    def update_textnote(self, id, value=None, geo_cord=None):
-        self.db.update_textnote(id, value, geo_cord)
+    def update_textnote(self, tid, value=None, geo_cord=None):
+        self.db.update_textnote(tid, value, geo_cord)
 
-    def delete_textnote(self, id):
-        self.db.delete_textnote(id)
+    def delete_textnote(self, tid):
+        self.db.delete_textnote(tid)
 
-    def update_image(self, id, path, geo_cord):
-        self.db.update_image(id, path, geo_cord)
+    def update_image(self, tid, path, geo_cord):
+        self.db.update_image(tid, path, geo_cord)
 
-    def delete_image(self, id):
-        self.db.delete_image(id)
+    def delete_image(self, tid):
+        self.db.delete_image(tid)
 
     def get_image(self, image_id):
         return self.db.get_image(image_id)
@@ -108,12 +108,12 @@ class Calendar:
         path_to_image = self.get_curr_images_folder()
         self.create_folder(path_to_image)
         ext = self.get_extension(source_path)
-        id = self.db.add_image(self._make_date(day), path_to_image)
-        filename = self.make_new_name(id, ext)
+        im_id = self.db.add_image(self._make_date(day), path_to_image)
+        filename = self.make_new_name(im_id, ext)
         shutil.copy(source_path, os.path.join(path_to_image, filename))
-        self.db.update_image(id, path=filename)
-        thumbnail = self.make_thumbnail(os.path.join(path_to_image, filename), filename)
-        return id
+        self.db.update_image(im_id, path=filename)
+        self.make_thumbnail(os.path.join(path_to_image, filename), filename)
+        return im_id
 
     def get_images_folder(self, profile_id):
         return os.path.join(self.get_data_folder(), str(profile_id))
@@ -128,8 +128,8 @@ class Calendar:
         old_name, extension = os.path.splitext(source_path)
         return extension
 
-    def make_new_name(self, id, ext):
-        return "img_" + str(id) + ext
+    def make_new_name(self, im_id, ext):
+        return "img_" + str(im_id) + ext
 
     def create_folder(self, path):
         if not os.path.exists(path):
@@ -151,11 +151,11 @@ class Calendar:
     def make_profile(self, name):
         return self.db.make_profile(name)
 
-    def update_profile(self, id, name):
-        return self.db.update_profile(id, name)
+    def update_profile(self, pid, name):
+        return self.db.update_profile(pid, name)
 
-    def set_current_profile(self, id):
-        return self.db.set_curr_profile(id)
+    def set_current_profile(self, pid):
+        return self.db.set_curr_profile(pid)
 
     def get_all_profiles(self):
         return self.db.get_all_profiles()
