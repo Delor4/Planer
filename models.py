@@ -95,8 +95,13 @@ class PlanerDB:
 
     def _init_hooks(self):
         return {
+            'on_before_create_image': [],
+            'on_after_create_image': [],
+            'on_before_update_image': [],
+            'on_after_update_image': [],
             'on_before_delete_image': [],
             'on_after_delete_image': [],
+
             'on_before_delete_textnote': [],
             'on_after_delete_textnote': [],
             'on_before_delete_profile': [],
@@ -165,7 +170,7 @@ class PlanerDB:
 
     @db_session
     def _profile_to_dict(self, pr):
-        return {'id': pr.id, 'name': pr.name, 'language':self._language_to_dict(pr.language)}
+        return {'id': pr.id, 'name': pr.name, 'language': self._language_to_dict(pr.language)}
 
     @db_session
     def _language_to_dict(self, lng):
@@ -261,9 +266,13 @@ class PlanerDB:
         """
         n = self._get_day(day_date)
         if n is None:
+            self._call_hook("on_before_create_image",
+                            {'date': day_date, 'profile': self.db.Profile[self.curr_profile_id], 'path': path})
             n = self.db.Day(date=day_date, profile=self.db.Profile[self.curr_profile_id])
         i = self.db.Image(path=path, day=n)
         commit()
+        self._call_hook("on_after_create_image", self._image_to_dict(i))
+
         return i.id
 
     @db_session
@@ -318,6 +327,7 @@ class PlanerDB:
         if n.deleted:
             return
         updated = False
+        self._call_hook("on_before_update_image", self._image_to_dict(n))
         if path is not None:
             n.path = path
             updated = True
@@ -326,6 +336,7 @@ class PlanerDB:
             updated = True
         if updated:
             n.updated_at = datetime.now()
+        self._call_hook("on_after_update_image", self._image_to_dict(n))
 
     @db_session
     def delete_image(self, im_id: int) -> None:
