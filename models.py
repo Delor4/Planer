@@ -1,3 +1,4 @@
+import typing
 from datetime import date
 from datetime import datetime
 from pony.orm import *
@@ -9,6 +10,7 @@ class PlanerDB:
         self.first_run = False
         self.db = PlanerDB._open_database(filename, debug)
         self.curr_profile_id = self._init_db(self.db)
+        self.hooks = self._init_hooks()
 
     @staticmethod
     def _define_entities(db):
@@ -90,6 +92,52 @@ class PlanerDB:
             return u.id
 
         return db.Config[1].profile.id
+
+    def _init_hooks(self):
+        return {
+            'on_before_delete_image': [],
+            'on_after_delete_image': [],
+            'on_before_delete_textnote': [],
+            'on_after_delete_textnote': [],
+            'on_before_delete_profile': [],
+            'on_after_delete_profile': [],
+        }
+
+    def add_hook(self, hook_id: str, func: typing.Callable[[dict], bool]) -> bool:
+        """
+        Registering new hook.
+        :param hook_id: name of hook
+        :param func: Function to register.
+                    Type: func(hook_data: dict) -> bool.
+                    Returning False meaning not calling the next queue hooks.
+        :return: True if hook registered.
+        """
+        if hook_id in self.hooks:
+            self.hooks[hook_id].append(func)
+            return True
+        else:
+            raise ValueError('Unknown hook.')
+        return False
+
+    def remove_hook(self, hook_id: str, func: typing.Callable[[dict], bool]) -> bool:
+        """
+        Remove registered hook.
+        :param hook_id: name of hook
+        :param func: registered func
+        :return: True if hook removed.
+        """
+        if hook_id in self.hooks:
+            self.hooks[hook_id].remove(func)
+            return True
+        else:
+            raise ValueError('Unknown hook.')
+        return False
+
+    def _call_hook(self, hook_id: str, data: dict):
+        data['hook'] = hook_id
+        for func in self.hooks[hook_id]:
+            if not func(data):
+                return
 
     @db_session
     def _get_day(self, day_date: date):
@@ -176,8 +224,10 @@ class PlanerDB:
         :param tx_id: id of textnote
         """
         if not self.db.TextNote[tx_id].deleted:
+            self._call_hook("on_before_delete_textnote", {'note_id': tx_id})
             self.db.TextNote[tx_id].deleted = True
             self.db.TextNote[tx_id].updated_at = datetime.now()
+            self._call_hook("on_after_delete_textnote", {'note_id': tx_id})
 
     @db_session
     def add_image(self, day_date: date, path: str) -> int:
@@ -262,8 +312,10 @@ class PlanerDB:
         :param im_id: id of image to delete
         """
         if not self.db.Image[im_id].deleted:
+            self._call_hook("on_before_delete_image", {'image_id': im_id})
             self.db.Image[im_id].deleted = True
             self.db.Image[im_id].updated_at = datetime.now()
+            self._call_hook("on_after_delete_image", {'image_id': im_id})
 
     @db_session
     def make_profile(self, name: str) -> int:
@@ -345,7 +397,9 @@ class PlanerDB:
             Currently selected profile can't be deleted.
         """
         if p_id != self.get_curr_profile():
+            self._call_hook("on_before_delete_profile", {'profile_id': p_id})
             self.db.Profile[p_id].delete()
+            self._call_hook("on_after_delete_profile", {'profile_id': p_id})
 
     @db_session
     def get_language(self) -> int:
