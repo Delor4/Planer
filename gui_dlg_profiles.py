@@ -60,14 +60,20 @@ class ProfilesDialog(gui_base_dialog.PlanerBaseModalDialog):
             profile_frame = Frame(profiles_frame)
             name_label = Label(profile_frame, text="{0}: {1}".format(p['id'], p['name']))
             name_label.pack(side=LEFT)
-            if self.state.get_curr_profile() == p['id']:
-                name_label.config(bg="white")
-            Button(profile_frame, text=self.T("delete").capitalize(),
-                   command=lambda pid=p['id']: self.on_delete_profile(pid)).pack(side=RIGHT, anchor=E)
+
+            del_btn = Button(profile_frame, text=self.T("delete").capitalize(),
+                             command=lambda pid=p['id']: self.on_delete_profile(pid))
+            del_btn.pack(side=RIGHT, anchor=E)
+
             Button(profile_frame, text=self.T("edit").capitalize(),
                    command=lambda pid=p['id']: self.on_edit_profile(pid)).pack(side=RIGHT)
             Button(profile_frame, text=self.T("select").capitalize(),
                    command=lambda pid=p['id']: self.on_select_profile(pid)).pack(side=RIGHT)
+
+            if self.state.get_curr_profile() == p['id']:
+                name_label.config(bg="white")
+                del_btn.configure(state=DISABLED)
+
             profile_frame.pack(fill=X, anchor=E)
 
         Button(add_frame, text=self.T("new_profile").capitalize(), command=self.on_new_profile).pack()
