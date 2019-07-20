@@ -17,7 +17,7 @@ class ImageViewerDialog(gui_base_dialog.PlanerBaseModalDialog):
         self.init_ui()
 
     def init_ui(self):
-        self.img = ImageTk.PhotoImage(Image.open(os.path.join(self.state.get_images_folder(), self.image_path)))
+        self.img = ImageTk.PhotoImage(Image.open(os.path.join(self.state.get_curr_images_folder(), self.image_path)))
         canvas = Canvas(self.top, width=self.img.width(), height=self.img.height())
         canvas.pack()
         canvas.create_image(0, 0, anchor=NW, image=self.img)

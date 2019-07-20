@@ -89,7 +89,7 @@ class Calendar:
         return
 
     def add_image(self, day, source_path):
-        path_to_image = self.get_images_folder()
+        path_to_image = self.get_curr_images_folder()
         self.create_folder(path_to_image)
         ext = self.get_extension(source_path)
         id = self.db.add_image(self._make_date(day), path_to_image)
@@ -99,8 +99,11 @@ class Calendar:
         thumbnail = self.make_thumbnail(os.path.join(path_to_image, filename), filename)
         return id
 
-    def get_images_folder(self):
-        return os.path.join(self.get_data_folder(), str(self.db.get_curr_profile()))
+    def get_images_folder(self, profile_id):
+        return os.path.join(self.get_data_folder(), str(profile_id))
+
+    def get_curr_images_folder(self):
+        return self.get_images_folder(self.db.get_curr_profile())
 
     def get_data_folder(self):  # TODO sprawdzenie czy __file__ zawsze zwraca sciezke
         return os.path.join(os.path.abspath(os.path.dirname(__file__)), "data")
@@ -124,7 +127,7 @@ class Calendar:
     def make_thumbnail(self, path, filename):
         image = Image.open(path)
         image.thumbnail((200, 120), Image.ANTIALIAS)
-        image.save(os.path.join(self.get_images_folder(), self.thumbnail_from_filename(filename)))
+        image.save(os.path.join(self.get_curr_images_folder(), self.thumbnail_from_filename(filename)))
 
     def make_profile(self, name):
         return self.db.make_profile(name)
