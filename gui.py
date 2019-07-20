@@ -34,9 +34,11 @@ class PlanerApp(PlanerBaseDialog):
         self.init_ui()
 
     def init_ui(self):
-        self.top.title("{0} - {1}".format(self.app_name, self.state.get_curr_profile_name()))
+        self.set_title(self.state.get_curr_profile_name())
+
         self.lang.set(self.state.get_language())
         self.profile.set(self.state.get_curr_profile())
+
         self.menu = PlanerApp.Menu(self.top, self)
         # frames
         self.top_main_frame = Frame(self.top, width=50, height=1)
@@ -176,7 +178,8 @@ class PlanerApp(PlanerBaseDialog):
             left.pack(side=LEFT)
 
             Label(menu_top_frame,
-                  text="{1} {0}".format(self.state.get_year(), self.T("month_" + str(self.state.get_month())))).pack(
+                  text="{1} {0}".format(self.state.get_year(),
+                                        self.T("month_" + str(self.state.get_month())).capitalize())).pack(
                 side=LEFT)
 
             right = Button(menu_top_frame, text='>', command=lambda: parent.next_month())

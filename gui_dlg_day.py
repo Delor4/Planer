@@ -42,10 +42,9 @@ class DayDialog(gui_base_dialog.PlanerBaseModalDialog):
         self.make_frame_note(self.notes_frame, {'id': txt_id, 'value': txt})
 
     def create_new_image(self):
-        print(self.app.initial_dir)
         filename = filedialog.askopenfilename(initialdir=self.app.initial_dir,
                                               title=self.T("select_file_title"),
-                                              filetypes=((self.T("jpeg files"), "*.jpg"),
+                                              filetypes=((self.T("jpeg_files"), "*.jpg"),
                                                          (self.T("all_files"), "*.*")))
         if os.path.isfile(filename):
             img_id = self.state.add_image(self.day, filename)
