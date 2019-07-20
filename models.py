@@ -153,15 +153,19 @@ class PlanerDB:
 
     @db_session
     def _textnote_to_dict(self, tn):
-        return {'id': tn.id, 'value': tn.value, 'geo_coord': tn.geo_coord}
+        return {'id': tn.id, 'value': tn.value, 'geo_coord': tn.geo_coord, 'day': self._day_to_dict(tn.day)}
 
     @db_session
     def _image_to_dict(self, im):
-        return {'id': im.id, 'path': im.path, 'geo_coord': im.geo_coord}
+        return {'id': im.id, 'path': im.path, 'geo_coord': im.geo_coord, 'day': self._day_to_dict(im.day)}
+
+    @db_session
+    def _day_to_dict(self, day):
+        return {'id': day.id, 'date': day.date, 'profile': self._profile_to_dict(day.profile)}
 
     @db_session
     def _profile_to_dict(self, pr):
-        return {'id': pr.id, 'name': pr.name}
+        return {'id': pr.id, 'name': pr.name, 'language':self._language_to_dict(pr.language)}
 
     @db_session
     def _language_to_dict(self, lng):
