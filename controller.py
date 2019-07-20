@@ -143,6 +143,9 @@ class Calendar:
     def get_curr_profile_name(self):
         return self.db.get_curr_profile_name()
 
+    def delete_profile(self, p_id):
+        return self.db.delete_profile(p_id)
+
     def get_language(self):
         return self.db.get_language()
 
