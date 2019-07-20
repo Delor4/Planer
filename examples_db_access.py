@@ -2,8 +2,8 @@ import models
 import datetime
 
 print("********************")
-# db = models.PlanerDB('notes.sqlite') # db in file
-db = models.PlanerDB()  # db in memory
+db = models.PlanerDB('notes.sqlite')  # db in file
+# db = models.PlanerDB()  # db in memory
 
 dat = datetime.datetime(2014, 5, 9)
 
@@ -56,7 +56,7 @@ db.add_textnote(dat, "test note in another profile")
 print("Notki profilu '{0}':".format(db.get_curr_profile_name()))
 for i in db.get_notes(dat):
     print(i['id'], '"' + i['value'] + '"', i['geo_coord'])
-    #print("    ", i.day.id, i.day.date)
+    # print("    ", i.day.id, i.day.date)
 
 db.set_curr_profile(old)
 
@@ -91,9 +91,19 @@ print("Aktulny język: {}".format(db.get_language()))
 db.set_language(2)
 print("Język po zmianie: {}".format(db.get_language()))
 
-old = db.set_curr_profile(2)
+old = db.set_curr_profile(pr)
 print("Język profilu '{1}': {0}".format(db.get_language(), db.get_curr_profile_name()))
 
 db.set_curr_profile(old)
 print("Język profilu '{1}': {0}".format(db.get_language(), db.get_curr_profile_name()))
+
+db.delete_profile(pr)
+
+print("Lista profili:")
+for i in db.get_all_profiles():
+    print(i['id'], i['name'])
+
+npr = db.make_profile("Nowy profil {}{}{}")
+old = db.set_curr_profile(npr)
+db.delete_profile(npr)
 
