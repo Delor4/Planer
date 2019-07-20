@@ -129,6 +129,9 @@ class Calendar:
         image.thumbnail((200, 120), Image.ANTIALIAS)
         image.save(os.path.join(self.get_curr_images_folder(), self.thumbnail_from_filename(filename)))
 
+    def get_no_image_image(self):
+        return Image.open(os.path.join(self.get_data_folder(), 'no_image.jpg'))
+
     def make_profile(self, name):
         return self.db.make_profile(name)
 

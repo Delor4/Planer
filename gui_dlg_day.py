@@ -108,18 +108,26 @@ class DayDialog(gui_base_dialog.PlanerBaseModalDialog):
             self.no_images.pack_forget()
             self.no_images.destroy()
             self.no_images = None
+
         i_frame = ttk.Frame(frame)
-        img = ImageTk.PhotoImage(
-            Image.open(os.path.join(self.state.get_curr_images_folder(),
+        try:
+            img = ImageTk.PhotoImage(
+                Image.open(os.path.join(self.state.get_curr_images_folder(),
                                     self.state.thumbnail_from_filename(image_data['path']))))
+        except FileNotFoundError:
+            img = ImageTk.PhotoImage(self.state.get_no_image_image())
+
         canvas = Canvas(i_frame, width=img.width(), height=img.height())
         canvas.pack()
         canvas.create_image(0, 0, anchor=NW, image=img)
+
         i_frame.pack()
+
         close_button = Button(i_frame, text='x',
                               command=lambda im_id=image_data['id'], fr=i_frame: self.remove_image(im_id, fr))
         close_button.place(relx=1, x=-3, y=-3, anchor=NE)
         canvas.bind("<Button-1>", lambda event, d=image_data: self.on_image_click(event, d))
+
         self.images_data.append({'img': img})
 
     def make_all_notes_frame(self, frame, notes):
