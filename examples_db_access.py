@@ -17,32 +17,32 @@ db.add_textnote(dat, "test note4")
 
 print("Dodane notki:")
 for i in db.get_notes(dat):
-    print(i.id, '"' + i.value + '"', i.geo_coord)
-    print("    ", i.day.id, i.day.date)
+    print(i['id'], '"' + i['value'] + '"', i['geo_coord'])
+    # print("    ", i.day.id, i.day.date)
 
 print("Dodane obrazy:")
 for i in db.get_images(dat):
-    print(i.id, i.path, i.geo_coord)
-    print("    ", i.day.id, i.day.date)
+    print(i['id'], i['path'], i['geo_coord'])
+    # print("    ", i.day.id, i.day.date)
 
 # update values in textnotes
 for i in db.get_notes(dat):
-    db.update_textnote(i.id, value=i.value + " dopisek")
+    db.update_textnote(i['id'], value=i['value'] + " dopisek")
 
 # update values in images
 for i in db.get_images(dat):
-    gc = i.geo_coord.copy()  # shallow copy because it's read only values
+    gc = i['geo_coord'].copy()
     gc['latitude'] = 'unknown'
     gc['longitude'] = 'unknown'
-    db.update_image(i.id, geo_coord=gc)
+    db.update_image(i['id'], geo_coord=gc)
 
 print("Zmienione notki:")
 for i in db.get_notes(dat):
-    print(i.id, '"' + i.value + '"')
+    print(i['id'], '"' + i['value'] + '"')
 
 print("Zmienione obrazy:")
 for i in db.get_images(dat):
-    print(i.id, i.path, i.geo_coord)
+    print(i['id'], i['path'], i['geo_coord'])
 
 print("Pod datą " + str(dat) + " są obrazy?:", db.has_images(dat))
 dat2 = datetime.datetime(2003, 5, 6)
@@ -55,8 +55,8 @@ db.add_textnote(dat, "test note in another profile")
 
 print("Notki profilu '{0}':".format(db.get_curr_profile_name()))
 for i in db.get_notes(dat):
-    print(i.id, '"' + i.value + '"', i.geo_coord)
-    print("    ", i.day.id, i.day.date)
+    print(i['id'], '"' + i['value'] + '"', i['geo_coord'])
+    #print("    ", i.day.id, i.day.date)
 
 db.set_curr_profile(old)
 
@@ -66,21 +66,21 @@ print("Profil po zmianie nazwy '{0}'".format(db.get_curr_profile_name()))
 
 print("Notki w profilu '{0}':".format(db.get_curr_profile_name()))
 for i in db.get_notes(dat):
-    print(i.id, '"' + i.value + '"', i.geo_coord)
+    print(i['id'], '"' + i['value'] + '"', i['geo_coord'])
 
 db.delete_textnote(note)
 print("Notki po usunięciu id '{0}':".format(note))
 for i in db.get_notes(dat):
-    print(i.id, '"' + i.value + '"', i.geo_coord)
+    print(i['id'], '"' + i['value'] + '"', i['geo_coord'])
 
 db.delete_image(img)
 print("Obrazy po usunięciu id '{0}':".format(img))
 for i in db.get_images(dat):
-    print(i.id, i.path, i.geo_coord)
+    print(i['id'], i['path'], i['geo_coord'])
 
 print("Lista profili:")
 for i in db.get_all_profiles():
-    print(i.id, i.name)
+    print(i['id'], i['name'])
 
 print("Lista języków:")
 for l in db.get_all_languages():
@@ -96,3 +96,4 @@ print("Język profilu '{1}': {0}".format(db.get_language(), db.get_curr_profile_
 
 db.set_curr_profile(old)
 print("Język profilu '{1}': {0}".format(db.get_language(), db.get_curr_profile_name()))
+
