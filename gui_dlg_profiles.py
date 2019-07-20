@@ -86,36 +86,7 @@ class ProfilesDialog(gui_base_dialog.PlanerBaseModalDialog):
         self.main_frame.pack()
 
     def get_user_text(self, prompt, text=None, title=None):
-        opts = TextDialog.Opts()
-        td = TextDialog(self, opts, prompt, text=text, title=title)
+        td = gui_base_dialog.TextDialog(self, prompt, text=text, title=title)
         self.top.wait_window(td.top)
-        if opts.ok:
-            return opts.value.get()
-
-
-class TextDialog(gui_base_dialog.PlanerBaseModalDialog):
-    class Opts:
-        def __init__(self):
-            self.value = StringVar()
-            self.ok = False
-
-    def __init__(self, parent, opts: Opts, prompt: str, text: str = None, title: str = None):
-        gui_base_dialog.PlanerBaseModalDialog.__init__(self, parent, title=title)
-        self.opts = opts
-
-        self.opts.ok = False
-        if text is not None:
-            self.opts.value.set(text)
-
-        self.init_ui(prompt)
-
-    def init_ui(self, prompt: str):
-        Label(self.top, text=prompt).pack(anchor=W)
-        e = Entry(self.top, textvariable=self.opts.value)
-        e.pack(fill=X)
-        e.bind('<Return>', lambda event: self.on_input_ok())
-        Button(self.top, text=self.T("ok"), command=self.on_input_ok).pack(anchor=E)
-
-    def on_input_ok(self):
-        self.opts.ok = True
-        self.close_window()
+        if td.ok:
+            return td.value.get()
