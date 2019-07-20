@@ -53,7 +53,7 @@ db.add_hook("on_after_delete_textnote", show_after_delete_note)
 db.add_hook("on_before_delete_profile", show_before_delete_profile)
 db.add_hook("on_after_delete_profile", show_after_delete_profile)
 
-#second function registered to hooks
+# second function registered to hooks
 db.add_hook("on_before_delete_image", show_hook_data)
 db.add_hook("on_after_delete_image", show_hook_data)
 
@@ -108,6 +108,7 @@ pr = db.make_profile("Nowy profil")
 old = db.set_curr_profile(pr)
 
 db.add_textnote(dat, "test note in another profile")
+db.add_image(dat, "/ggg/yy/image_cats.jpeg")
 
 print("Notki profilu '{0}':".format(db.get_curr_profile_name()))
 for i in db.get_notes(dat):
