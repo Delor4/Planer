@@ -1,0 +1,47 @@
+file;file;plik
+profile;profile;profil
+configure;configure;konfiguracja
+close;close;zamknij
+options;options;opcje
+language;language;język
+help;help;pomoc
+about;about;o nas
+ok;Ok;Ok
+delete;delete;usuń
+edit;edit;edytuj
+select;select;wybierz
+new_profile;new profile;nowy profil
+about_title;About;O nas
+imageview_title;Image Viewer;Przeglądarka obrazów
+profiles_config_title;Profiles configure;Konfiguracja profili
+new_profile_title;New profile;Nowy profil
+edit_profile_title;Edit profile;Edycja profilu
+notes;notes;notatki
+no_notes;No notes.;Brak notatek.
+images;images;obrazy
+no_images;No images.;Brak obrazów.
+select_file_title;Select file;Wybierz plik
+jpeg_files;Jpeg files;Pliki jpeg
+all_files;All files;Wszystkie
+enter_profile_name;Enter profile name:;Wprowadź nazwę profilu:
+month_1;january;styczeń
+month_2;february;luty
+month_3;march;marzec
+month_4;april;kwiecień
+month_5;may;maj
+month_6;june;czerwiec
+month_7;july;lipiec
+month_8;august;sierpień
+month_9;september;wrzesień
+month_10;october;październik
+month_11;november;listopad
+month_12;december;grudzień
+weekday_0;monday;poniedziałek
+weekday_1;tuesday;wtorek
+weekday_2;wednesday;środa
+weekday_3;thursday;czwartek
+weekday_4;friday;piątek
+weekday_5;saturday;sobota
+weekday_6;sunday;niedziela
+caption_title;Warning;Uwaga
+delete_error_curr_profile;Current profile can't be deleted.;Nie można usunąć aktywnego profilu.

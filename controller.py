@@ -5,6 +5,7 @@ import os
 import shutil
 from PIL import Image
 from pathlib import Path
+import csv
 
 
 class Calendar:
@@ -16,10 +17,25 @@ class Calendar:
         self.create_folder(self.get_data_folder())
         self.db = models.PlanerDB(os.path.join(self.get_data_folder(), 'notes.sqlite'))
         self.db.add_hook("on_after_delete_image", lambda data: self.after_db_delete_image(data))
+        self.translations = self.read_translations()
 
     def after_db_delete_image(self, data):
         self.delete_image_files(data['path'], data['day']['profile']['id'])
         return True
+
+    def read_translations(self):
+        # read file
+        file = []
+        with open(os.path.join(self.get_data_folder(), 'translations.csv')) as csvfile:
+            for line in csvfile:
+                file.append(line.encode('windows-1250').decode('utf-8'))
+        # parse file
+        translations = {}
+        reader = csv.reader(file, delimiter=';')
+        for row in reader:
+            translations[row[0]] = row[1:]
+
+        return translations
 
     def prev_month(self):  # ustawienie poprzedniego miesiąca
         d = self.date - datetime.timedelta(28)
@@ -166,7 +182,7 @@ class Calendar:
         return self.db.get_all_languages()
 
     def translate(self, tag):
-        # TODO: zwraca tekst przypisany do taga
-        # TODO: język tekstu: self.(db.)get_language()
+        if tag in self.translations:
+            return self.translations[tag][self.get_language() - 1]
         print("To translate:", tag)
         return "{" + tag + "}"
