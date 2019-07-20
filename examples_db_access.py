@@ -2,8 +2,8 @@ import models
 import datetime
 
 print("********************")
-db = models.PlanerDB('notes.sqlite')  # db in file
-# db = models.PlanerDB()  # db in memory
+# db = models.PlanerDB('db_for_test.sqlite')  # db in file
+db = models.PlanerDB()  # db in memory
 
 dat = datetime.datetime(2014, 5, 9)
 
