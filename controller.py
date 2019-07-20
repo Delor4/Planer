@@ -15,6 +15,11 @@ class Calendar:
         # self.db = models.PlanerDB() # db in memory
         self.create_folder(self.get_data_folder())
         self.db = models.PlanerDB(os.path.join(self.get_data_folder(), 'notes.sqlite'))
+        self.db.add_hook("on_after_delete_image", lambda data: self.after_db_delete_image(data))
+
+    def after_db_delete_image(self, data):
+        self.delete_image_files(data['path'], data['day']['profile']['id'])
+        return True
 
     def prev_month(self):  # ustawienie poprzedniego miesiąca
         d = self.date - datetime.timedelta(28)
@@ -74,13 +79,12 @@ class Calendar:
         self.db.update_image(id, path, geo_cord)
 
     def delete_image(self, id):
-        self.delete_image_files(id)
         self.db.delete_image(id)
 
     def get_image(self, image_id):
         return self.db.get_image(image_id)
 
-    def delete_image_files(self, image_id):
+    def delete_image_files(self, file_path, profile_id):
         # TODO: tu kasowanie plików (obraz główny i thumb) powiązanych z rekordem image_id
         return
 
