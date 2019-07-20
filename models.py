@@ -164,6 +164,10 @@ class PlanerDB:
         return {'id': pr.id, 'name': pr.name}
 
     @db_session
+    def _language_to_dict(self, lng):
+        return {'id': lng.id, 'eng_name': lng.eng_name, 'native_name': lng.native_name}
+
+    @db_session
     def add_textnote(self, day_date: date, note: str) -> int:
         """
         Adding new textnote to day.
@@ -413,8 +417,19 @@ class PlanerDB:
             Currently selected profile can't be deleted.
         """
         if p_id != self.get_curr_profile():
-            self._call_hook("on_before_delete_profile", self._profile_to_dict(self.db.Profile[p_id]))
-            tmp = self._profile_to_dict(self.db.Profile[p_id])
+            pr = self.db.Profile[p_id]
+            self._call_hook("on_before_delete_profile", self._profile_to_dict(pr))
+            tmp = self._profile_to_dict(pr)
+            # removing all days data
+            for d in self.db.Day.select(lambda j: j.profile == pr):
+                # removing textnotes
+                for t in d.textnotes:
+                    self.delete_textnote(t.id)
+                # removing images
+                for i in d.images:
+                    self.delete_image(i.id)
+
+            # removing all images
             self.db.Profile[p_id].delete()
             self._call_hook("on_after_delete_profile", tmp)
 
@@ -446,7 +461,7 @@ class PlanerDB:
          """
         langs = select(l for l in self.db.Language)
         for l in langs:
-            yield {'id': l.id, 'eng_name': l.eng_name, 'native_name': l.native_name}
+            yield self._language_to_dict(l)
 
     def is_first_run(self) -> bool:
         """
