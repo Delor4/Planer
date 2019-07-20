@@ -49,12 +49,14 @@ class PlanerDB:
             config = Optional('Config')
 
         class Language(db.Entity):
+            _table_ = 'languages'
             id = PrimaryKey(int, auto=True)
             eng_name = Required(str)
             native_name = Optional(str)
             profiles = Set(Profile)
 
         class Config(db.Entity):
+            _table_ = 'config'
             id = PrimaryKey(int, auto=True)
             profile = Required(Profile)
 
@@ -335,6 +337,15 @@ class PlanerDB:
          """
         for i in select(u for u in self.db.Profile):
             yield {'id': i.id, 'name': i.name}
+
+    @db_session
+    def delete_profile(self, p_id: int) -> None:
+        """
+        Delete p_id profile.
+            Currently selected profile can't be deleted.
+        """
+        if p_id != self.get_curr_profile():
+            self.db.Profile[p_id].delete()
 
     @db_session
     def get_language(self) -> int:
