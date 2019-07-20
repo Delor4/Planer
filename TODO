@@ -1,9 +1,9 @@
 - obsługa języków (controller, <del>gui</del>)
-- kasowanie profili (models, controller, gui)
+- <del>kasowanie profili (models, controller, gui)</del>
 - <del>kasowanie notatek (DayDialog)</del>
 - <del>kasowanie obrazów (DayDialog)</del>
 - <del>flaga pierwszego uruchomienia  (models.py)</del>
-- pytanie o wybór języka przy pierwszym uruchomieniu (gui)
+- <small>pytanie o wybór języka przy pierwszym uruchomieniu (gui)</small>
 - synchronizacja z zewnętrznym serwerem 
         (baza danych lub api)
 - integracja z Google Calendar

@@ -43,6 +43,7 @@ class ProfilesDialog(gui_base_dialog.PlanerBaseModalDialog):
             messagebox.showinfo(self.T("caption_title"),
                                 self.T("delete_error_curr_profile"))  # Aktywny profil nie może zostać usunięty.
         else:
+            # TODO: Okienko powierdzenia usunięcia profilu.
             self.state.delete_profile(profile_id)
         self.refresh()
 
