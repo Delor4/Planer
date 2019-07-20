@@ -9,32 +9,37 @@ dat = datetime.datetime(2014, 5, 9)
 
 
 def show_before_delete_image(data):
-    print(">>hook>> Przygotowanie do usunięcia obrazu:", data)
+    print(">>hook>> Przygotowanie do usunięcia obrazu:", data['id'])
     return True
 
 
 def show_after_delete_image(data):
-    print(">>hook>> Sprzątanie po usunięciu obrazu:", data)
+    print(">>hook>> Sprzątanie po usunięciu obrazu:", data['id'])
     return True
 
 
 def show_before_delete_note(data):
-    print(">>hook>> Przygotowanie do usunięcia notatki:", data)
+    print(">>hook>> Przygotowanie do usunięcia notatki:", data['id'])
     return True
 
 
 def show_after_delete_note(data):
-    print(">>hook>> Sprzątanie po usunięciu notatki:", data)
+    print(">>hook>> Sprzątanie po usunięciu notatki:", data['id'])
     return True
 
 
 def show_before_delete_profile(data):
-    print(">>hook>> Przygotowanie do usunięcia profilu:", data)
+    print(">>hook>> Przygotowanie do usunięcia profilu:", data['id'])
     return True
 
 
 def show_after_delete_profile(data):
-    print(">>hook>> Sprzątanie po usunięciu profilu:", data)
+    print(">>hook>> Sprzątanie po usunięciu profilu:", data['id'])
+    return True
+
+
+def show_hook_data(data):
+    print(">>hook>> ", data)
     return True
 
 
@@ -47,6 +52,16 @@ db.add_hook("on_after_delete_textnote", show_after_delete_note)
 
 db.add_hook("on_before_delete_profile", show_before_delete_profile)
 db.add_hook("on_after_delete_profile", show_after_delete_profile)
+
+#second function registered to hooks
+db.add_hook("on_before_delete_image", show_hook_data)
+db.add_hook("on_after_delete_image", show_hook_data)
+
+db.add_hook("on_before_delete_textnote", show_hook_data)
+db.add_hook("on_after_delete_textnote", show_hook_data)
+
+db.add_hook("on_before_delete_profile", show_hook_data)
+db.add_hook("on_after_delete_profile", show_hook_data)
 
 # adding some data to DB
 db.add_image(dat, "/fff/tt/image.jpeg")
