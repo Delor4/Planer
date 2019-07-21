@@ -17,19 +17,19 @@ class Calendar:
         self.translations = self._read_translations()
 
     # DATABASE
-    def _setup_db(self):
+    def _setup_db(self) -> models.PlanerDB:
         self.create_folder(self.get_data_folder())
         # db = models.PlanerDB()  # db in memory
         db = models.PlanerDB(os.path.join(self.get_data_folder(), 'notes.sqlite'))
         db.add_hook("on_after_delete_image", lambda data: self._after_db_delete_image(data))
         return db
 
-    def _after_db_delete_image(self, hook_data: dict):
+    def _after_db_delete_image(self, hook_data: dict) -> bool:
         self._delete_image_files(hook_data['path'], hook_data['day']['profile']['id'])
         return True
 
     # TRANSLATE
-    def _read_translations(self):
+    def _read_translations(self) -> dict:
         # read file
         file = []
         with open(os.path.join(self.get_data_folder(), 'translations.csv')) as csvfile:
@@ -59,11 +59,11 @@ class Calendar:
     def get_year(self) -> int:
         return self.date.year
 
-    def prev_month(self):  # ustawienie poprzedniego miesiąca
+    def prev_month(self) -> None:  # ustawienie poprzedniego miesiąca
         d = self.date - datetime.timedelta(28)
         self.date = datetime.date(d.year, d.month, 1)
 
-    def next_month(self):  # ustawienie następnego miesiąca
+    def next_month(self) -> None:  # ustawienie następnego miesiąca
         d = self.date + datetime.timedelta(31)
         self.date = datetime.date(d.year, d.month, 1)
 
@@ -71,12 +71,7 @@ class Calendar:
         return '{:%Y-%m-%d}'.format(self._make_date(day))
 
     # ALL DATA
-    # def get_day_data(self, day: int):
-    #    notes = self.get_textnotes(day)
-    #    images = self.db.get_images(self._make_date(day))
-    #    return notes, images
-
-    def get_month_data(self):
+    def get_month_data(self):  # generator
         row = 0
         for day in calendar.Calendar().itermonthdays2(self.date.year, self.date.month):
             if day[0] > 0:
@@ -162,7 +157,7 @@ class Calendar:
         image.thumbnail((200, 120), Image.ANTIALIAS)
         image.save(os.path.join(self.get_images_folder(profile_id), self._make_thumbnail_from_filename(filename)))
 
-    def get_no_image_image(self):
+    def get_no_image_image(self) -> Image:
         return Image.open(os.path.join(self.get_data_folder(), 'no_image.jpg'))
 
     # PROFILE
