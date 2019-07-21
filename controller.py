@@ -101,8 +101,9 @@ class Calendar:
         return self.db.get_image(image_id)
 
     def delete_image_files(self, file_path, profile_id):
-        # TODO: tu kasowanie plików (obraz główny i thumb) powiązanych z rekordem image_id
-        return
+        img_folder = self.get_images_folder(profile_id)
+        os.remove(os.path.join(img_folder, file_path))
+        os.remove(os.path.join(img_folder, self.thumbnail_from_filename(file_path)))
 
     def add_image(self, day, source_path):
         path_to_image = self.get_curr_images_folder()
