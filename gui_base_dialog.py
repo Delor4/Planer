@@ -51,7 +51,8 @@ class PlanerBaseModalDialog(PlanerBaseDialog):
         self.top.grab_set()
 
         # set position
-        self.top.geometry("+{0}+{1}".format(parent.top.winfo_x() + 20, parent.top.winfo_y() + 20))
+        self.top.geometry("+{0}+{1}".format(parent.top.winfo_x() + int(parent.top.winfo_width() / 2),
+                                            parent.top.winfo_y() + int(parent.top.winfo_height() / 2)))
 
         PlanerBaseDialog.__init__(self, parent, title=title, window=self.top)
 
