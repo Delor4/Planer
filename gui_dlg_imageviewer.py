@@ -20,7 +20,7 @@ class ImageViewerDialog(gui_base_dialog.PlanerBaseModalDialog):
         try:
             self.img = ImageTk.PhotoImage(Image.open(os.path.join(self.state.get_curr_images_folder(), self.image_path)))
         except FileNotFoundError:
-            self.img = ImageTk.PhotoImage(self.state.get_no_image_image())
+            self.img = ImageTk.PhotoImage(self.state.get_no_image())
 
         canvas = Canvas(self.top, width=self.img.width(), height=self.img.height())
         canvas.pack()

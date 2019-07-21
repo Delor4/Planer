@@ -9,6 +9,8 @@ import csv
 
 
 class Calendar:
+    no_image: Image = None
+
     def __init__(self, _=None):
         d = datetime.date.today()
         self.date = datetime.date(d.year, d.month, 1)  # always set to first day of month
@@ -157,8 +159,10 @@ class Calendar:
         image.thumbnail((200, 120), Image.ANTIALIAS)
         image.save(os.path.join(self.get_images_folder(profile_id), self._make_thumbnail_from_filename(filename)))
 
-    def get_no_image_image(self) -> Image:
-        return Image.open(os.path.join(self.get_data_folder(), 'no_image.jpg'))
+    def get_no_image(self) -> Image:
+        if self.no_image is None:
+            self.no_image = Image.open(os.path.join(self.get_data_folder(), 'no_image.jpg'))
+        return self.no_image
 
     # PROFILE
     def make_profile(self, name: str):
