@@ -76,7 +76,8 @@ class PlanerApp(PlanerBaseDialog):
 
         for prof in self.state.get_all_profiles():
             profiles_menu.add_radiobutton(label="{0}: {1}".format(str(prof['id']), prof['name']),
-                                          var=self.profile, value=prof['id'],
+                                          var=self.profile,
+                                          value=prof['id'],
                                           command=lambda pid=prof['id']: self.on_change_profile(pid))
         profiles_menu.add_separator()
         profiles_menu.add_command(label=self.T("configure").capitalize(), command=self.on_profiles_configure)
@@ -96,7 +97,8 @@ class PlanerApp(PlanerBaseDialog):
 
         for lang in self.state.get_all_languages():
             lang_menu.add_radiobutton(label="{0} ({1})".format(lang['native_name'], lang['eng_name']),
-                                      var=self.lang, value=lang['id'],
+                                      var=self.lang,
+                                      value=lang['id'],
                                       command=lambda lid=lang['id']: self.on_change_language(lid))
 
         return lang_menu
@@ -118,8 +120,7 @@ class PlanerApp(PlanerBaseDialog):
 
         Label(menu_top_frame,
               text="{1} {0}".format(self.state.get_year(),
-                                    self.T("month_" + str(self.state.get_month())).capitalize())).pack(
-            side=LEFT)
+                                    self.T("month_" + str(self.state.get_month())).capitalize())).pack(side=LEFT)
 
         right = Button(menu_top_frame, text='>', command=self.on_next_month)
         right.pack(side=LEFT)
@@ -139,21 +140,22 @@ class PlanerApp(PlanerBaseDialog):
 
         # displaying calendar grid
         for day in self.state.get_month_data():
-            form = LabelFrame(menu_bottom_frame, text=day['day_of_month'])
-            form.grid(row=day['week_of_month'] + 1, column=day['day_of_week'])
-            label = Label(form,
+            day_frame = LabelFrame(menu_bottom_frame, text=day['day_of_month'])
+            day_frame.grid(row=day['week_of_month'] + 1, column=day['day_of_week'])
+            label = Label(day_frame,
                           text='day:{2}\nnotes: {3}, images:{4}'.format(day['day_of_week'],
                                                                         day['week_of_month'],
                                                                         day['day_of_month'],
                                                                         day['notes_count'],
                                                                         day['images_count']),
-                          borderwidth=50, bg="white")
+                          borderwidth=50,
+                          bg="white")
             label.grid()
 
             label.bind("<Button-1>", lambda event, d=day['day_of_month']: self.on_day_click(event, d))
 
             if day['notes_count'] > 0:
-                self.add_tooltip_for_day(form, day['day_of_month'])
+                self.add_tooltip_for_day(day_frame, day['day_of_month'])
         return menu_bottom_frame
 
     def add_tooltip_for_day(self, form, day):
