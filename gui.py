@@ -21,10 +21,8 @@ class PlanerApp(PlanerBaseDialog):
         self.profile = IntVar()
 
         self.menu = None
-        self.top_main_frame = None
-        self.bottom_main_frame = None
-        self.top_frame = None
-        self.bottom_frame = None
+        self.nav_frame = None
+        self.calendar_frame = None
 
         self.initial_dir = '.'
 
@@ -37,18 +35,13 @@ class PlanerApp(PlanerBaseDialog):
         self.profile.set(self.state.get_curr_profile())
 
         self.menu = self.create_main_menu(self.top)
-        # frames
-        self.top_main_frame = Frame(self.top, width=50, height=1)
-        # leftMainFrame = Frame(top, width=1, height=700, bg="red")
-        # rightMainFrame = Frame(top, width=1, height=700, bg="red")
-        self.bottom_main_frame = Frame(self.top)
-        self.top_frame = self.create_nav_frame(self.top)
-        self.bottom_frame = self.create_calendar_frame(self.top)
+        self.nav_frame = self.create_nav_frame(self.top)
+        self.calendar_frame = self.create_calendar_frame(self.top)
 
     def refresh(self):
         self.menu.destroy()
-        self.top_frame.destroy()
-        self.bottom_frame.destroy()
+        self.nav_frame.destroy()
+        self.calendar_frame.destroy()
         self.init_ui()
 
     def run(self):
