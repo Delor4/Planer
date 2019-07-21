@@ -84,3 +84,29 @@ class TextDialog(PlanerBaseModalDialog):
 
     def get_value(self):
         return self.value.get()
+
+
+class YesNoDialog(PlanerBaseModalDialog):
+
+    def __init__(self, parent: PlanerBaseDialog, prompt: str, title: str = None):
+        PlanerBaseModalDialog.__init__(self, parent, title=title)
+        self.yes = False
+        self.no = False
+
+        self._init_ui(prompt)
+
+    def _init_ui(self, prompt: str):
+        Label(self.top, text=prompt, wraplength=500).pack(anchor=W,padx=5, pady=5)
+
+        f = Frame(self.top)
+        Button(f, text=self.T("yes"), command=self._on_yes).pack(side=LEFT,padx=5, pady=5)
+        Button(f, text=self.T("no"), command=self._on_no).pack(side=RIGHT,padx=5, pady=5)
+        f.pack()
+
+    def _on_yes(self):
+        self.yes = True
+        self.close_window()
+
+    def _on_no(self):
+        self.no = True
+        self.close_window()
