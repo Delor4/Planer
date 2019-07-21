@@ -20,7 +20,7 @@ class ProfilesDialog(gui_base_dialog.PlanerBaseModalDialog):
         add_profile_frame = self.create_add_profile_frame(self.main_frame)
         bottom_frame = self.create_bottom_frame(self.main_frame)
 
-        profiles_frame.pack(fill=X, anchor=E)
+        profiles_frame.pack(fill=X, anchor=E, padx=5, pady=5)
         add_profile_frame.pack()
         bottom_frame.pack(fill=X, side=BOTTOM)
         self.main_frame.pack()
@@ -45,7 +45,7 @@ class ProfilesDialog(gui_base_dialog.PlanerBaseModalDialog):
 
     def create_bottom_frame(self, parent_frame):
         bottom_frame = Frame(parent_frame)
-        Button(bottom_frame, text=self.T("ok"), command=self.on_ok).pack(side=RIGHT)
+        Button(bottom_frame, text=self.T("ok"), command=self.on_ok).pack(side=RIGHT, padx=5, pady=5)
         return bottom_frame
 
     # Profile subframe
