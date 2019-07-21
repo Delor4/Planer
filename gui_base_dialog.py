@@ -99,8 +99,8 @@ class YesNoDialog(PlanerBaseModalDialog):
         Label(self.top, text=prompt, wraplength=500).pack(anchor=W, padx=5, pady=5)
 
         f = Frame(self.top)
-        Button(f, text=self.T("yes"), command=self._on_yes).pack(side=LEFT, padx=5, pady=5)
-        Button(f, text=self.T("no"), command=self._on_no).pack(side=RIGHT, padx=5, pady=5)
+        Button(f, text=self.T("yes").capitalize(), command=self._on_yes).pack(side=LEFT, padx=5, pady=5)
+        Button(f, text=self.T("no").capitalize(), command=self._on_no).pack(side=RIGHT, padx=5, pady=5)
         f.pack()
 
     def _on_yes(self):

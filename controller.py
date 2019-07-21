@@ -43,7 +43,7 @@ class Calendar:
 
         return translations
 
-    def translate(self, tag: str):
+    def translate(self, tag: str) -> str:
         if tag in self.translations:
             return self.translations[tag][self.get_language() - 1]
         print("To translate:", tag)
@@ -53,10 +53,10 @@ class Calendar:
     def _make_date(self, day: int) -> datetime.date:
         return datetime.date(self.date.year, self.date.month, day)
 
-    def get_month(self)->int:
+    def get_month(self) -> int:
         return self.date.month
 
-    def get_year(self)->int:
+    def get_year(self) -> int:
         return self.date.year
 
     def prev_month(self):  # ustawienie poprzedniego miesiąca
@@ -67,11 +67,11 @@ class Calendar:
         d = self.date + datetime.timedelta(31)
         self.date = datetime.date(d.year, d.month, 1)
 
-    def get_data_string(self, day: int)->str:
+    def get_data_string(self, day: int) -> str:
         return '{:%Y-%m-%d}'.format(self._make_date(day))
 
     # ALL DATA
-    #def get_day_data(self, day: int):
+    # def get_day_data(self, day: int):
     #    notes = self.get_textnotes(day)
     #    images = self.db.get_images(self._make_date(day))
     #    return notes, images
