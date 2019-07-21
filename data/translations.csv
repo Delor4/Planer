@@ -45,3 +45,6 @@ weekday_5;saturday;sobota
 weekday_6;sunday;niedziela
 caption_title;Warning;Uwaga
 delete_error_curr_profile;Current profile can't be deleted.;Nie można usunąć aktywnego profilu.
+delete_profile_prompt;Deleting all profile's notes and pictures. Continue?;Usuwanie wszystkich notatek i zdjęć profilu. Kontynuować?
+yes;yes;tak
+no;no;nie
