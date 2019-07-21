@@ -72,13 +72,13 @@ class TextDialog(PlanerBaseModalDialog):
         self._init_ui(prompt)
 
     def _init_ui(self, prompt: str):
-        Label(self.top, text=prompt).pack(anchor=W)
-        e = Entry(self.top, textvariable=self.value)
-        e.pack(fill=X)
-        e.bind('<Return>', lambda event: self._on_input_ok())
-        Button(self.top, text=self.T("ok"), command=self._on_input_ok).pack(anchor=E)
+        Label(self.top, text=prompt, wraplength=500).pack(anchor=W, padx=5)
+        e = Entry(self.top, textvariable=self.value, width=40)
+        e.pack(fill=X, padx=5)
+        e.bind('<Return>', lambda event: self._on_ok())
+        Button(self.top, text=self.T("ok"), command=self._on_ok).pack(anchor=E, padx=5, pady=5)
 
-    def _on_input_ok(self):
+    def _on_ok(self):
         self.ok = True
         self.close_window()
 
@@ -96,11 +96,11 @@ class YesNoDialog(PlanerBaseModalDialog):
         self._init_ui(prompt)
 
     def _init_ui(self, prompt: str):
-        Label(self.top, text=prompt, wraplength=500).pack(anchor=W,padx=5, pady=5)
+        Label(self.top, text=prompt, wraplength=500).pack(anchor=W, padx=5, pady=5)
 
         f = Frame(self.top)
-        Button(f, text=self.T("yes"), command=self._on_yes).pack(side=LEFT,padx=5, pady=5)
-        Button(f, text=self.T("no"), command=self._on_no).pack(side=RIGHT,padx=5, pady=5)
+        Button(f, text=self.T("yes"), command=self._on_yes).pack(side=LEFT, padx=5, pady=5)
+        Button(f, text=self.T("no"), command=self._on_no).pack(side=RIGHT, padx=5, pady=5)
         f.pack()
 
     def _on_yes(self):
