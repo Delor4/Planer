@@ -89,4 +89,4 @@ class ProfilesDialog(gui_base_dialog.PlanerBaseModalDialog):
         td = gui_base_dialog.TextDialog(self, prompt, text=text, title=title)
         self.top.wait_window(td.top)
         if td.ok:
-            return td.value.get()
+            return td.get_value()

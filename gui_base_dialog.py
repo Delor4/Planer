@@ -3,6 +3,9 @@ from tkinter import *
 
 
 class PlanerBaseDialog:
+    """
+    Base class for all windows in app.
+    """
     app_name = "Planer"
 
     def __init__(self, parent, title: str = None, window=None):
@@ -38,6 +41,10 @@ class PlanerBaseDialog:
 
 
 class PlanerBaseModalDialog(PlanerBaseDialog):
+    """
+    Base class for all child windows in app.
+    """
+
     def __init__(self, parent, title: str = None):
         self.top = Toplevel(parent.top)
         self.top.transient(parent.top)
@@ -50,7 +57,11 @@ class PlanerBaseModalDialog(PlanerBaseDialog):
 
 
 class TextDialog(PlanerBaseModalDialog):
-    def __init__(self, parent, prompt: str, text: str = None, title: str = None):
+    """
+    Class for input text from user.
+    """
+
+    def __init__(self, parent: PlanerBaseDialog, prompt: str, text: str = None, title: str = None):
         PlanerBaseModalDialog.__init__(self, parent, title=title)
         self.value = StringVar()
         self.ok = False
@@ -58,15 +69,18 @@ class TextDialog(PlanerBaseModalDialog):
         if text is not None:
             self.value.set(text)
 
-        self.init_ui(prompt)
+        self._init_ui(prompt)
 
-    def init_ui(self, prompt: str):
+    def _init_ui(self, prompt: str):
         Label(self.top, text=prompt).pack(anchor=W)
         e = Entry(self.top, textvariable=self.value)
         e.pack(fill=X)
-        e.bind('<Return>', lambda event: self.on_input_ok())
-        Button(self.top, text=self.T("ok"), command=self.on_input_ok).pack(anchor=E)
+        e.bind('<Return>', lambda event: self._on_input_ok())
+        Button(self.top, text=self.T("ok"), command=self._on_input_ok).pack(anchor=E)
 
-    def on_input_ok(self):
+    def _on_input_ok(self):
         self.ok = True
         self.close_window()
+
+    def get_value(self):
+        return self.value.get()
