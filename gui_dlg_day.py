@@ -112,7 +112,7 @@ class DayDialog(gui_base_dialog.PlanerBaseModalDialog):
         try:
             img = ImageTk.PhotoImage(
                 Image.open(os.path.join(self.state.get_curr_images_folder(),
-                                    self.state.thumbnail_from_filename(image_data['path']))))
+                                        self.state._make_thumbnail_from_filename(image_data['path']))))
         except FileNotFoundError:
             img = ImageTk.PhotoImage(self.state.get_no_image_image())
 
