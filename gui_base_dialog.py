@@ -70,6 +70,7 @@ class TextDialog(PlanerBaseModalDialog):
             self.value.set(text)
 
         self._init_ui(prompt)
+        self.parent.top.wait_window(self.top)
 
     def _init_ui(self, prompt: str):
         Label(self.top, text=prompt, wraplength=500).pack(anchor=W, padx=5)
@@ -94,6 +95,7 @@ class YesNoDialog(PlanerBaseModalDialog):
         self.no = False
 
         self._init_ui(prompt)
+        self.parent.top.wait_window(self.top)
 
     def _init_ui(self, prompt: str):
         Label(self.top, text=prompt, wraplength=500).pack(anchor=W, padx=5, pady=5)

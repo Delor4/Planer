@@ -87,7 +87,6 @@ class ProfilesDialog(gui_base_dialog.PlanerBaseModalDialog):
                                 self.T("delete_error_curr_profile"))  # Aktywny profil nie może zostać usunięty.
         else:
             ynd = gui_base_dialog.YesNoDialog(self, self.T("delete_profile_prompt"), title=None)
-            self.top.wait_window(ynd.top)
             if ynd.yes:
                 self.state.delete_profile(profile_id)
         self.refresh()
@@ -104,6 +103,5 @@ class ProfilesDialog(gui_base_dialog.PlanerBaseModalDialog):
 
     def get_user_text(self, prompt, text=None, title=None):
         td = gui_base_dialog.TextDialog(self, prompt, text=text, title=title)
-        self.top.wait_window(td.top)
         if td.ok:
             return td.get_value()
