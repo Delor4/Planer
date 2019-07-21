@@ -6,7 +6,7 @@ import tooltip
 
 import gui_dlg_day
 import gui_dlg_profiles
-from gui_base_dialog import PlanerBaseDialog
+from gui_base_dialog import PlanerBaseDialog, CaptionDialog
 
 
 class PlanerApp(PlanerBaseDialog):
@@ -93,9 +93,7 @@ class PlanerApp(PlanerBaseDialog):
             text = [self.parent.app_name, ""]
             text.extend(team)
 
-            messagebox.showinfo(self.T("about_title"), "\n".join(text))
-            # messagebox.showinfo(self.T("about_title"),
-            #                    "SKS Team:\nBrodziak Sebastian\nJaśkowski Krzysztof\nKucharczyk Sebastian")
+            CaptionDialog(self.parent, title=self.T("about_title"), caption="\n".join(text))
 
         def on_change_profile(self, p_id):
             self.state.set_current_profile(p_id)

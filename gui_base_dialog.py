@@ -112,3 +112,20 @@ class YesNoDialog(PlanerBaseModalDialog):
     def _on_no(self):
         self.no = True
         self.close_window()
+
+
+class CaptionDialog(PlanerBaseModalDialog):
+
+    def __init__(self, parent: PlanerBaseDialog, caption: str, title: str = None):
+        PlanerBaseModalDialog.__init__(self, parent, title=title)
+
+        self._init_ui(caption)
+        self.parent.top.wait_window(self.top)
+
+    def _init_ui(self, prompt: str):
+        Label(self.top, text=prompt, wraplength=500).pack(anchor=W, padx=25, pady=10)
+
+        Button(self.top, text=self.T("ok").capitalize(), command=self._on_ok).pack(padx=5, pady=5)
+
+    def _on_ok(self):
+        self.close_window()
