@@ -53,7 +53,8 @@ class DayDialog(gui_base_dialog.PlanerBaseModalDialog):
             self.app.initial_dir = os.path.dirname(filename)
 
     def init_ui(self):
-        notes, images = self.state.get_day_data(self.day)
+        notes = self.state.get_textnotes(self.day)
+        images = self.state.get_images(self.day)
         frame = ttk.Frame(self.top)
         frame.pack(fill=BOTH)
 
@@ -132,11 +133,13 @@ class DayDialog(gui_base_dialog.PlanerBaseModalDialog):
     def make_all_notes_frame(self, frame, notes):
         notes_frame = ttk.LabelFrame(frame, text=self.T("notes").capitalize())
         notes_wrapper = ttk.Frame(notes_frame)
-        if len(notes) == 0:
-            self.no_notes = ttk.Label(notes_wrapper, text=self.T("no_notes"))  # Brak notatek.
-            self.no_notes.pack()
+        added = False
         for n in notes:
             self.make_frame_note(notes_wrapper, n)
+            added = True
+        if not added:
+            self.no_notes = ttk.Label(notes_wrapper, text=self.T("no_notes"))  # Brak notatek.
+            self.no_notes.pack()
         notes_wrapper.pack()
 
         self.create_notes_bottom(notes_frame)
@@ -167,12 +170,14 @@ class DayDialog(gui_base_dialog.PlanerBaseModalDialog):
         images_frame = ttk.LabelFrame(frame, text=self.T("images").capitalize())
         ttk.Button(images_frame, text="+", command=self.create_new_image).pack()
 
-        if len(images) == 0:
-            self.no_images = ttk.Label(images_frame, text=self.T("no_images"))  # Brak obrazów.
-            self.no_images.pack()
-
+        added = False
         for i in images:
             self.make_frame_image(images_frame, i)
+            added = True
+
+        if not added:
+            self.no_images = ttk.Label(images_frame, text=self.T("no_images"))  # Brak obrazów.
+            self.no_images.pack()
         return images_frame
 
     def make_buttons_frame(self, frame):

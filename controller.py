@@ -50,13 +50,13 @@ class Calendar:
         return "{" + tag + "}"
 
     # DATE
-    def _make_date(self, day: int):
+    def _make_date(self, day: int) -> datetime.date:
         return datetime.date(self.date.year, self.date.month, day)
 
-    def get_month(self):
+    def get_month(self)->int:
         return self.date.month
 
-    def get_year(self):
+    def get_year(self)->int:
         return self.date.year
 
     def prev_month(self):  # ustawienie poprzedniego miesiąca
@@ -67,18 +67,14 @@ class Calendar:
         d = self.date + datetime.timedelta(31)
         self.date = datetime.date(d.year, d.month, 1)
 
-    def get_data_string(self, day: int):
+    def get_data_string(self, day: int)->str:
         return '{:%Y-%m-%d}'.format(self._make_date(day))
 
     # ALL DATA
-    def get_day_data(self, day: int):
-        notes = []
-        for i in self.db.get_notes(self._make_date(day)):
-            notes.append(i)
-        images = []
-        for i in self.db.get_images(self._make_date(day)):
-            images.append(i)
-        return notes, images
+    #def get_day_data(self, day: int):
+    #    notes = self.get_textnotes(day)
+    #    images = self.db.get_images(self._make_date(day))
+    #    return notes, images
 
     def get_month_data(self):
         row = 0
@@ -115,6 +111,9 @@ class Calendar:
 
     def get_image(self, image_id: int):
         return self.db.get_image(image_id)
+
+    def get_images(self, day):
+        return self.db.get_images(self._make_date(day))
 
     def _delete_image_files(self, file_path: str, profile_id: int):
         img_folder = self.get_images_folder(profile_id)
