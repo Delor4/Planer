@@ -120,7 +120,7 @@ class PlanerApp(PlanerBaseDialog):
         menu_top_frame = Frame(parent_frame, width=1100, height=50)
         menu_top_frame.pack(side=TOP)
 
-        left = Button(menu_top_frame, text='<', command=lambda: self.on_prev_month(), highlightcolor="red")
+        left = Button(menu_top_frame, text='<', command=self.on_prev_month, highlightcolor="red")
         left.pack(side=LEFT)
 
         Label(menu_top_frame,
@@ -128,7 +128,7 @@ class PlanerApp(PlanerBaseDialog):
                                     self.T("month_" + str(self.state.get_month())).capitalize())).pack(
             side=LEFT)
 
-        right = Button(menu_top_frame, text='>', command=lambda: self.on_next_month())
+        right = Button(menu_top_frame, text='>', command=self.on_next_month)
         right.pack(side=LEFT)
 
         return menu_top_frame
