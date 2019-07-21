@@ -11,17 +11,21 @@ import csv
 class Calendar:
     def __init__(self, _=None):
         d = datetime.date.today()
-        self.date = datetime.date(d.year, d.month, 1)
+        self.date = datetime.date(d.year, d.month, 1)  # always set to first day of month
+        self.db = self.setup_db()
         self.T = self.translate
-        # self.db = models.PlanerDB() # db in memory
-        self.create_folder(self.get_data_folder())
-        self.db = models.PlanerDB(os.path.join(self.get_data_folder(), 'notes.sqlite'))
-        self.db.add_hook("on_after_delete_image", lambda data: self.after_db_delete_image(data))
         self.translations = self.read_translations()
 
-    def after_db_delete_image(self, data):
-        self.delete_image_files(data['path'], data['day']['profile']['id'])
+    def after_db_delete_image(self, hook_data):
+        self.delete_image_files(hook_data['path'], hook_data['day']['profile']['id'])
         return True
+
+    def setup_db(self):
+        self.create_folder(self.get_data_folder())
+        # db = models.PlanerDB()  # db in memory
+        db = models.PlanerDB(os.path.join(self.get_data_folder(), 'notes.sqlite'))
+        db.add_hook("on_after_delete_image", lambda data: self.after_db_delete_image(data))
+        return db
 
     def read_translations(self):
         # read file
@@ -37,6 +41,16 @@ class Calendar:
 
         return translations
 
+    # date operations
+    def _make_date(self, day):
+        return datetime.date(self.date.year, self.date.month, day)
+
+    def get_month(self):
+        return self.date.month
+
+    def get_year(self):
+        return self.date.year
+
     def prev_month(self):  # ustawienie poprzedniego miesiąca
         d = self.date - datetime.timedelta(28)
         self.date = datetime.date(d.year, d.month, 1)
@@ -44,9 +58,6 @@ class Calendar:
     def next_month(self):  # ustawienie następnego miesiąca
         d = self.date + datetime.timedelta(31)
         self.date = datetime.date(d.year, d.month, 1)
-
-    def _make_date(self, day):
-        return datetime.date(self.date.year, self.date.month, day)
 
     def get_data_string(self, day):
         return '{:%Y-%m-%d}'.format(self._make_date(day))
@@ -73,12 +84,6 @@ class Calendar:
             if day[1] == 6:
                 row += 1
 
-    def get_month(self):
-        return self.date.month
-
-    def get_year(self):
-        return self.date.year
-
     def add_textnote(self, day, note):
         return self.db.add_textnote(self._make_date(day), note)
 
@@ -91,7 +96,7 @@ class Calendar:
     def delete_textnote(self, tid):
         self.db.delete_textnote(tid)
 
-    def update_image(self, tid, path, geo_cord):
+    def update_image(self, tid, path=None, geo_cord=None):
         self.db.update_image(tid, path, geo_cord)
 
     def delete_image(self, tid):
@@ -108,11 +113,10 @@ class Calendar:
     def add_image(self, day, source_path):
         path_to_image = self.get_curr_images_folder()
         self.create_folder(path_to_image)
-        ext = self.get_extension(source_path)
         im_id = self.db.add_image(self._make_date(day), path_to_image)
-        filename = self.make_new_name(im_id, ext)
+        filename = self.make_new_name(im_id, self.get_extension(source_path))
+        self.update_image(im_id, path=filename)
         shutil.copy(source_path, os.path.join(path_to_image, filename))
-        self.db.update_image(im_id, path=filename)
         self.make_thumbnail(os.path.join(path_to_image, filename), filename)
         return im_id
 
@@ -126,7 +130,7 @@ class Calendar:
         return os.path.join(os.path.abspath(os.path.dirname(__file__)), "data")
 
     def get_extension(self, source_path):
-        old_name, extension = os.path.splitext(source_path)
+        _, extension = os.path.splitext(source_path)
         return extension
 
     def make_new_name(self, im_id, ext):
