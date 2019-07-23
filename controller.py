@@ -36,7 +36,7 @@ class Calendar:
         file = []
         with open(os.path.join(self.get_data_folder(), 'translations.csv')) as csvfile:
             for line in csvfile:
-                file.append(line.encode('windows-1250').decode('utf-8'))
+                file.append(line.encode('utf-8').decode('utf-8'))
         # parse file
         translations = {}
         reader = csv.reader(file, delimiter=';')

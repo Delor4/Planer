@@ -112,15 +112,16 @@ class PlanerApp(PlanerBaseDialog):
     # NavFrame
     def create_nav_frame(self, parent_frame):
 
-        menu_top_frame = Frame(parent_frame, width=1100, height=50)
+        menu_top_frame = Frame(parent_frame, width=1100, height=50) # tło pod nazwą miesiąca
         menu_top_frame.pack(side=TOP)
 
         left = Button(menu_top_frame, text='<', command=self.on_prev_month, highlightcolor="red")
+
         left.pack(side=LEFT)
 
         Label(menu_top_frame,
               text="{1} {0}".format(self.state.get_year(),
-                                    self.T("month_" + str(self.state.get_month())).capitalize())).pack(side=LEFT)
+                                    self.T("month_" + str(self.state.get_month())).capitalize()), width=15).pack(side=LEFT)
 
         right = Button(menu_top_frame, text='>', command=self.on_next_month)
         right.pack(side=LEFT)
@@ -130,12 +131,14 @@ class PlanerApp(PlanerBaseDialog):
     # Calendar Frame
     def create_calendar_frame(self, parent_frame):
 
-        menu_bottom_frame = Frame(parent_frame)
+        menu_bottom_frame = Frame(parent_frame) # TŁO POD CAŁYM PLANEREM
+
         menu_bottom_frame.pack(side=BOTTOM)
 
-        # displaying week days bar
+        # displaying week days names bar
         for day_nr in range(7):
-            day_label = Label(menu_bottom_frame, text=self.T("weekday_" + str(day_nr)).upper())
+            day_label = Label(menu_bottom_frame, text=self.T("weekday_" + str(day_nr)).upper()) # tło pod dniami tygodnia
+
             day_label.grid(row=0, column=day_nr)
 
         # displaying calendar grid
@@ -149,7 +152,8 @@ class PlanerApp(PlanerBaseDialog):
                                                                         day['notes_count'],
                                                                         day['images_count']),
                           borderwidth=50,
-                          bg="white")
+                          ) # tło pod planerem
+
             label.grid()
 
             label.bind("<Button-1>", lambda event, d=day['day_of_month']: self.on_day_click(event, d))
