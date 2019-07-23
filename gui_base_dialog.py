@@ -1,3 +1,4 @@
+import os
 import platform
 from tkinter import *
 
@@ -32,12 +33,12 @@ class PlanerBaseDialog:
     def set_icon(self):
         self._set_icon(self.top)
 
-    @staticmethod
-    def _set_icon(window):
+    def _set_icon(self, window):
         if platform.system() == 'Windows':
-            window.iconbitmap("planer.ico")
+            window.iconbitmap(os.path.join(self.state.get_resources_folder(), "planer.ico"))
         elif platform.system() == 'Linux':
-            window.tk.call('wm', 'iconphoto', window._w, PhotoImage(file='planer.png'))
+            window.tk.call('wm', 'iconphoto', window._w,
+                           PhotoImage(file=os.path.join(self.state.get_resources_folder(), 'planer.png')))
 
 
 class PlanerBaseModalDialog(PlanerBaseDialog):

@@ -34,7 +34,7 @@ class Calendar:
     def _read_translations(self) -> dict:
         # read file
         file = []
-        with open(os.path.join(self.get_data_folder(), 'translations.csv')) as csvfile:
+        with open(os.path.join(self.get_resources_folder(), 'translations.csv')) as csvfile:
             for line in csvfile:
                 file.append(line.encode('windows-1250').decode('utf-8'))
         # parse file
@@ -138,6 +138,11 @@ class Calendar:
                             # TODO sprawdzić czy __file__ zawsze zwraca sciezke
                             "data")
 
+    def get_resources_folder(self):
+        return os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                            # TODO sprawdzić czy __file__ zawsze zwraca sciezke
+                            "resources")
+
     def _get_extension(self, source_path: str):
         _, extension = os.path.splitext(source_path)
         return extension
@@ -161,7 +166,7 @@ class Calendar:
 
     def get_no_image(self) -> Image:
         if self.no_image is None:
-            self.no_image = Image.open(os.path.join(self.get_data_folder(), 'no_image.jpg'))
+            self.no_image = Image.open(os.path.join(self.get_resources_folder(), 'no_image.jpg'))
         return self.no_image
 
     # PROFILE
