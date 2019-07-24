@@ -1,4 +1,5 @@
 import datetime
+
 import models
 import calendar
 import os
@@ -33,13 +34,10 @@ class Calendar:
     # TRANSLATE
     def _read_translations(self) -> dict:
         # read file
-        file = []
-        with open(os.path.join(self.get_resources_folder(), 'translations.csv')) as csvfile:
-            for line in csvfile:
-                file.append(line.encode('utf-8').decode('utf-8'))
+        csvfile = open(os.path.join(self.get_resources_folder(), 'translations.csv'), encoding="utf-8")
         # parse file
         translations = {}
-        reader = csv.reader(file, delimiter=';')
+        reader = csv.reader(csvfile, delimiter=';')
         for row in reader:
             translations[row[0]] = row[1:]
 

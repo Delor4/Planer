@@ -190,8 +190,8 @@ class PlanerApp(PlanerBaseDialog):
 
     def on_about(self):
         team = list()
-        for line in open('about'):
-            team.append(line.strip().encode('windows-1250').decode('utf-8'))
+        for line in open('about', encoding="utf-8"):
+            team.append(line.strip())
 
         text = [self.app_name, ""]
         text.extend(team)
