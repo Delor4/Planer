@@ -112,7 +112,7 @@ class PlanerApp(PlanerBaseDialog):
     # NavFrame
     def create_nav_frame(self, parent_frame):
 
-        menu_top_frame = Frame(parent_frame, width=1100, height=50) # tło pod nazwą miesiąca
+        menu_top_frame = Frame(parent_frame, width=1100, height=50)  # tło pod nazwą miesiąca
         menu_top_frame.pack(side=TOP)
 
         left = Button(menu_top_frame, text='<', command=self.on_prev_month, highlightcolor="red")
@@ -121,7 +121,8 @@ class PlanerApp(PlanerBaseDialog):
 
         Label(menu_top_frame,
               text="{1} {0}".format(self.state.get_year(),
-                                    self.T("month_" + str(self.state.get_month())).capitalize()), width=15).pack(side=LEFT)
+                                    self.T("month_" + str(self.state.get_month())).capitalize()), width=15).pack(
+            side=LEFT)
 
         right = Button(menu_top_frame, text='>', command=self.on_next_month)
         right.pack(side=LEFT)
@@ -131,36 +132,42 @@ class PlanerApp(PlanerBaseDialog):
     # Calendar Frame
     def create_calendar_frame(self, parent_frame):
 
-        menu_bottom_frame = Frame(parent_frame) # TŁO POD CAŁYM PLANEREM
+        menu_bottom_frame = Frame(parent_frame)  # TŁO POD CAŁYM PLANEREM
 
         menu_bottom_frame.pack(side=BOTTOM)
 
         # displaying week days names bar
         for day_nr in range(7):
-            day_label = Label(menu_bottom_frame, text=self.T("weekday_" + str(day_nr)).upper()) # tło pod dniami tygodnia
+            day_label = Label(menu_bottom_frame,
+                              text=self.T("weekday_" + str(day_nr)).upper(), width=15)  # tło pod dniami tygodnia
 
             day_label.grid(row=0, column=day_nr)
 
         # displaying calendar grid
         for day in self.state.get_month_data():
-            day_frame = LabelFrame(menu_bottom_frame, text=day['day_of_month'])
-            day_frame.grid(row=day['week_of_month'] + 1, column=day['day_of_week'])
-            label = Label(day_frame,
-                          text='day:{2}\nnotes: {3}, images:{4}'.format(day['day_of_week'],
-                                                                        day['week_of_month'],
-                                                                        day['day_of_month'],
-                                                                        day['notes_count'],
-                                                                        day['images_count']),
-                          borderwidth=50,
-                          ) # tło pod planerem
+            day_frame = LabelFrame(menu_bottom_frame, text=day['day_of_month'], height=80)
+            day_frame.pack_propagate(0)
+            day_frame.grid(row=day['week_of_month'] + 1, column=day['day_of_week'], sticky="ew")
+            label = Frame(day_frame, height=50)  # tło pod planerem
+            label.pack()
 
-            label.grid()
-
-            label.bind("<Button-1>", lambda event, d=day['day_of_month']: self.on_day_click(event, d))
-
+            self.set_day_bind(day_frame, day['day_of_month'])
+            self.set_day_bind(label, day['day_of_month'])
+            if day['notes_count'] > 0:
+                notes_lbl = Label(label, text=str(day['notes_count']), bg="#3ff")
+                notes_lbl.pack(side=LEFT, padx=5, pady=10)
+                self.set_day_bind(notes_lbl, day['day_of_month'])
+            if day['images_count'] > 0:
+                images_lbl = Label(label, text=str(day['images_count']), bg="#ff3")
+                images_lbl.pack(side=LEFT, padx=5, pady=10)
+                self.set_day_bind(images_lbl, day['day_of_month'])
             if day['notes_count'] > 0:
                 self.add_tooltip_for_day(day_frame, day['day_of_month'])
+
         return menu_bottom_frame
+
+    def set_day_bind(self, frame, day):
+        frame.bind("<Button-1>", lambda event, d=day: self.on_day_click(event, d))
 
     def add_tooltip_for_day(self, form, day):
         text = []
