@@ -49,7 +49,7 @@ class PlanerBaseModalDialog(PlanerBaseDialog):
     def __init__(self, parent, title: str = None):
         self.top = Toplevel(parent.top)
         self.top.transient(parent.top)
-        self.top.grab_set()
+        self.top.after(100, self.top.grab_set)
 
         # set position
         self.top.geometry("+{0}+{1}".format(parent.top.winfo_x() + int(parent.top.winfo_width() / 2),
