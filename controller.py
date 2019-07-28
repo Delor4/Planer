@@ -1,4 +1,5 @@
 import datetime
+import sys
 
 import models
 import calendar
@@ -132,13 +133,11 @@ class Calendar:
         return self.get_images_folder(self.db.get_curr_profile())
 
     def get_data_folder(self):
-        return os.path.join(os.path.abspath(os.path.dirname(__file__)),
-                            # TODO sprawdzić czy __file__ zawsze zwraca sciezke
+        return os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])),
                             "data")
 
     def get_resources_folder(self):
-        return os.path.join(os.path.abspath(os.path.dirname(__file__)),
-                            # TODO sprawdzić czy __file__ zawsze zwraca sciezke
+        return os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])),
                             "resources")
 
     def _get_extension(self, source_path: str):
