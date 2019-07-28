@@ -6,7 +6,7 @@ import tooltip
 import gui_dlg_day
 import gui_dlg_profiles
 from gui_base_dialog import PlanerBaseDialog, CaptionDialog
-
+import pony.orm.dbproviders.sqlite # reference for Pyinstaller
 
 class PlanerApp(PlanerBaseDialog):
 
