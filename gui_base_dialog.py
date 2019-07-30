@@ -57,6 +57,9 @@ class PlanerBaseModalDialog(PlanerBaseDialog):
 
         PlanerBaseDialog.__init__(self, parent, title=title, window=self.top)
 
+    def wait_for_close(self):
+        self.parent.top.wait_window(self.top)
+
 
 class TextDialog(PlanerBaseModalDialog):
     """
@@ -72,7 +75,7 @@ class TextDialog(PlanerBaseModalDialog):
             self.value.set(text)
 
         self._init_ui(prompt)
-        self.parent.top.wait_window(self.top)
+        self.wait_for_close()
 
     def _init_ui(self, prompt: str):
         Label(self.top, text=prompt, wraplength=500).pack(anchor=W, padx=5)
@@ -97,7 +100,7 @@ class YesNoDialog(PlanerBaseModalDialog):
         self.no = False
 
         self._init_ui(prompt)
-        self.parent.top.wait_window(self.top)
+        self.wait_for_close()
 
     def _init_ui(self, prompt: str):
         Label(self.top, text=prompt, wraplength=500).pack(anchor=W, padx=5, pady=5)
@@ -122,7 +125,7 @@ class CaptionDialog(PlanerBaseModalDialog):
         PlanerBaseModalDialog.__init__(self, parent, title=title)
 
         self._init_ui(caption)
-        self.parent.top.wait_window(self.top)
+        self.wait_for_close()
 
     def _init_ui(self, prompt: str):
         Label(self.top, text=prompt, wraplength=500).pack(anchor=W, padx=25, pady=10)
