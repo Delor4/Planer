@@ -196,12 +196,8 @@ class PlanerApp(PlanerBaseDialog):
         self.refresh()
 
     def on_about(self):
-        team = list()
-        for line in open('about', encoding="utf-8"):
-            team.append(line.strip())
-
         text = [self.app_name, ""]
-        text.extend(team)
+        text.extend(self.state.get_about_texts())
 
         CaptionDialog(self, title=self.T("about_title"), caption="\n".join(text))
 

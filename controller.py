@@ -200,3 +200,9 @@ class Calendar:
 
     def get_all_languages(self):
         return self.db.get_all_languages()
+
+    def get_about_texts(self):
+        team = list()
+        for line in open('about', encoding="utf-8"):
+            team.append(line.strip())
+        return team
