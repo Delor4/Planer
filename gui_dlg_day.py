@@ -49,14 +49,14 @@ class DayDialog(gui_base_dialog.PlanerBaseModalDialog):
 
     # Main frames
     def create_notes_frame(self, frame, notes):
-        notes_frame = ttk.LabelFrame(frame, text=self.T("notes").capitalize())
+        notes_frame = LabelFrame(frame, text=self.T("notes").capitalize())
         self.create_notes_top(notes_frame, notes)
         self.create_notes_bottom(notes_frame)
         return notes_frame
 
     def create_images_frame(self, frame, images):
-        images_frame = ttk.LabelFrame(frame, text=self.T("images").capitalize())
-        ttk.Button(images_frame, text="+", command=self.on_new_image).pack()
+        images_frame = LabelFrame(frame, text=self.T("images").capitalize())
+        Button(images_frame, text="+", command=self.on_new_image).pack()
 
         added = False
         for i in images:
@@ -64,32 +64,32 @@ class DayDialog(gui_base_dialog.PlanerBaseModalDialog):
             added = True
 
         if not added:
-            self.no_images = ttk.Label(images_frame, text=self.T("no_images"))  # Brak obrazów.
+            self.no_images = Label(images_frame, text=self.T("no_images"))  # Brak obrazów.
             self.no_images.pack()
         return images_frame
 
     def create_buttons_frame(self, frame):
-        buttons_frame = ttk.Frame(frame)
+        buttons_frame = Frame(frame)
         Button(buttons_frame, text=self.T('ok'), command=self.on_ok).pack(side=RIGHT, padx=5, pady=5)
         return buttons_frame
 
     # Notes frame
     def create_notes_top(self, frame, notes):
-        notes_wrapper = ttk.Frame(frame)
+        notes_wrapper = Frame(frame)
         added = False
         for n in notes:
             self.make_frame_note(notes_wrapper, n)
             added = True
         if not added:
-            self.no_notes = ttk.Label(notes_wrapper, text=self.T("no_notes"))  # Brak notatek.
+            self.no_notes = Label(notes_wrapper, text=self.T("no_notes"))  # Brak notatek.
             self.no_notes.pack()
         notes_wrapper.pack()
 
     def create_notes_bottom(self, frame):
-        self.notes_bottom = ttk.Frame(frame)
-        ttk.Button(self.notes_bottom, text="↲", command=self.on_new_note).pack(side=RIGHT)
+        self.notes_bottom = Frame(frame)
+        Button(self.notes_bottom, text="+", command=self.on_new_note).pack(side=RIGHT)
 
-        e = ttk.Entry(self.notes_bottom, textvariable=self.entry_text)
+        e = Entry(self.notes_bottom, textvariable=self.entry_text)
         e.pack(fill=X)
         e.bind('<Return>', lambda event: self.on_new_note())
 
