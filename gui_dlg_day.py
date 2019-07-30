@@ -70,7 +70,7 @@ class DayDialog(gui_base_dialog.PlanerBaseModalDialog):
 
     def create_buttons_frame(self, frame):
         buttons_frame = ttk.Frame(frame)
-        ttk.Button(buttons_frame, text=self.T('ok'), command=self.on_ok).pack(side=RIGHT)
+        Button(buttons_frame, text=self.T('ok'), command=self.on_ok).pack(side=RIGHT, padx=5, pady=5)
         return buttons_frame
 
     # Notes frame
@@ -120,7 +120,7 @@ class DayDialog(gui_base_dialog.PlanerBaseModalDialog):
             self.no_images.destroy()
             self.no_images = None
 
-        i_frame = ttk.Frame(frame)
+        i_frame = Frame(frame)
         try:
             img = ImageTk.PhotoImage(
                 Image.open(os.path.join(self.state.get_curr_images_folder(),
