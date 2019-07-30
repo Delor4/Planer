@@ -172,7 +172,13 @@ class DayDialog(gui_base_dialog.PlanerBaseModalDialog):
     def on_new_image(self):
         filename = filedialog.askopenfilename(initialdir=self.app.initial_dir,
                                               title=self.T("select_file_title"),
-                                              filetypes=((self.T("jpeg_files"), "*.jpg"),
+                                              filetypes=(
+                                                         (self.T("image_files"), "*.jpg"),
+                                                         (self.T("image_files"), "*.jpeg"),
+                                                         (self.T("image_files"), "*.png"),
+                                                         (self.T("image_files"), "*.bmp"),
+                                                         (self.T("image_files"), "*.gif"),
+                                                         (self.T("jpeg_files"), "*.jpg"),
                                                          (self.T("all_files"), "*.*")))
         if os.path.isfile(filename):
             img_id = self.state.add_image(self.day, filename)

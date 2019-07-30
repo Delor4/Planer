@@ -22,6 +22,7 @@ images;images;obrazy
 no_images;No images.;Brak obrazów.
 select_file_title;Select file;Wybierz plik
 jpeg_files;Jpeg files;Pliki jpeg
+image_files;Image files;Pliki obrazów
 all_files;All files;Wszystkie
 enter_profile_name;Enter profile name:;Wprowadź nazwę profilu:
 month_1;january;styczeń
